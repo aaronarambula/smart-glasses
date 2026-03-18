@@ -1,0 +1,4 @@
+/Users/aaronarambula/Documents/smart-glasses/autograd/build/CMakeFiles/autograd_lib.dir
+/Users/aaronarambula/Documents/smart-glasses/autograd/build/CMakeFiles/example.dir
+/Users/aaronarambula/Documents/smart-glasses/autograd/build/CMakeFiles/edit_cache.dir
+/Users/aaronarambula/Documents/smart-glasses/autograd/build/CMakeFiles/rebuild_cache.dir
