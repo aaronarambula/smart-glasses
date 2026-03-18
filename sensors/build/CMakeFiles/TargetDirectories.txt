@@ -1,0 +1,4 @@
+/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles/sensors_lib.dir
+/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles/lidar_test.dir
+/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles/edit_cache.dir
+/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles/rebuild_cache.dir
