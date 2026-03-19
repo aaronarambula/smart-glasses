@@ -13,7 +13,17 @@ else()
 endif()
 
 # ── autograd_lib (static) ─────────────────────────────────────────────────────
-# All engine source files compiled into a single static library.
+# aaronnet — our custom C++ autograd engine.
+# Compiled into a single static library consumed by prediction_lib.
+#
+# Provides:
+#   Tensor / TensorPtr  — shared_ptr-based graph node with flat float storage
+#   Linear, ReLU        — neural network layers with He initialisation
+#   Sequential          — ordered layer container
+#   Adam                — adaptive moment optimiser with gradient clipping
+#   NoGradGuard         — RAII context that disables graph construction
+#
+# Include via:  #include "autograd/autograd.h"
 
 add_library(autograd_lib STATIC
     src/ops.cpp
@@ -27,25 +37,16 @@ target_include_directories(autograd_lib
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# C++17 features used: std::optional, structured bindings, inline variables
-# (thread_local inline in no_grad.h), if-constexpr, etc.
 target_compile_features(autograd_lib PUBLIC cxx_std_17)
 
-# ── example executable ────────────────────────────────────────────────────────
-
-add_executable(example example.cpp)
-
-target_link_libraries(example PRIVATE autograd_lib)
-
-# On Linux/macOS, link math library explicitly just in case.
+# Math library — std::sqrt, std::exp, std::pow, etc.
 if(UNIX)
-    target_link_libraries(example PRIVATE m)
+    target_link_libraries(autograd_lib PUBLIC m)
 endif()
 
-# ── Optional: Release build defaults ─────────────────────────────────────────
-# Set a default build type if none was specified.
+# ── Default build type ────────────────────────────────────────────────────────
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    message(STATUS "Setting build type to 'Release' as none was specified.")
+    message(STATUS "autograd: defaulting build type to Release")
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
         "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
