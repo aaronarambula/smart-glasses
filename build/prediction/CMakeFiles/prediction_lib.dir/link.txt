@@ -1,0 +1,2 @@
+/usr/bin/ar qc libprediction_lib.a CMakeFiles/prediction_lib.dir/src/ttc_engine.cpp.o CMakeFiles/prediction_lib.dir/src/risk_predictor.cpp.o
+/usr/bin/ranlib libprediction_lib.a

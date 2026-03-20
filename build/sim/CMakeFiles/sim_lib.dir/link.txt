@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsim_lib.a CMakeFiles/sim_lib.dir/src/sim_world.cpp.o CMakeFiles/sim_lib.dir/src/sim_lidar.cpp.o
+/usr/bin/ranlib libsim_lib.a

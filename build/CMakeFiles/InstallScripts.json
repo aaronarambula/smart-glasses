@@ -1,0 +1,15 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/aaronarambula/Documents/smart-glasses/build/cmake_install.cmake",
+		"/Users/aaronarambula/Documents/smart-glasses/build/autograd/cmake_install.cmake",
+		"/Users/aaronarambula/Documents/smart-glasses/build/sensors/cmake_install.cmake",
+		"/Users/aaronarambula/Documents/smart-glasses/build/perception/cmake_install.cmake",
+		"/Users/aaronarambula/Documents/smart-glasses/build/prediction/cmake_install.cmake",
+		"/Users/aaronarambula/Documents/smart-glasses/build/audio/cmake_install.cmake",
+		"/Users/aaronarambula/Documents/smart-glasses/build/agent/cmake_install.cmake",
+		"/Users/aaronarambula/Documents/smart-glasses/build/sim/cmake_install.cmake",
+		"/Users/aaronarambula/Documents/smart-glasses/build/app/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

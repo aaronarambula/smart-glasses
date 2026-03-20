@@ -1,0 +1,2 @@
+/usr/bin/ar qc libautograd_lib.a CMakeFiles/autograd_lib.dir/src/ops.cpp.o CMakeFiles/autograd_lib.dir/src/tensor.cpp.o CMakeFiles/autograd_lib.dir/src/layers.cpp.o CMakeFiles/autograd_lib.dir/src/optimizer.cpp.o
+/usr/bin/ranlib libautograd_lib.a

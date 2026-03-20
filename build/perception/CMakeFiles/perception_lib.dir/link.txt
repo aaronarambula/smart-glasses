@@ -1,0 +1,2 @@
+/usr/bin/ar qc libperception_lib.a CMakeFiles/perception_lib.dir/src/occupancy_map.cpp.o CMakeFiles/perception_lib.dir/src/clusterer.cpp.o CMakeFiles/perception_lib.dir/src/tracker.cpp.o
+/usr/bin/ranlib libperception_lib.a

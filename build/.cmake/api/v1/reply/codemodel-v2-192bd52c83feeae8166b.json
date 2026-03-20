@@ -1,0 +1,368 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "CURL::libcurl::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CURL__libcurl-Release-3cbb96f5dbd7ed8abfd4.json",
+					"name" : "CURL::libcurl",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Threads::Threads::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Threads__Threads-Release-c98a71078739fc275dba.json",
+					"name" : "Threads::Threads",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1
+					],
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-9ad1a58d4644cf6543fa.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "autograd",
+					"jsonFile" : "directory-autograd-Release-5ae5479d6ea9edb2ae2a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "autograd",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "sensors",
+					"jsonFile" : "directory-sensors-Release-5510d0ba104737e8c893.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "sensors",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "perception",
+					"jsonFile" : "directory-perception-Release-f7e259cb1f4be34c0b43.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "perception",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "prediction",
+					"jsonFile" : "directory-prediction-Release-acfaacb750ab7b808551.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "prediction",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "audio",
+					"jsonFile" : "directory-audio-Release-dd2281643f50e9b783c7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 5,
+					"source" : "audio",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "agent",
+					"jsonFile" : "directory-agent-Release-f41b84ae350c59c0f88c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 6,
+					"source" : "agent",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "sim",
+					"jsonFile" : "directory-sim-Release-df1009cb850ea5850485.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 7,
+					"source" : "sim",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"build" : "app",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-app-Release-12231ee6acdbbc54beb8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 8,
+					"source" : "app",
+					"targetIndexes" : 
+					[
+						7
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1
+					],
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "smart_glasses"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "autograd",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "sensors",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "perception",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						4
+					],
+					"name" : "prediction",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "audio",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "agent",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7
+					],
+					"name" : "sim",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						8
+					],
+					"name" : "app",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						7
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 6,
+					"id" : "agent_lib::@e2a0fc020fba741d1a6f",
+					"jsonFile" : "target-agent_lib-Release-b7b358e900a28063af7f.json",
+					"name" : "agent_lib",
+					"projectIndex" : 6
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "audio_lib::@882ca0cc851fe790ef9f",
+					"jsonFile" : "target-audio_lib-Release-483103e6b3711acdc92b.json",
+					"name" : "audio_lib",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "autograd_lib::@54c2e6a378206e9c3dd8",
+					"jsonFile" : "target-autograd_lib-Release-c5e95e1bff9bb501a227.json",
+					"name" : "autograd_lib",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "perception_lib::@fb3ba39d3782f4a53dba",
+					"jsonFile" : "target-perception_lib-Release-afa0f7a5278b1b5c2da8.json",
+					"name" : "perception_lib",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "prediction_lib::@ca844ff82bbd11bcd205",
+					"jsonFile" : "target-prediction_lib-Release-c3aea0df8660bef4a942.json",
+					"name" : "prediction_lib",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "sensors_lib::@01114594966304017685",
+					"jsonFile" : "target-sensors_lib-Release-8a5848e66b7156c3fb02.json",
+					"name" : "sensors_lib",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "sim_lib::@b622755370c2a46d4cb5",
+					"jsonFile" : "target-sim_lib-Release-9b30870bf837f5e77315.json",
+					"name" : "sim_lib",
+					"projectIndex" : 7
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "smart_glasses::@5f5a17c01335469806cb",
+					"jsonFile" : "target-smart_glasses-Release-aa0697d3d7773ea7f1a0.json",
+					"name" : "smart_glasses",
+					"projectIndex" : 8
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/aaronarambula/Documents/smart-glasses/build",
+		"source" : "/Users/aaronarambula/Documents/smart-glasses"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	}
+}

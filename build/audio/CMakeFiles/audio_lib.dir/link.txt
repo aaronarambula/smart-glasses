@@ -1,0 +1,2 @@
+/usr/bin/ar qc libaudio_lib.a CMakeFiles/audio_lib.dir/src/tts_engine.cpp.o CMakeFiles/audio_lib.dir/src/alert_policy.cpp.o
+/usr/bin/ranlib libaudio_lib.a

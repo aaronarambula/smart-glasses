@@ -1,0 +1,489 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "app/smart_glasses"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"install",
+			"target_link_libraries",
+			"add_compile_options",
+			"target_include_directories",
+			"target_compile_features"
+		],
+		"files" : 
+		[
+			"app/CMakeLists.txt",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 24,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 141,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 51,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 99,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 115,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 119,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 110,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 20,
+				"parent" : 8
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 28,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 100,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 41,
+				"parent" : 0
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"compileDependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "agent_lib::@e2a0fc020fba741d1a6f"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "audio_lib::@882ca0cc851fe790ef9f"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "prediction_lib::@ca844ff82bbd11bcd205"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "perception_lib::@fb3ba39d3782f4a53dba"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "sensors_lib::@01114594966304017685"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "autograd_lib::@54c2e6a378206e9c3dd8"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "sim_lib::@b622755370c2a46d4cb5"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "Threads::Threads::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "CURL::libcurl::@6890427a1f51a3e7e1df"
+		}
+	],
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-O3 -DNDEBUG -std=c++17 -arch arm64"
+				},
+				{
+					"backtrace" : 9,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 9,
+					"fragment" : "-Wextra"
+				},
+				{
+					"backtrace" : 9,
+					"fragment" : "-Wpedantic"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "USE_SIM=1"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 10,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/app/../sensors/include"
+				},
+				{
+					"backtrace" : 10,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/app/../perception/include"
+				},
+				{
+					"backtrace" : 10,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/app/../prediction/include"
+				},
+				{
+					"backtrace" : 10,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/app/../audio/include"
+				},
+				{
+					"backtrace" : 10,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/app/../agent/include"
+				},
+				{
+					"backtrace" : 10,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/app/../autograd/include"
+				},
+				{
+					"backtrace" : 11,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/app/../sim/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/agent/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/agent/../audio/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/agent/../prediction/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/agent/../perception/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/agent/../sensors/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/agent/../autograd/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/audio/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/audio/../prediction/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/audio/../perception/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/audio/../sensors/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/audio/../autograd/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/prediction/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/prediction/../autograd/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/prediction/../perception/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/prediction/../sensors/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/autograd/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/perception/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/perception/../sensors/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/sensors/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/sim/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/aaronarambula/Documents/smart-glasses/sim/../sensors/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					12
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "autograd_lib::@54c2e6a378206e9c3dd8"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "sensors_lib::@01114594966304017685"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "perception_lib::@fb3ba39d3782f4a53dba"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "prediction_lib::@ca844ff82bbd11bcd205"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "audio_lib::@882ca0cc851fe790ef9f"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "agent_lib::@e2a0fc020fba741d1a6f"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "sim_lib::@b622755370c2a46d4cb5"
+		}
+	],
+	"id" : "smart_glasses::@5f5a17c01335469806cb",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "bin"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-O3 -DNDEBUG",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-search_paths_first -Wl,-headerpad_max_install_names",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "../agent/libagent_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "../audio/libaudio_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "../prediction/libprediction_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "../perception/libperception_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "../sensors/libsensors_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "../autograd/libautograd_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "../sim/libsim_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libcurl.tbd",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "../sensors/libsensors_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"linkLibraries" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "agent_lib::@e2a0fc020fba741d1a6f"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "audio_lib::@882ca0cc851fe790ef9f"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "prediction_lib::@ca844ff82bbd11bcd205"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "perception_lib::@fb3ba39d3782f4a53dba"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "sensors_lib::@01114594966304017685"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "autograd_lib::@54c2e6a378206e9c3dd8"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "sim_lib::@b622755370c2a46d4cb5"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "Threads::Threads::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "CURL::libcurl::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 6,
+			"fragment" : "m"
+		}
+	],
+	"name" : "smart_glasses",
+	"nameOnDisk" : "smart_glasses",
+	"paths" : 
+	{
+		"build" : "app",
+		"source" : "app"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "app/main.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}
