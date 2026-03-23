@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/aaronarambula/Documents/smart-glasses/sensors/LiDAR.cpp" "sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o" "gcc" "sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o.d"
   "/Users/aaronarambula/Documents/smart-glasses/sensors/ld06.cpp" "sensors/CMakeFiles/sensors_lib.dir/ld06.cpp.o" "gcc" "sensors/CMakeFiles/sensors_lib.dir/ld06.cpp.o.d"
   "/Users/aaronarambula/Documents/smart-glasses/sensors/rplidar_a1.cpp" "sensors/CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o" "gcc" "sensors/CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o.d"
+  "/Users/aaronarambula/Documents/smart-glasses/sensors/ultrasonic_fallback.cpp" "sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o" "gcc" "sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

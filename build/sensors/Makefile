@@ -247,6 +247,30 @@ rplidar_a1.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.s
 .PHONY : rplidar_a1.cpp.s
 
+ultrasonic_fallback.o: ultrasonic_fallback.cpp.o
+.PHONY : ultrasonic_fallback.o
+
+# target to build an object file
+ultrasonic_fallback.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o
+.PHONY : ultrasonic_fallback.cpp.o
+
+ultrasonic_fallback.i: ultrasonic_fallback.cpp.i
+.PHONY : ultrasonic_fallback.i
+
+# target to preprocess a source file
+ultrasonic_fallback.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.i
+.PHONY : ultrasonic_fallback.cpp.i
+
+ultrasonic_fallback.s: ultrasonic_fallback.cpp.s
+.PHONY : ultrasonic_fallback.s
+
+# target to generate assembly for a file
+ultrasonic_fallback.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.s
+.PHONY : ultrasonic_fallback.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -269,6 +293,9 @@ help:
 	@echo "... rplidar_a1.o"
 	@echo "... rplidar_a1.i"
 	@echo "... rplidar_a1.s"
+	@echo "... ultrasonic_fallback.o"
+	@echo "... ultrasonic_fallback.i"
+	@echo "... ultrasonic_fallback.s"
 .PHONY : help
 
 

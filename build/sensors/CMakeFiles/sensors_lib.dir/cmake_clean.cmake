@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/sensors_lib.dir/ld06.cpp.o.d"
   "CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o"
   "CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o.d"
+  "CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o"
+  "CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o.d"
   "libsensors_lib.a"
   "libsensors_lib.pdb"
 )

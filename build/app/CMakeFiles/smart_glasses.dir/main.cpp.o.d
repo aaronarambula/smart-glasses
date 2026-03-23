@@ -834,6 +834,7 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__fwd/stack.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/print \
   /Users/aaronarambula/Documents/smart-glasses/app/../sensors/include/sensors/ld06.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../sensors/include/sensors/ultrasonic_fallback.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/perception.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/occupancy_map.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/clusterer.h \

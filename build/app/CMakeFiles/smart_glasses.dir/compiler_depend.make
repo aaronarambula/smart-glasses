@@ -938,6 +938,7 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: /Users/aaronarambula/Documents/smar
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/rplidar_a1.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/sensors.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/serial_port.h \
+  /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ultrasonic_fallback.h \
   /Users/aaronarambula/Documents/smart-glasses/sim/include/sim/sim.h \
   /Users/aaronarambula/Documents/smart-glasses/sim/include/sim/sim_lidar.h \
   /Users/aaronarambula/Documents/smart-glasses/sim/include/sim/sim_world.h
@@ -2062,6 +2063,8 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: /Users/aaronarambula/Documents/smar
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/not_fn.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/ostream_iterator.h:
+
+/Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ultrasonic_fallback.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/constructible.h:
 

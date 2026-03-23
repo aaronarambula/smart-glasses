@@ -833,4 +833,5 @@ sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stack \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__fwd/stack.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/print \
-  /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ld06.h
+  /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ld06.h \
+  /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ultrasonic_fallback.h
