@@ -10,6 +10,7 @@
 
 struct gpiod_chip;
 struct gpiod_line;
+struct gpiod_line_request;
 
 namespace sensors {
 
@@ -48,7 +49,11 @@ private:
     float read_distance_mm();
 
 #ifdef __linux__
-#ifdef HAVE_LIBGPIOD
+#if defined(HAVE_LIBGPIOD_V2)
+    bool open_gpiod();
+    bool wait_for_gpio_value(bool target,
+                             std::chrono::microseconds timeout) const;
+#elif defined(HAVE_LIBGPIOD_V1)
     bool open_gpiod();
     bool wait_for_gpio_value(bool target,
                              std::chrono::microseconds timeout) const;
@@ -87,7 +92,11 @@ private:
     std::chrono::steady_clock::time_point last_good_time_{};
 
 #ifdef __linux__
-#ifdef HAVE_LIBGPIOD
+#if defined(HAVE_LIBGPIOD_V2)
+    gpiod_chip* chip_ = nullptr;
+    gpiod_line_request* trigger_request_ = nullptr;
+    gpiod_line_request* echo_request_ = nullptr;
+#elif defined(HAVE_LIBGPIOD_V1)
     gpiod_chip* chip_ = nullptr;
     gpiod_line* trigger_line_ = nullptr;
     gpiod_line* echo_line_ = nullptr;

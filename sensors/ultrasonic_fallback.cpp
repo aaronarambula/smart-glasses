@@ -11,7 +11,7 @@
 #include <vector>
 
 #ifdef __linux__
-#ifdef HAVE_LIBGPIOD
+#if defined(HAVE_LIBGPIOD_V2) || defined(HAVE_LIBGPIOD_V1)
 #include <gpiod.h>
 #else
 #include <unistd.h>
@@ -120,7 +120,7 @@ bool UltrasonicFallback::open()
         open_.store(true);
         return true;
     }
-#ifdef HAVE_LIBGPIOD
+#if defined(HAVE_LIBGPIOD_V2) || defined(HAVE_LIBGPIOD_V1)
     if (!open_gpiod()) return false;
 #else
     if (!ensure_gpio_pin(trigger_pin_, "out", &trigger_exported_)) return false;
@@ -158,7 +158,20 @@ void UltrasonicFallback::close()
 {
     stop();
 #ifdef __linux__
-#ifdef HAVE_LIBGPIOD
+#if defined(HAVE_LIBGPIOD_V2)
+    if (echo_request_) {
+        gpiod_line_request_release(echo_request_);
+        echo_request_ = nullptr;
+    }
+    if (trigger_request_) {
+        gpiod_line_request_release(trigger_request_);
+        trigger_request_ = nullptr;
+    }
+    if (chip_) {
+        gpiod_chip_close(chip_);
+        chip_ = nullptr;
+    }
+#elif defined(HAVE_LIBGPIOD_V1)
     if (echo_line_) {
         gpiod_line_release(echo_line_);
         echo_line_ = nullptr;
@@ -254,7 +267,28 @@ float UltrasonicFallback::read_distance_mm()
 #ifndef __linux__
         raw_distance_mm = 0.0f;
 #else
-#ifdef HAVE_LIBGPIOD
+#if defined(HAVE_LIBGPIOD_V2)
+        if (gpiod_line_request_set_value(trigger_request_, trigger_pin_, GPIOD_LINE_VALUE_INACTIVE) != 0) return 0.0f;
+        std::this_thread::sleep_for(std::chrono::microseconds(2));
+        if (gpiod_line_request_set_value(trigger_request_, trigger_pin_, GPIOD_LINE_VALUE_ACTIVE) != 0) return 0.0f;
+        std::this_thread::sleep_for(std::chrono::microseconds(10));
+        if (gpiod_line_request_set_value(trigger_request_, trigger_pin_, GPIOD_LINE_VALUE_INACTIVE) != 0) return 0.0f;
+
+        if (!wait_for_gpio_value(true, std::chrono::milliseconds(30))) {
+            raw_distance_mm = 0.0f;
+        } else {
+            const auto pulse_start = std::chrono::steady_clock::now();
+            if (!wait_for_gpio_value(false, std::chrono::milliseconds(30))) {
+                raw_distance_mm = 0.0f;
+            } else {
+                const auto pulse_end = std::chrono::steady_clock::now();
+                const auto pulse_us =
+                    std::chrono::duration_cast<std::chrono::microseconds>(pulse_end - pulse_start).count();
+                raw_distance_mm = static_cast<float>(pulse_us) * (kSpeedOfSoundMmPerUs * 0.5f);
+                raw_distance_mm = std::clamp(raw_distance_mm, 0.0f, max_distance_mm_);
+            }
+        }
+#elif defined(HAVE_LIBGPIOD_V1)
         if (gpiod_line_set_value(trigger_line_, 0) != 0) return 0.0f;
         std::this_thread::sleep_for(std::chrono::microseconds(2));
         if (gpiod_line_set_value(trigger_line_, 1) != 0) return 0.0f;
@@ -364,7 +398,90 @@ void UltrasonicFallback::read_loop()
 }
 
 #ifdef __linux__
-#ifdef HAVE_LIBGPIOD
+#if defined(HAVE_LIBGPIOD_V2)
+bool UltrasonicFallback::open_gpiod()
+{
+    static constexpr const char* kChipPaths[] = {
+        "/dev/gpiochip0", "/dev/gpiochip1", "/dev/gpiochip2",
+        "/dev/gpiochip3", "/dev/gpiochip4", "/dev/gpiochip5"
+    };
+
+    for (const char* chip_path : kChipPaths) {
+        gpiod_chip* chip = gpiod_chip_open(chip_path);
+        if (!chip) continue;
+
+        unsigned int trig_offset = static_cast<unsigned int>(trigger_pin_);
+        unsigned int echo_offset = static_cast<unsigned int>(echo_pin_);
+
+        gpiod_line_settings* trig_settings = gpiod_line_settings_new();
+        gpiod_line_settings* echo_settings = gpiod_line_settings_new();
+        gpiod_line_config* trig_config = gpiod_line_config_new();
+        gpiod_line_config* echo_config = gpiod_line_config_new();
+        gpiod_request_config* trig_req_cfg = gpiod_request_config_new();
+        gpiod_request_config* echo_req_cfg = gpiod_request_config_new();
+
+        if (!trig_settings || !echo_settings || !trig_config || !echo_config ||
+            !trig_req_cfg || !echo_req_cfg) {
+            if (trig_settings) gpiod_line_settings_free(trig_settings);
+            if (echo_settings) gpiod_line_settings_free(echo_settings);
+            if (trig_config) gpiod_line_config_free(trig_config);
+            if (echo_config) gpiod_line_config_free(echo_config);
+            if (trig_req_cfg) gpiod_request_config_free(trig_req_cfg);
+            if (echo_req_cfg) gpiod_request_config_free(echo_req_cfg);
+            gpiod_chip_close(chip);
+            continue;
+        }
+
+        gpiod_line_settings_set_direction(trig_settings, GPIOD_LINE_DIRECTION_OUTPUT);
+        gpiod_line_settings_set_output_value(trig_settings, GPIOD_LINE_VALUE_INACTIVE);
+        gpiod_line_settings_set_direction(echo_settings, GPIOD_LINE_DIRECTION_INPUT);
+
+        gpiod_line_config_add_line_settings(trig_config, &trig_offset, 1, trig_settings);
+        gpiod_line_config_add_line_settings(echo_config, &echo_offset, 1, echo_settings);
+        gpiod_request_config_set_consumer(trig_req_cfg, "smart_glasses_ultrasonic");
+        gpiod_request_config_set_consumer(echo_req_cfg, "smart_glasses_ultrasonic");
+
+        gpiod_line_request* trig_req = gpiod_chip_request_lines(chip, trig_req_cfg, trig_config);
+        gpiod_line_request* echo_req = gpiod_chip_request_lines(chip, echo_req_cfg, echo_config);
+
+        gpiod_line_settings_free(trig_settings);
+        gpiod_line_settings_free(echo_settings);
+        gpiod_line_config_free(trig_config);
+        gpiod_line_config_free(echo_config);
+        gpiod_request_config_free(trig_req_cfg);
+        gpiod_request_config_free(echo_req_cfg);
+
+        if (!trig_req || !echo_req) {
+            if (trig_req) gpiod_line_request_release(trig_req);
+            if (echo_req) gpiod_line_request_release(echo_req);
+            gpiod_chip_close(chip);
+            continue;
+        }
+
+        chip_ = chip;
+        trigger_request_ = trig_req;
+        echo_request_ = echo_req;
+        return true;
+    }
+
+    set_error("Cannot request GPIO lines via libgpiod v2; verify GPIO23/GPIO24 and install libgpiod-dev");
+    return false;
+}
+
+bool UltrasonicFallback::wait_for_gpio_value(
+    bool target,
+    std::chrono::microseconds timeout) const
+{
+    const auto deadline = std::chrono::steady_clock::now() + timeout;
+    while (std::chrono::steady_clock::now() < deadline) {
+        const int value = gpiod_line_request_get_value(echo_request_, echo_pin_);
+        if (value < 0) return false;
+        if ((value != 0) == target) return true;
+        std::this_thread::sleep_for(std::chrono::microseconds(50));
+    }
+    return false;
+}
+#elif defined(HAVE_LIBGPIOD_V1)
 bool UltrasonicFallback::open_gpiod()
 {
     static constexpr const char* kChipNames[] = {
