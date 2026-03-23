@@ -49,6 +49,21 @@ if(UNIX)
     target_link_libraries(sensors_lib PUBLIC m)
 endif()
 
+# Prefer libgpiod on Linux for modern Raspberry Pi GPIO access. Fall back to
+# legacy sysfs GPIO only when libgpiod is unavailable.
+if(UNIX AND NOT APPLE)
+    find_path(GPIOD_INCLUDE_DIR gpiod.h)
+    find_library(GPIOD_LIBRARY gpiod)
+    if(GPIOD_INCLUDE_DIR AND GPIOD_LIBRARY)
+        target_include_directories(sensors_lib PRIVATE ${GPIOD_INCLUDE_DIR})
+        target_link_libraries(sensors_lib PRIVATE ${GPIOD_LIBRARY})
+        target_compile_definitions(sensors_lib PRIVATE HAVE_LIBGPIOD=1)
+        message(STATUS "sensors: libgpiod found — ultrasonic fallback will use GPIO character device API")
+    else()
+        message(STATUS "sensors: libgpiod not found — ultrasonic fallback will use legacy sysfs GPIO if available")
+    endif()
+endif()
+
 # ── Default build type ────────────────────────────────────────────────────────
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message(STATUS "sensors: defaulting build type to Release")

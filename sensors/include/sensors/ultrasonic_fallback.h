@@ -8,6 +8,9 @@
 #include <string>
 #include <thread>
 
+struct gpiod_chip;
+struct gpiod_line;
+
 namespace sensors {
 
 // Single-beam HC-SR04-style ultrasonic sensor wrapped in the existing
@@ -45,11 +48,17 @@ private:
     float read_distance_mm();
 
 #ifdef __linux__
+#ifdef HAVE_LIBGPIOD
+    bool open_gpiod();
+    bool wait_for_gpio_value(bool target,
+                             std::chrono::microseconds timeout) const;
+#else
     bool ensure_gpio_pin(int pin, const char* direction, bool* exported_flag);
     bool write_gpio_value(int pin, bool high);
     bool read_gpio_value(int pin, bool& high) const;
     bool wait_for_gpio_value(int pin, bool target,
                              std::chrono::microseconds timeout) const;
+#endif
 #endif
 
     int   trigger_pin_      = 23;
@@ -78,8 +87,14 @@ private:
     std::chrono::steady_clock::time_point last_good_time_{};
 
 #ifdef __linux__
+#ifdef HAVE_LIBGPIOD
+    gpiod_chip* chip_ = nullptr;
+    gpiod_line* trigger_line_ = nullptr;
+    gpiod_line* echo_line_ = nullptr;
+#else
     bool trigger_exported_ = false;
     bool echo_exported_    = false;
+#endif
 #endif
 };
 
