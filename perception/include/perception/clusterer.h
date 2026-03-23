@@ -189,10 +189,10 @@ public:
     // min_dist_mm : ignore points closer than this (sensor housing noise)
     // max_dist_mm : ignore points beyond this range
     explicit Clusterer(float   eps_mm      = 150.0f,
-                       int     min_pts     = 3,
+                       int     min_pts     = 4,
                        uint8_t min_quality = 10,
                        float   min_dist_mm = 50.0f,
-                       float   max_dist_mm = 6000.0f)
+                       float   max_dist_mm = 4000.0f)
         : eps_mm_(eps_mm)
         , eps_sq_(eps_mm * eps_mm)
         , min_pts_(min_pts)

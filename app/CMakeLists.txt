@@ -83,6 +83,28 @@ else()
     )
 endif()
 
+# ── Optional sim_lib ──────────────────────────────────────────────────────────
+# Linked only when USE_SIM=ON is passed to cmake.
+# sim_lib propagates -DUSE_SIM=1 to all consumers via its PUBLIC compile
+# definition, which activates the #ifdef USE_SIM blocks in main.cpp.
+# Real hardware builds (USE_SIM=OFF, the default) are completely unaffected —
+# sim/ is not compiled, not linked, and contributes zero bytes to the binary.
+#
+# Enable:
+#   cmake .. -DUSE_SIM=ON
+#   make -j4
+#   ./smart_glasses --sensor sim --scene sidewalk --verbose
+
+if(TARGET sim_lib)
+    target_link_libraries(smart_glasses PRIVATE sim_lib)
+    target_include_directories(smart_glasses PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sim/include
+    )
+    message(STATUS "app: sim_lib linked — simulation mode available")
+    message(STATUS "app: run with: --sensor sim --scene <name>")
+    message(STATUS "app: scenes: sidewalk crossing hallway parking_lot cyclist_overtake crowd")
+endif()
+
 # pthreads — required by TtsEngine, AgentLoop, sensor drivers.
 find_package(Threads REQUIRED)
 target_link_libraries(smart_glasses PRIVATE Threads::Threads)

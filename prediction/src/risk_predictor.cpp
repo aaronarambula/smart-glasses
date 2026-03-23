@@ -16,8 +16,85 @@
 #include <iomanip>
 #include <fstream>
 #include <numeric>
+#include <cstdlib>
+#include <iostream>
 
 namespace prediction {
+
+namespace {
+bool debug_prediction_enabled()
+{
+    static const bool enabled = [] {
+        const char* v = std::getenv("SMART_GLASSES_DEBUG_PREDICTION");
+        return v && v[0] != '\0' && std::string(v) != "0";
+    }();
+    return enabled;
+}
+
+bool frame_is_empty(const TTCFrame& frame)
+{
+    if (!frame.results.empty()) return false;
+    return std::none_of(frame.sectors.begin(), frame.sectors.end(),
+                        [](const SectorThreat& st) { return st.occupied; });
+}
+
+bool frame_has_actionable_signal(const TTCFrame& frame)
+{
+    for (const auto& r : frame.results) {
+        if (r.distance_mm < 4000.0f) return true;
+        if (r.has_ttc()) return true;
+        if (r.cpa.time_s <= 8.0f && r.cpa.distance_mm < 2000.0f) return true;
+    }
+    return std::any_of(frame.sectors.begin(), frame.sectors.end(),
+                       [](const SectorThreat& st) { return st.occupied; });
+}
+
+void apply_probability_floor(std::array<float, RiskPredictor::NUM_CLASSES>& probs,
+                             RiskLevel floor_label,
+                             float min_prob = 0.60f)
+{
+    const size_t idx = static_cast<size_t>(static_cast<int>(floor_label));
+    if (probs[idx] >= min_prob) return;
+
+    float remaining = 1.0f - probs[idx];
+    if (remaining <= 1e-6f) {
+        probs.fill(0.0f);
+        probs[idx] = 1.0f;
+        return;
+    }
+
+    const float target_remaining = 1.0f - min_prob;
+    const float scale = target_remaining / remaining;
+
+    for (size_t i = 0; i < probs.size(); ++i) {
+        if (i == idx) continue;
+        probs[i] *= scale;
+    }
+    probs[idx] = min_prob;
+}
+
+void log_feature_vector(const FeatureVector& feat)
+{
+    if (!debug_prediction_enabled()) return;
+
+    std::cout << "[debug-feat] dist=[";
+    for (int i = 0; i < NUM_SECTORS; ++i) {
+        if (i) std::cout << ",";
+        std::cout << feat.sector_dist(i);
+    }
+    std::cout << "] ttc=[";
+    for (int i = 0; i < NUM_SECTORS; ++i) {
+        if (i) std::cout << ",";
+        std::cout << feat.sector_ttc(i);
+    }
+    std::cout << "] dyn=["
+              << feat.max_closing_speed() << ","
+              << feat.num_confirmed_tracks() << ","
+              << feat.global_min_ttc() << ","
+              << feat.local_occ_density()
+              << "]\n";
+}
+} // namespace
 
 // ─── PredictionResult::summary ───────────────────────────────────────────────
 
@@ -76,8 +153,15 @@ RiskLevel PseudoLabeller::label_result(const TTCResult& r) const
     }
 
     // ── CPA-based rule ────────────────────────────────────────────────────────
-    // Even if TTC is ∞ (parallel path), a dangerously close CPA warrants WARNING.
-    if (r.cpa.is_dangerous()) {
+    // Crossing-path objects often have TTC = ∞ but still pass close enough to
+    // matter. Use CPA distance + CPA time as a secondary risk signal.
+    if (r.cpa.time_s <= danger_ttc_s && r.cpa.distance_mm < warning_dist_mm) {
+        level = max_risk(level, RiskLevel::DANGER);
+    } else if (r.cpa.time_s <= warning_ttc_s && r.cpa.distance_mm < warning_dist_mm) {
+        level = max_risk(level, RiskLevel::WARNING);
+    } else if (r.cpa.time_s <= caution_ttc_s && r.cpa.distance_mm < caution_dist_mm) {
+        level = max_risk(level, RiskLevel::CAUTION);
+    } else if (r.cpa.is_dangerous()) {
         level = max_risk(level, RiskLevel::WARNING);
     }
 
@@ -96,10 +180,14 @@ RiskLevel PseudoLabeller::label_result(const TTCResult& r) const
 RiskLevel PseudoLabeller::label(const TTCFrame& frame, bool allow_tentative) const
 {
     RiskLevel worst = RiskLevel::CLEAR;
+    const bool has_reliable = std::any_of(
+        frame.results.begin(), frame.results.end(),
+        [](const TTCResult& r) { return r.velocity_reliable; });
 
     for (const auto& r : frame.results) {
-        // Skip tentative objects unless explicitly allowed.
-        if (!allow_tentative && !r.velocity_reliable) continue;
+        // Prefer reliable tracks once available, but don't suppress all risk
+        // when only early/tentative tracks exist.
+        if (!allow_tentative && has_reliable && !r.velocity_reliable) continue;
 
         worst = max_risk(worst, label_result(r));
 
@@ -151,9 +239,10 @@ RiskPredictor::RiskPredictor(std::string checkpoint_path,
     if (!checkpoint_path_.empty()) {
         // Silently ignore load failure on first run (file doesn't exist yet).
         try {
-            load_weights(checkpoint_path_);
+            loaded_checkpoint_ = load_weights(checkpoint_path_);
         } catch (const std::exception&) {
             // First run — start from He-initialised weights.
+            loaded_checkpoint_ = false;
         }
     }
 }
@@ -366,6 +455,7 @@ PredictionResult RiskPredictor::predict(const TTCFrame& frame,
 
     // ── 1. Featurise ──────────────────────────────────────────────────────────
     FeatureVector features = featurise(frame, local_density);
+    log_feature_vector(features);
 
     // ── 2. Inference (no grad) ────────────────────────────────────────────────
     auto [logits, probs] = forward_inference(features);
@@ -378,8 +468,16 @@ PredictionResult RiskPredictor::predict(const TTCFrame& frame,
     // ── 4. Pseudo-label ───────────────────────────────────────────────────────
     // Use allow_tentative=true for the first 30 frames (300 ms at 10 Hz)
     // so training starts immediately even before Kalman velocities settle.
-    bool allow_tentative = (frames_processed_ < 30);
+    const bool empty_scene = frame_is_empty(frame);
+    const bool has_reliable = std::any_of(
+        frame.results.begin(), frame.results.end(),
+        [](const TTCResult& r) { return r.velocity_reliable; });
+    bool allow_tentative = (frames_processed_ < 30) || !has_reliable;
     RiskLevel pseudo = labeller_.label(frame, allow_tentative);
+
+    if (empty_scene) {
+        pseudo = RiskLevel::CLEAR;
+    }
 
     // Update label distribution counters.
     label_counts_[static_cast<size_t>(static_cast<int>(pseudo))]++;
@@ -388,7 +486,11 @@ PredictionResult RiskPredictor::predict(const TTCFrame& frame,
     float loss = 0.0f;
     bool trained = false;
 
-    if (online_training_ && (frames_processed_ % TRAIN_EVERY_N == 0)) {
+    const bool actionable_scene = !empty_scene && frame_has_actionable_signal(frame);
+
+    if (online_training_ &&
+        actionable_scene &&
+        (frames_processed_ % TRAIN_EVERY_N == 0)) {
         loss = train_step(features, pseudo);
         last_loss_ = loss;
         ++training_steps_;
@@ -406,7 +508,38 @@ PredictionResult RiskPredictor::predict(const TTCFrame& frame,
         }
     }
 
-    // ── 7. Assemble result ────────────────────────────────────────────────────
+    // ── 7. Select user-facing label ───────────────────────────────────────────
+    // Fresh models start from random He-initialised weights, which can produce
+    // pathological outputs (for example always predicting DANGER) before enough
+    // online updates have happened. When we did not load a checkpoint, use the
+    // heuristic pseudo-label during an initial bootstrap window.
+    const bool bootstrap_mode =
+        !loaded_checkpoint_ &&
+        training_steps_ < BOOTSTRAP_TRAINING_STEPS;
+
+    if (bootstrap_mode) {
+        predicted = pseudo;
+        probs.fill(0.0f);
+        probs[static_cast<size_t>(static_cast<int>(pseudo))] = 1.0f;
+    } else if (pseudo > predicted) {
+        predicted = pseudo;
+        apply_probability_floor(probs, pseudo);
+    }
+
+    if (debug_prediction_enabled()) {
+        std::cout << "[debug-pred] frame=" << frame.frame_id
+                  << " pred=" << risk_name(predicted)
+                  << " pseudo=" << risk_name(pseudo)
+                  << " probs=["
+                  << probs[0] << "," << probs[1] << ","
+                  << probs[2] << "," << probs[3] << "]"
+                  << " trained=" << trained
+                  << " empty=" << empty_scene
+                  << " actionable=" << actionable_scene
+                  << "\n";
+    }
+
+    // ── 8. Assemble result ────────────────────────────────────────────────────
     PredictionResult result;
     result.risk_level          = predicted;
     result.probabilities       = probs;

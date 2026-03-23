@@ -29,6 +29,7 @@ endif()
 add_library(sensors_lib STATIC
     rplidar_a1.cpp
     ld06.cpp
+    ultrasonic_fallback.cpp
     LiDAR.cpp
 )
 

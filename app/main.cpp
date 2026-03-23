@@ -1,5 +1,8 @@
 // ─── main.cpp ────────────────────────────────────────────────────────────────
 // Smart Glasses — top-level entry point.
+// Supports real hardware (LD06, RPLidar A1) and the synthetic simulator:
+//   ./smart_glasses --sensor sim --scene sidewalk
+//   ./smart_glasses --sensor sim --scene crossing --no-agent --verbose
 //
 // Wires every module into a single 10 Hz real-time pipeline:
 //
@@ -54,6 +57,13 @@
 #include "audio/audio.h"
 #include "agent/agent.h"
 
+// sim/ is an optional module — only included when USE_SIM is defined at
+// compile time (i.e. when sim_lib is linked). Real hardware builds are
+// completely unaffected: this block compiles to nothing without -DUSE_SIM.
+#ifdef USE_SIM
+#  include "sim/sim.h"
+#endif
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -86,9 +96,21 @@ struct AppConfig {
     sensors::LidarModel sensor_model = sensors::LidarModel::LD06;
     std::string         port         = "/dev/ttyAMA0";
 
+    // Simulation (only used when sensor_model == Sim)
+    std::string         sim_scene    = "sidewalk";   // scene name without "sim://"
+    bool                sim_walk     = true;         // user walks forward
+    uint32_t            sim_seed     = 0;            // 0 = random, >0 = reproducible
+    float               sim_hz       = 10.0f;        // sim scan rate
+
+    // Ultrasonic fallback
+    int                 ultra_trigger_pin = 23;
+    int                 ultra_echo_pin    = 24;
+    float               ultra_hz          = 10.0f;
+    float               ultra_mock_mm     = 0.0f;    // 0 = real GPIO sensor
+
     // Perception
     float eps_mm  = 150.0f;
-    int   min_pts = 3;
+    int   min_pts = 4;
 
     // Prediction / training
     std::string checkpoint   = "aaronnet_risk.bin";
@@ -123,12 +145,27 @@ struct AppConfig {
         "Usage: " << prog << " [options]\n"
         "\n"
         "Sensor:\n"
-        "  --sensor ld06|rplidar     LiDAR model (default: ld06)\n"
+        "  --sensor ld06|rplidar|ultrasonic|sim sensor model (default: ld06)\n"
         "  --port   PATH             Serial device (default: /dev/ttyAMA0)\n"
+        "                            (ignored when --sensor sim)\n"
+        "\n"
+        "Simulation (only with --sensor sim):\n"
+        "  --scene  NAME             Sim scene: sidewalk|crossing|hallway|\n"
+        "                                       parking_lot|cyclist_overtake|crowd\n"
+        "                            (default: sidewalk)\n"
+        "  --sim-seed INT            RNG seed (0=random, >0=reproducible)\n"
+        "  --sim-no-walk             Keep simulated user stationary\n"
+        "  --sim-hz  FLOAT           Sim scan rate Hz (default: 10.0)\n"
+        "\n"
+        "Ultrasonic fallback (only with --sensor ultrasonic):\n"
+        "  --ultra-trigger INT       GPIO trigger pin (default: 23)\n"
+        "  --ultra-echo INT          GPIO echo pin    (default: 24)\n"
+        "  --ultra-hz FLOAT          Poll rate Hz     (default: 10.0)\n"
+        "  --ultra-mock-mm FLOAT     Desktop/mock fixed distance in mm\n"
         "\n"
         "Perception:\n"
         "  --eps-mm FLOAT            DBSCAN neighbourhood radius mm (default: 150)\n"
-        "  --min-pts INT             DBSCAN minimum cluster size    (default: 3)\n"
+        "  --min-pts INT             DBSCAN minimum cluster size    (default: 4)\n"
         "\n"
         "Prediction:\n"
         "  --checkpoint PATH         aaronnet weight file           (default: aaronnet_risk.bin)\n"
@@ -156,7 +193,9 @@ struct AppConfig {
         "\n"
         "Examples:\n"
         "  " << prog << " --sensor ld06 --port /dev/ttyAMA0 --verbose\n"
-        "  " << prog << " --sensor rplidar --port /dev/ttyUSB0 --no-agent\n";
+        "  " << prog << " --sensor rplidar --port /dev/ttyUSB0 --no-agent\n"
+        "  " << prog << " --sensor sim --scene crossing --verbose\n"
+        "  " << prog << " --sensor sim --scene crowd --sim-seed 42 --no-agent\n";
     std::exit(0);
 }
 
@@ -186,12 +225,37 @@ static AppConfig parse_args(int argc, char* argv[])
             } else if (s == "rplidar" || s == "RPLidar" || s == "a1") {
                 cfg.sensor_model = sensors::LidarModel::RPLidarA1;
                 if (cfg.port == "/dev/ttyAMA0") cfg.port = "/dev/ttyUSB0";
+            } else if (s == "ultrasonic" || s == "ultra" || s == "Ultrasonic") {
+                cfg.sensor_model = sensors::LidarModel::Ultrasonic;
+                cfg.port = sensors::default_port(cfg.sensor_model);
+            } else if (s == "sim" || s == "Sim" || s == "SIM") {
+#ifndef USE_SIM
+                std::cerr << "error: --sensor sim requires the sim_lib to be "
+                             "linked.\n"
+                             "Rebuild with: cmake .. -DUSE_SIM=ON\n";
+                std::exit(1);
+#else
+                cfg.sensor_model = sensors::LidarModel::Sim;
+                cfg.port = "sim://sidewalk";   // default; overridden by --scene
+#endif
             } else {
                 std::cerr << "error: unknown sensor '" << s
-                          << "' (use ld06 or rplidar)\n";
+                          << "' (use ld06, rplidar, ultrasonic, or sim)\n";
                 std::exit(1);
             }
         }
+        else if (arg == "--scene") {
+            cfg.sim_scene = next("--scene");
+            // If the user set --scene before --sensor sim, we still update port.
+            cfg.port = "sim://" + cfg.sim_scene;
+        }
+        else if (arg == "--sim-seed")    { cfg.sim_seed = static_cast<uint32_t>(std::stoul(next("--sim-seed"))); }
+        else if (arg == "--sim-no-walk") { cfg.sim_walk = false; }
+        else if (arg == "--sim-hz")      { cfg.sim_hz   = std::stof(next("--sim-hz")); }
+        else if (arg == "--ultra-trigger"){ cfg.ultra_trigger_pin = std::stoi(next("--ultra-trigger")); }
+        else if (arg == "--ultra-echo")   { cfg.ultra_echo_pin    = std::stoi(next("--ultra-echo")); }
+        else if (arg == "--ultra-hz")     { cfg.ultra_hz          = std::stof(next("--ultra-hz")); }
+        else if (arg == "--ultra-mock-mm"){ cfg.ultra_mock_mm     = std::stof(next("--ultra-mock-mm")); }
         else if (arg == "--port")            { cfg.port              = next("--port");            }
         else if (arg == "--eps-mm")          { cfg.eps_mm            = std::stof(next("--eps-mm"));     }
         else if (arg == "--min-pts")         { cfg.min_pts           = std::stoi(next("--min-pts"));    }
@@ -303,7 +367,7 @@ static void log_frame(const prediction::FullPrediction& pred,
 int main(int argc, char* argv[])
 {
     // ── Parse CLI ─────────────────────────────────────────────────────────────
-    const AppConfig cfg = parse_args(argc, argv);
+    AppConfig cfg = parse_args(argc, argv);
 
     // ── Install signal handlers ───────────────────────────────────────────────
     std::signal(SIGINT,  signal_handler);
@@ -316,6 +380,38 @@ int main(int argc, char* argv[])
         "║   aaronnet autograd  ·  Kalman tracker  ·  GPT-4o agent  ║\n"
         "╚══════════════════════════════════════════════════════════╝\n\n";
 
+    // When sim is selected, assemble the full scene URI now (handles the case
+    // where --scene was passed before --sensor sim, or vice versa).
+#ifdef USE_SIM
+    if (cfg.sensor_model == sensors::LidarModel::Sim) {
+        cfg.port = "sim://" + cfg.sim_scene;
+    }
+#endif
+    if (cfg.sensor_model == sensors::LidarModel::Ultrasonic) {
+        std::ostringstream uri;
+        if (cfg.ultra_mock_mm > 0.0f) {
+            uri << "ultrasonic://mock?mm=" << cfg.ultra_mock_mm
+                << "&hz=" << cfg.ultra_hz;
+        } else {
+            uri << "ultrasonic://" << cfg.ultra_trigger_pin
+                << "," << cfg.ultra_echo_pin
+                << "?hz=" << cfg.ultra_hz;
+        }
+        cfg.port = uri.str();
+
+        // Keep the ultrasonic fallback from inheriting a stale LiDAR-trained
+        // checkpoint unless the user explicitly asked for one.
+        if (cfg.checkpoint == "aaronnet_risk.bin") {
+            cfg.checkpoint = "aaronnet_ultrasonic.bin";
+        }
+
+        // Forward-only ultrasonic is a placeholder path. Default to frozen
+        // heuristic behavior unless the user explicitly asked for training.
+        if (cfg.online_train) {
+            cfg.online_train = false;
+        }
+    }
+
     std::cout << "Sensor      : " << sensors::model_name(cfg.sensor_model)
               << " on " << cfg.port << "\n";
     std::cout << "Checkpoint  : " << cfg.checkpoint << "\n";
@@ -326,13 +422,27 @@ int main(int argc, char* argv[])
               << "m  CAUTION=" << cfg.caution_mm / 1000.0f << "m\n\n";
 
     // ══════════════════════════════════════════════════════════════════════════
-    // 1. SENSORS — LiDAR driver
+    // 1. SENSORS — range sensor driver
     // ══════════════════════════════════════════════════════════════════════════
 
-    std::cout << "[1/6] Opening LiDAR sensor...\n";
+    std::cout << "[1/6] Opening sensor...\n";
     std::unique_ptr<sensors::LidarBase> lidar;
     try {
-        lidar = sensors::make_lidar(cfg.sensor_model, cfg.port);
+#ifdef USE_SIM
+        if (cfg.sensor_model == sensors::LidarModel::Sim) {
+            // Build the SimConfig from CLI args and construct directly.
+            // This avoids going through the extern-C bridge and gives full
+            // access to SimConfig fields (seed, walk, hz).
+            sim::SimConfig sim_cfg;
+            sim_cfg.rng_seed    = cfg.sim_seed;
+            sim_cfg.user_walks  = cfg.sim_walk;
+            sim_cfg.scan_hz     = cfg.sim_hz;
+            lidar = sim::make_sim_lidar(cfg.port, sim_cfg);
+        } else
+#endif
+        {
+            lidar = sensors::make_lidar(cfg.sensor_model, cfg.port);
+        }
     } catch (const std::exception& e) {
         std::cerr << "FATAL: Cannot create sensor driver: " << e.what() << "\n";
         return 1;
@@ -340,9 +450,12 @@ int main(int argc, char* argv[])
 
     if (!lidar->open()) {
         std::cerr << "FATAL: Cannot open sensor on " << cfg.port
-                  << ": " << lidar->error_message() << "\n"
-                  << "  → Check cable connection and port permissions.\n"
-                  << "  → Run: sudo chmod 666 " << cfg.port << "\n";
+                  << ": " << lidar->error_message() << "\n";
+        if (cfg.sensor_model != sensors::LidarModel::Sim &&
+            cfg.sensor_model != sensors::LidarModel::Ultrasonic) {
+            std::cerr << "  → Check cable connection and port permissions.\n"
+                      << "  → Run: sudo chmod 666 " << cfg.port << "\n";
+        }
         return 1;
     }
 
@@ -353,6 +466,26 @@ int main(int argc, char* argv[])
     }
 
     std::cout << "  ✓ " << lidar->model_name() << " scanning\n";
+#ifdef USE_SIM
+    if (cfg.sensor_model == sensors::LidarModel::Sim) {
+        std::cout << "  ✓ Scene      : " << cfg.sim_scene << "\n";
+        std::cout << "  ✓ Seed       : "
+                  << (cfg.sim_seed == 0 ? "random" : std::to_string(cfg.sim_seed)) << "\n";
+        std::cout << "  ✓ User walk  : " << (cfg.sim_walk ? "yes" : "no") << "\n";
+        std::cout << "  ✓ Scan rate  : " << cfg.sim_hz << " Hz\n";
+    }
+#endif
+    if (cfg.sensor_model == sensors::LidarModel::Ultrasonic) {
+        if (cfg.ultra_mock_mm > 0.0f) {
+            std::cout << "  ✓ Mode       : mock\n";
+            std::cout << "  ✓ Distance   : " << cfg.ultra_mock_mm << " mm\n";
+        } else {
+            std::cout << "  ✓ Trigger pin: GPIO" << cfg.ultra_trigger_pin << "\n";
+            std::cout << "  ✓ Echo pin   : GPIO" << cfg.ultra_echo_pin << "\n";
+        }
+        std::cout << "  ✓ Poll rate  : " << cfg.ultra_hz << " Hz\n";
+        std::cout << "  ✓ Output     : narrow forward synthetic cluster\n";
+    }
 
     // ══════════════════════════════════════════════════════════════════════════
     // 2. PERCEPTION — occupancy map + DBSCAN clusterer + Kalman tracker
@@ -507,6 +640,7 @@ int main(int argc, char* argv[])
 
     PipelineStats stats;
     uint64_t last_frame_id     = UINT64_MAX;
+    auto     last_new_frame_at = std::chrono::steady_clock::now();
 
     // dt timing: measured wall-clock time between consecutive frames.
     auto last_frame_time = std::chrono::steady_clock::now();
@@ -521,6 +655,18 @@ int main(int argc, char* argv[])
             // No new frame yet — yield briefly then poll again.
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
+            const auto stall_s = std::chrono::duration_cast<std::chrono::duration<double>>(
+                std::chrono::steady_clock::now() - last_new_frame_at).count();
+            if (stall_s > 2.0) {
+                std::cerr << "FATAL: Sensor stopped producing new frames for "
+                          << std::fixed << std::setprecision(1)
+                          << stall_s << " seconds.\n";
+                if (!lidar->error_message().empty()) {
+                    std::cerr << "  → Sensor error: " << lidar->error_message() << "\n";
+                }
+                break;
+            }
+
             // Surface sensor errors (non-fatal — driver keeps retrying).
             if (!lidar->error_message().empty() && cfg.verbose) {
                 std::cerr << "[sensor] " << lidar->error_message() << "\n";
@@ -529,6 +675,7 @@ int main(int argc, char* argv[])
         }
 
         last_frame_id = frame.frame_id;
+        last_new_frame_at = std::chrono::steady_clock::now();
 
         // ── Measure dt ────────────────────────────────────────────────────────
         const auto frame_start_time = std::chrono::steady_clock::now();

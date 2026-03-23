@@ -352,7 +352,7 @@ public:
 
     static constexpr int   MIN_HITS         = 3;      // frames to confirm
     static constexpr int   MAX_LOST_FRAMES  = 5;      // frames before deletion
-    static constexpr float GATE_MM          = 800.0f; // max assignment distance
+    static constexpr float GATE_MM          = 1200.0f; // max assignment distance
     static constexpr float DT_S             = 0.10f;  // nominal timestep (10 Hz)
 
     // Process noise: uncertainty added per step (tuned for pedestrian motion).

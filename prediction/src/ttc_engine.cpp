@@ -9,8 +9,21 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
+#include <cstdlib>
+#include <iostream>
 
 namespace prediction {
+
+namespace {
+bool debug_ttc_enabled()
+{
+    static const bool enabled = [] {
+        const char* v = std::getenv("SMART_GLASSES_DEBUG_TTC");
+        return v && v[0] != '\0' && std::string(v) != "0";
+    }();
+    return enabled;
+}
+} // namespace
 
 // ─── TTCResult::alert_str ─────────────────────────────────────────────────────
 
@@ -84,6 +97,11 @@ int TTCEngine::bearing_to_sector(float bearing_deg)
 
 float TTCEngine::compute_ttc(float px, float py, float vx, float vy) const
 {
+    if (!std::isfinite(px) || !std::isfinite(py) ||
+        !std::isfinite(vx) || !std::isfinite(vy)) {
+        return std::numeric_limits<float>::infinity();
+    }
+
     const float R  = collision_radius_mm_;
     const float a  = vx*vx + vy*vy;
 
@@ -108,7 +126,9 @@ float TTCEngine::compute_ttc(float px, float py, float vx, float vy) const
     if (t2 > 0.0f) ttc = std::min(ttc, t2);
 
     // Clip to MAX_TTC_S — beyond that it's not actionable.
-    if (ttc > MAX_TTC_S) return std::numeric_limits<float>::infinity();
+    if (!std::isfinite(ttc) || ttc > MAX_TTC_S) {
+        return std::numeric_limits<float>::infinity();
+    }
 
     return ttc;
 }
@@ -194,12 +214,23 @@ TTCResult TTCEngine::build_result(const perception::TrackedObject& obj) const
     r.is_stationary     = (obj.speed_mm_s < STATIONARY_THRESHOLD);
     r.sector      = bearing_to_sector(obj.bearing_deg);
 
+    if (!std::isfinite(obj.px) || !std::isfinite(obj.py) ||
+        !std::isfinite(obj.vx) || !std::isfinite(obj.vy)) {
+        r.cpa = CPAResult{};
+        r.path = project_path(0.0f, 0.0f, 0.0f, 0.0f);
+        return r;
+    }
+
     // ── TTC ───────────────────────────────────────────────────────────────────
-    // Only compute TTC if velocity is reliable and the object is approaching.
-    // For stationary objects or those with unreliable velocity, TTC = ∞.
-    // This prevents false alarms from a wall that "appears to move" in the first
-    // few Kalman frames before velocity has settled.
-    if (obj.velocity_reliable() && obj.closing_speed_mm_s > MIN_CLOSING_SPEED) {
+    // Relax the gating slightly so early confirmed tracks can still produce a
+    // physically meaningful TTC before the tracker reaches full "reliable"
+    // status. This helps the system detect approaching objects earlier without
+    // rewriting the tracker.
+    const bool has_motion   = obj.speed_mm_s > MIN_CLOSING_SPEED;
+    const bool approaching  = obj.closing_speed_mm_s > MIN_CLOSING_SPEED;
+    const bool enough_hits  = obj.hits >= 2;
+
+    if (enough_hits && has_motion && approaching) {
         r.ttc_s = compute_ttc(obj.px, obj.py, obj.vx, obj.vy);
     }
     // Proximity override: even a stationary object triggers a finite "TTC" if
@@ -220,6 +251,20 @@ TTCResult TTCEngine::build_result(const perception::TrackedObject& obj) const
 
     // ── Projected path ────────────────────────────────────────────────────────
     r.path = project_path(obj.px, obj.py, obj.vx, obj.vy);
+
+    if (debug_ttc_enabled() && enough_hits) {
+        std::cout << "[debug-ttc] id=" << r.object_id
+                  << " px=" << obj.px
+                  << " py=" << obj.py
+                  << " vx=" << obj.vx
+                  << " vy=" << obj.vy
+                  << " dist=" << r.distance_mm
+                  << " closing=" << r.closing_speed_mm_s
+                  << " ttc=" << (std::isfinite(r.ttc_s) ? r.ttc_s : -1.0f)
+                  << " reliable=" << obj.velocity_reliable()
+                  << " hits=" << obj.hits
+                  << "\n";
+    }
 
     return r;
 }

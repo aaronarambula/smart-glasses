@@ -10,8 +10,41 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
+#include <cstdlib>
+#include <iostream>
 
 namespace perception {
+
+namespace {
+bool debug_ttc_enabled()
+{
+    static const bool enabled = [] {
+        const char* v = std::getenv("SMART_GLASSES_DEBUG_TTC");
+        return v && v[0] != '\0' && std::string(v) != "0";
+    }();
+    return enabled;
+}
+
+bool debug_perception_enabled()
+{
+    static const bool enabled = [] {
+        const char* v = std::getenv("SMART_GLASSES_DEBUG_PERCEPTION");
+        return v && v[0] != '\0' && std::string(v) != "0";
+    }();
+    return enabled;
+}
+
+bool is_trackworthy_cluster(const Cluster& c)
+{
+    // Avoid spawning tracks from tiny, flickering fragments. The clusterer
+    // already filters output, but this second gate keeps tracker growth under
+    // control if parameters are loosened elsewhere.
+    const bool enough_support = c.point_count() >= 4;
+    const bool plausible_extent = c.point_count() >= 3 && c.size_mm() >= 300.0f;
+    const bool in_tracking_roi = c.distance_mm <= 5000.0f;
+    return in_tracking_roi && (enough_support || plausible_extent);
+}
+} // namespace
 
 // ─── TrackedObject::str ───────────────────────────────────────────────────────
 
@@ -300,9 +333,13 @@ std::vector<int> Tracker::hungarian_assign(
 
     // ── Hungarian algorithm ───────────────────────────────────────────────────
 
-    std::vector<float> u(static_cast<size_t>(N), 0.0f);  // row potentials
-    std::vector<float> v(static_cast<size_t>(N), 0.0f);  // col potentials
-    std::vector<int>   p(static_cast<size_t>(N + 1), 0); // col → row assignment (1-indexed rows)
+    // The JV/Hungarian implementation below is written in the standard
+    // 1-indexed form with a dummy column 0. Keep potentials 1-indexed too;
+    // mixing 0-indexed u/v with 1-indexed p/way causes out-of-bounds writes
+    // when the dummy column participates in the augmenting-path updates.
+    std::vector<float> u(static_cast<size_t>(N + 1), 0.0f);  // row potentials
+    std::vector<float> v(static_cast<size_t>(N + 1), 0.0f);  // col potentials
+    std::vector<int>   p(static_cast<size_t>(N + 1), 0);     // col → row assignment
     std::vector<int>   way(static_cast<size_t>(N + 1), 0);
 
     // Jonker-Volgenant style Hungarian (numerically robust, clean O(N³)).
@@ -323,8 +360,8 @@ std::vector<int> Tracker::hungarian_assign(
 
                 // Cost with potential subtracted (reduced cost).
                 float cur = cost[static_cast<size_t>((i0 - 1) * N + (j - 1))]
-                          - u[static_cast<size_t>(i0 - 1)]
-                          - v[static_cast<size_t>(j - 1)];
+                          - u[static_cast<size_t>(i0)]
+                          - v[static_cast<size_t>(j)];
 
                 if (cur < minv[static_cast<size_t>(j)]) {
                     minv[static_cast<size_t>(j)] = cur;
@@ -336,10 +373,19 @@ std::vector<int> Tracker::hungarian_assign(
                 }
             }
 
+            // All remaining columns are effectively unreachable for this row.
+            // This happens when gating rejects every cluster for the current
+            // track. Leave the row unmatched instead of stepping into an
+            // invalid augmenting-path state.
+            if (j1 < 0 || !std::isfinite(delta) || delta >= INF * 0.5f) {
+                j0 = -1;
+                break;
+            }
+
             // Update potentials
             for (int j = 0; j <= N; ++j) {
                 if (used[static_cast<size_t>(j)]) {
-                    u[static_cast<size_t>(p[static_cast<size_t>(j)] - 1)] += delta;
+                    u[static_cast<size_t>(p[static_cast<size_t>(j)])] += delta;
                     v[static_cast<size_t>(j)] -= delta;
                 } else {
                     minv[static_cast<size_t>(j)] -= delta;
@@ -347,7 +393,11 @@ std::vector<int> Tracker::hungarian_assign(
             }
 
             j0 = j1;
-        } while (p[static_cast<size_t>(j0)] != 0);
+        } while (j0 >= 0 && p[static_cast<size_t>(j0)] != 0);
+
+        if (j0 < 0) {
+            continue;
+        }
 
         // Augment path
         do {
@@ -402,6 +452,14 @@ void Tracker::fill_derived(TrackedObject& obj)
     if (bearing_deg < 0.0f) bearing_deg += 360.0f;
     obj.bearing_deg = bearing_deg;
 
+    if (!std::isfinite(obj.vx) || !std::isfinite(obj.vy)) {
+        obj.vx = 0.0f;
+        obj.vy = 0.0f;
+    }
+
+    obj.vx = std::clamp(obj.vx, -5000.0f, 5000.0f);
+    obj.vy = std::clamp(obj.vy, -5000.0f, 5000.0f);
+
     // Speed magnitude.
     obj.speed_mm_s = std::sqrt(obj.vx * obj.vx + obj.vy * obj.vy);
 
@@ -415,6 +473,10 @@ void Tracker::fill_derived(TrackedObject& obj)
         obj.closing_speed_mm_s =
             -(obj.vx * obj.px + obj.vy * obj.py) / obj.distance_mm;
     } else {
+        obj.closing_speed_mm_s = 0.0f;
+    }
+
+    if (!std::isfinite(obj.closing_speed_mm_s)) {
         obj.closing_speed_mm_s = 0.0f;
     }
 }
@@ -459,6 +521,10 @@ TrackedObjectList Tracker::update(const ClusterList& clusters, float dt_s)
 {
     if (dt_s <= 0.0f) dt_s = DT_S;
 
+    if (debug_perception_enabled()) {
+        std::cout << "[dbg-tracker-in] clusters=" << clusters.size() << "\n";
+    }
+
     // ── 1. Predict ────────────────────────────────────────────────────────────
     predict(dt_s);
 
@@ -497,10 +563,32 @@ TrackedObjectList Tracker::update(const ClusterList& clusters, float dt_s)
         auto& t = tracks_[i];
         if (t.state == TrackState::DEAD) continue;
 
+        // Tentative tracks that miss before confirmation are almost always
+        // clutter. Kill them immediately instead of letting them accumulate as
+        // LOST tracks.
+        if (t.state == TrackState::TENTATIVE && t.hits <= 1) {
+            if (debug_perception_enabled()) {
+                std::cout << "[dbg-track-drop] id=" << t.id
+                          << " reason=tentative_miss"
+                          << " hits=" << t.hits
+                          << " lost=" << t.lost
+                          << "\n";
+            }
+            t.state = TrackState::DEAD;
+            continue;
+        }
+
         ++t.lost;
         ++t.age;
 
         if (t.lost > MAX_LOST_FRAMES) {
+            if (debug_perception_enabled()) {
+                std::cout << "[dbg-track-drop] id=" << t.id
+                          << " reason=max_lost"
+                          << " hits=" << t.hits
+                          << " lost=" << t.lost
+                          << "\n";
+            }
             t.state = TrackState::DEAD;
         } else {
             t.state = TrackState::LOST;
@@ -509,7 +597,30 @@ TrackedObjectList Tracker::update(const ClusterList& clusters, float dt_s)
 
     // ── 5. Spawn new tracks from unmatched clusters ───────────────────────────
     for (int j : unmatched_clusters) {
-        tracks_.push_back(init_track(clusters[static_cast<size_t>(j)]));
+        const auto& c = clusters[static_cast<size_t>(j)];
+        if (!is_trackworthy_cluster(c)) {
+            if (debug_perception_enabled()) {
+                std::cout << "[dbg-track-reject] reason=cluster_gate"
+                          << " pts=" << c.point_count()
+                          << " size=" << c.size_mm()
+                          << " dist=" << c.distance_mm
+                          << " cx=" << c.centroid_x
+                          << " cy=" << c.centroid_y
+                          << "\n";
+            }
+            continue;
+        }
+        auto t = init_track(c);
+        if (debug_perception_enabled()) {
+            std::cout << "[dbg-track-create] id=" << t.id
+                      << " pts=" << c.point_count()
+                      << " size=" << c.size_mm()
+                      << " dist=" << c.distance_mm
+                      << " cx=" << c.centroid_x
+                      << " cy=" << c.centroid_y
+                      << "\n";
+        }
+        tracks_.push_back(std::move(t));
     }
 
     // ── 6. Promote TENTATIVE tracks ───────────────────────────────────────────
@@ -531,6 +642,18 @@ TrackedObjectList Tracker::update(const ClusterList& clusters, float dt_s)
 
         TrackedObject obj = t.to_tracked_object();
         fill_derived(obj);
+        if (debug_ttc_enabled() && (obj.is_confirmed() || obj.hits >= 2)) {
+            std::cout << "[debug-track] id=" << obj.id
+                      << " px=" << obj.px
+                      << " py=" << obj.py
+                      << " vx=" << obj.vx
+                      << " vy=" << obj.vy
+                      << " dist=" << obj.distance_mm
+                      << " closing=" << obj.closing_speed_mm_s
+                      << " hits=" << obj.hits
+                      << " state=" << static_cast<int>(obj.state)
+                      << "\n";
+        }
         result.push_back(std::move(obj));
     }
 

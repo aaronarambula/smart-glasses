@@ -11,8 +11,21 @@
 #include <iomanip>
 #include <numeric>
 #include <cassert>
+#include <cstdlib>
+#include <iostream>
 
 namespace perception {
+
+namespace {
+bool debug_perception_enabled()
+{
+    static const bool enabled = [] {
+        const char* v = std::getenv("SMART_GLASSES_DEBUG_PERCEPTION");
+        return v && v[0] != '\0' && std::string(v) != "0";
+    }();
+    return enabled;
+}
+}
 
 // ─── Cluster::str ─────────────────────────────────────────────────────────────
 
@@ -106,16 +119,18 @@ void Clusterer::expand_cluster(
         int idx = q.front();
         q.pop();
 
-        // If this point was previously labelled NOISE, absorb it into the cluster.
-        // If already labelled with this or another cluster, skip.
-        if (labels[static_cast<size_t>(idx)] != -1 &&
-            labels[static_cast<size_t>(idx)] != 0) {
-            // Already assigned to a cluster — skip.
+        // If this point is already owned by another cluster, skip it.
+        // Points already assigned to this cluster must still be expanded;
+        // otherwise the seed core point never grows beyond a singleton.
+        if (labels[static_cast<size_t>(idx)] > 0 &&
+            labels[static_cast<size_t>(idx)] != cluster_id) {
             continue;
         }
 
-        // Assign to this cluster.
-        labels[static_cast<size_t>(idx)] = cluster_id;
+        // Assign previously-unvisited or noise points to this cluster.
+        if (labels[static_cast<size_t>(idx)] <= 0) {
+            labels[static_cast<size_t>(idx)] = cluster_id;
+        }
 
         // If this point is a core point (has enough neighbours), expand further.
         const auto& nbrs = neighbours[static_cast<size_t>(idx)];
@@ -254,7 +269,22 @@ ClusterList Clusterer::dbscan(const std::vector<CartesianPoint>& pts) const
 ClusterList Clusterer::run(const sensors::ScanFrame& frame) const
 {
     auto pts = to_cartesian(frame);
-    return dbscan(pts);
+    auto clusters = dbscan(pts);
+
+    if (debug_perception_enabled()) {
+        std::cout << "[dbg-clusters] n=" << clusters.size() << "\n";
+        for (const auto& c : clusters) {
+            std::cout << "[dbg-cluster] pts=" << c.point_count()
+                      << " size=" << c.size_mm()
+                      << " dist=" << c.distance_mm
+                      << " bearing=" << c.bearing_deg
+                      << " cx=" << c.centroid_x
+                      << " cy=" << c.centroid_y
+                      << "\n";
+        }
+    }
+
+    return clusters;
 }
 
 // ─── run (from CartesianPoint list) ──────────────────────────────────────────

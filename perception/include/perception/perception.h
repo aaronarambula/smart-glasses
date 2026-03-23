@@ -132,7 +132,7 @@ public:
     // eps_mm   : DBSCAN neighbourhood radius (mm)
     // min_pts  : DBSCAN minimum cluster size
     explicit PerceptionPipeline(float   eps_mm  = 150.0f,
-                                int     min_pts = 3)
+                                int     min_pts = 4)
         : clusterer_(eps_mm, min_pts)
     {}
 

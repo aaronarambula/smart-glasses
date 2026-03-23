@@ -33,10 +33,19 @@
 #include "lidar_base.h"
 #include "rplidar_a1.h"
 #include "ld06.h"
+#include "ultrasonic_fallback.h"
 
 #include <memory>
 #include <string>
 #include <stdexcept>
+
+// Forward declaration for the sim bridge function (global namespace, extern "C").
+// Defined in sim/src/sim_lidar.cpp. Only resolves at link time when sim_lib
+// is linked (cmake -DUSE_SIM=ON). Declared here so make_lidar(Sim) can call
+// it without pulling in any sim/ headers into sensors/.
+#ifdef USE_SIM
+extern "C" sensors::LidarBase* sim_make_lidar_raw(const std::string&);
+#endif
 
 namespace sensors {
 
@@ -48,6 +57,11 @@ namespace sensors {
 enum class LidarModel {
     RPLidarA1,  // Slamtec RPLIDAR A1M8 — USB-serial, 115200 baud
     LD06,       // LDROBOT LD06 / LD19 — UART, 230400 baud
+    Ultrasonic, // HC-SR04-style forward fallback, exposed as a narrow cluster
+    Sim,        // SimLidar — synthetic outdoor scenes, no hardware required
+                // port_path = "sim://sidewalk" | "sim://crossing" |
+                //             "sim://hallway"  | "sim://parking_lot" |
+                //             "sim://cyclist_overtake" | "sim://crowd"
 };
 
 // ─── make_lidar ──────────────────────────────────────────────────────────────
@@ -74,6 +88,21 @@ inline std::unique_ptr<LidarBase> make_lidar(LidarModel model,
         case LidarModel::LD06:
             return std::make_unique<LD06>(port_path);
 
+        case LidarModel::Ultrasonic:
+            return std::make_unique<UltrasonicFallback>(port_path);
+
+#ifdef USE_SIM
+        case LidarModel::Sim: {
+            // sim_make_lidar_raw is declared in the GLOBAL namespace (extern "C"
+            // in sim/src/sim_lidar.cpp) to avoid C++ name mangling. We declare
+            // it here at the point of use, outside any namespace, by temporarily
+            // closing the sensors namespace, declaring the extern, and re-opening.
+            // This keeps sensors.h free of any #include of sim/ headers.
+            return std::unique_ptr<LidarBase>(::sim_make_lidar_raw(port_path));
+        }
+#endif
+
+
         default:
             throw std::invalid_argument(
                 "sensors::make_lidar: unknown LidarModel");
@@ -92,6 +121,10 @@ inline std::string default_port(LidarModel model) {
     switch (model) {
         case LidarModel::RPLidarA1: return "/dev/ttyUSB0";
         case LidarModel::LD06:      return "/dev/ttyAMA0";
+        case LidarModel::Ultrasonic:return "ultrasonic://23,24?hz=10";
+#ifdef USE_SIM
+        case LidarModel::Sim:       return "sim://sidewalk";
+#endif
         default:                    return "/dev/ttyUSB0";
     }
 }
@@ -104,6 +137,10 @@ inline std::string model_name(LidarModel model) {
     switch (model) {
         case LidarModel::RPLidarA1: return "RPLIDAR A1M8";
         case LidarModel::LD06:      return "LD06";
+        case LidarModel::Ultrasonic:return "UltrasonicFallback";
+#ifdef USE_SIM
+        case LidarModel::Sim:       return "SimLidar (synthetic)";
+#endif
         default:                    return "Unknown";
     }
 }

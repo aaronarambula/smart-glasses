@@ -274,6 +274,7 @@ public:
     // ── Training hyperparameters ───────────────────────────────────────────────
     static constexpr int   TRAIN_EVERY_N = 5;    // train on every Nth frame
     static constexpr int   SAVE_EVERY_N  = 200;  // save weights every N training steps
+    static constexpr int   BOOTSTRAP_TRAINING_STEPS = 20; // heuristic labels until model settles
     static constexpr float LEARNING_RATE = 5e-4f;
     static constexpr float CLIP_NORM     = 1.0f;
     static constexpr float MAX_RANGE_MM  = 6000.0f;
@@ -372,6 +373,7 @@ private:
 
     // ── Persistence ───────────────────────────────────────────────────────────
     std::string checkpoint_path_;
+    bool        loaded_checkpoint_ = false;
 
     // ── Pseudo-labeller ───────────────────────────────────────────────────────
     PseudoLabeller labeller_;
