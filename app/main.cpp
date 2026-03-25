@@ -130,7 +130,6 @@ struct AppConfig {
     int   tts_speed_wpm = 150;
     int   tts_pitch     = 55;
     bool  tts_verbose   = false;
-    std::string tts_alsa_device;
 
     // Alert thresholds
     float danger_mm  =  500.0f;
@@ -197,7 +196,6 @@ struct AppConfig {
         "Audio:\n"
         "  --speed  INT              espeak-ng words/min (default: 150)\n"
         "  --pitch  INT              espeak-ng pitch 0-99 (default: 55)\n"
-        "  --tts-alsa-device DEV     Route TTS through ALSA device (e.g. plughw:1,0)\n"
         "\n"
         "Agent:\n"
         "  --no-agent                Disable GPT-4o agent (no API calls)\n"
@@ -297,7 +295,6 @@ static AppConfig parse_args(int argc, char* argv[])
         else if (arg == "--caution-mm")      { cfg.caution_mm        = std::stof(next("--caution-mm")); }
         else if (arg == "--speed")           { cfg.tts_speed_wpm     = std::stoi(next("--speed"));      }
         else if (arg == "--pitch")           { cfg.tts_pitch         = std::stoi(next("--pitch"));      }
-        else if (arg == "--tts-alsa-device") { cfg.tts_alsa_device   = next("--tts-alsa-device");      }
         else if (arg == "--no-agent")        { cfg.agent_enabled     = false;                           }
         else if (arg == "--agent-interval")  { cfg.agent_interval_s  = std::stof(next("--agent-interval")); }
         else if (arg == "--agent-verbose")   { cfg.agent_verbose     = true;                            }
@@ -615,7 +612,6 @@ int main(int argc, char* argv[])
     tts_cfg.speed_wpm = cfg.tts_speed_wpm;
     tts_cfg.pitch     = cfg.tts_pitch;
     tts_cfg.verbose   = cfg.tts_verbose;
-    tts_cfg.alsa_device = cfg.tts_alsa_device;
 
     audio::AlertThresholds alert_thresh;
     // Cooldowns are intentionally left at their defaults (DANGER=1.5s, etc.)
@@ -631,9 +627,6 @@ int main(int argc, char* argv[])
 
     std::cout << "  ✓ TTS engine running (espeak-ng, "
               << cfg.tts_speed_wpm << " wpm)\n";
-    if (!cfg.tts_alsa_device.empty()) {
-        std::cout << "  ✓ ALSA device: " << cfg.tts_alsa_device << "\n";
-    }
 
     // ══════════════════════════════════════════════════════════════════════════
     // 5. AGENT — OpenAI GPT-4o integration
