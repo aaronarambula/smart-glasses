@@ -58,6 +58,7 @@
 // from any thread.
 
 #include "tts_engine.h"
+#include "haptics_engine.h"
 #include "prediction/prediction.h"
 
 #include <string>
@@ -122,6 +123,7 @@ public:
     //            The TtsEngine must outlive the AlertPolicy.
     // thresholds: tunable timing / distance parameters (default = safe values).
     explicit AlertPolicy(TtsEngine& tts,
+                         HapticsEngine& haptics,
                          AlertThresholds thresholds = AlertThresholds{});
 
     // Non-copyable (holds a reference to TtsEngine).
@@ -205,6 +207,7 @@ private:
     // ── References ────────────────────────────────────────────────────────────
 
     TtsEngine&      tts_;
+    HapticsEngine&  haptics_;
     AlertThresholds thresholds_;
 
     // ── Per-level last-alert timestamps ───────────────────────────────────────

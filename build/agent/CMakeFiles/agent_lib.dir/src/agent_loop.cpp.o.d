@@ -894,5 +894,6 @@ agent/CMakeFiles/agent_lib.dir/src/agent_loop.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/atomic_unique_lock.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/intrusive_list_view.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_token.h \
+  /Users/aaronarambula/Documents/smart-glasses/agent/../audio/include/audio/haptics_engine.h \
   /Users/aaronarambula/Documents/smart-glasses/agent/../audio/include/audio/alert_policy.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/iostream

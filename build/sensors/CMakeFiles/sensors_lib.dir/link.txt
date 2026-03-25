@@ -1,2 +1,2 @@
-/usr/bin/ar qc libsensors_lib.a CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o CMakeFiles/sensors_lib.dir/ld06.cpp.o CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o CMakeFiles/sensors_lib.dir/LiDAR.cpp.o
+/usr/bin/ar qc libsensors_lib.a CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o CMakeFiles/sensors_lib.dir/ld06.cpp.o CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o CMakeFiles/sensors_lib.dir/LiDAR.cpp.o
 /usr/bin/ranlib libsensors_lib.a

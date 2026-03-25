@@ -130,6 +130,11 @@ struct AppConfig {
     int   tts_speed_wpm = 150;
     int   tts_pitch     = 55;
     bool  tts_verbose   = false;
+    int   haptic_pin    = -1;   // BCM numbering; -1 disables caution vibration
+    bool  haptic_active_low = true;
+    int   haptic_pulse_count = 2;
+    int   haptic_pulse_on_ms = 180;
+    int   haptic_pulse_off_ms = 120;
 
     // Alert thresholds
     float danger_mm  =  500.0f;
@@ -147,6 +152,41 @@ struct AppConfig {
     int   map_every_n_frames = 50;
     int   stats_every_n_frames = 100;  // print pipeline stats every N frames
 };
+
+static int board_pin_to_bcm(int board_pin)
+{
+    switch (board_pin) {
+        case 3: return 2;
+        case 5: return 3;
+        case 7: return 4;
+        case 8: return 14;
+        case 10: return 15;
+        case 11: return 17;
+        case 12: return 18;
+        case 13: return 27;
+        case 15: return 22;
+        case 16: return 23;
+        case 18: return 24;
+        case 19: return 10;
+        case 21: return 9;
+        case 22: return 25;
+        case 23: return 11;
+        case 24: return 8;
+        case 26: return 7;
+        case 27: return 0;
+        case 28: return 1;
+        case 29: return 5;
+        case 31: return 6;
+        case 32: return 12;
+        case 33: return 13;
+        case 35: return 19;
+        case 36: return 16;
+        case 37: return 26;
+        case 38: return 20;
+        case 40: return 21;
+        default: return -1;
+    }
+}
 
 // Prints usage string and exits.
 [[noreturn]] static void print_usage_and_exit(const char* prog)
@@ -196,6 +236,12 @@ struct AppConfig {
         "Audio:\n"
         "  --speed  INT              espeak-ng words/min (default: 150)\n"
         "  --pitch  INT              espeak-ng pitch 0-99 (default: 55)\n"
+        "  --haptic-pin INT          BCM GPIO pin for CAUTION vibration motor\n"
+        "  --haptic-board-pin INT    Physical BOARD pin for CAUTION vibration motor\n"
+        "  --haptic-active-high      Treat HIGH as motor-on (default: active-low)\n"
+        "  --haptic-pulses INT       Pulses per CAUTION alert (default: 2)\n"
+        "  --haptic-on-ms INT        Motor-on milliseconds per pulse (default: 180)\n"
+        "  --haptic-off-ms INT       Gap milliseconds between pulses (default: 120)\n"
         "\n"
         "Agent:\n"
         "  --no-agent                Disable GPT-4o agent (no API calls)\n"
@@ -295,6 +341,20 @@ static AppConfig parse_args(int argc, char* argv[])
         else if (arg == "--caution-mm")      { cfg.caution_mm        = std::stof(next("--caution-mm")); }
         else if (arg == "--speed")           { cfg.tts_speed_wpm     = std::stoi(next("--speed"));      }
         else if (arg == "--pitch")           { cfg.tts_pitch         = std::stoi(next("--pitch"));      }
+        else if (arg == "--haptic-pin")      { cfg.haptic_pin        = std::stoi(next("--haptic-pin")); }
+        else if (arg == "--haptic-board-pin") {
+            const int board_pin = std::stoi(next("--haptic-board-pin"));
+            cfg.haptic_pin = board_pin_to_bcm(board_pin);
+            if (cfg.haptic_pin < 0) {
+                std::cerr << "error: unsupported Raspberry Pi BOARD pin '"
+                          << board_pin << "' for --haptic-board-pin\n";
+                std::exit(1);
+            }
+        }
+        else if (arg == "--haptic-active-high") { cfg.haptic_active_low = false; }
+        else if (arg == "--haptic-pulses")      { cfg.haptic_pulse_count = std::max(1, std::stoi(next("--haptic-pulses"))); }
+        else if (arg == "--haptic-on-ms")       { cfg.haptic_pulse_on_ms = std::max(1, std::stoi(next("--haptic-on-ms"))); }
+        else if (arg == "--haptic-off-ms")      { cfg.haptic_pulse_off_ms = std::max(1, std::stoi(next("--haptic-off-ms"))); }
         else if (arg == "--no-agent")        { cfg.agent_enabled     = false;                           }
         else if (arg == "--agent-interval")  { cfg.agent_interval_s  = std::stof(next("--agent-interval")); }
         else if (arg == "--agent-verbose")   { cfg.agent_verbose     = true;                            }
@@ -405,6 +465,16 @@ int main(int argc, char* argv[])
     // ── Install signal handlers ───────────────────────────────────────────────
     std::signal(SIGINT,  signal_handler);
     std::signal(SIGTERM, signal_handler);
+
+    if (cfg.haptic_pin >= 0 &&
+        cfg.sensor_model == sensors::LidarModel::Ultrasonic &&
+        (cfg.haptic_pin == cfg.ultra_trigger_pin ||
+         cfg.haptic_pin == cfg.ultra_echo_pin))
+    {
+        std::cerr << "error: haptic GPIO" << cfg.haptic_pin
+                  << " conflicts with ultrasonic trigger/echo GPIO.\n";
+        return 1;
+    }
 
     // ── Banner ────────────────────────────────────────────────────────────────
     std::cout <<
@@ -613,13 +683,30 @@ int main(int argc, char* argv[])
     tts_cfg.pitch     = cfg.tts_pitch;
     tts_cfg.verbose   = cfg.tts_verbose;
 
+    audio::HapticsConfig haptics_cfg;
+    haptics_cfg.enabled = (cfg.haptic_pin >= 0);
+    haptics_cfg.gpio_pin = cfg.haptic_pin;
+    haptics_cfg.active_low = cfg.haptic_active_low;
+    haptics_cfg.pulse_count = cfg.haptic_pulse_count;
+    haptics_cfg.pulse_on_ms = cfg.haptic_pulse_on_ms;
+    haptics_cfg.pulse_off_ms = cfg.haptic_pulse_off_ms;
+    haptics_cfg.verbose = cfg.verbose;
+
     audio::AlertThresholds alert_thresh;
     // Cooldowns are intentionally left at their defaults (DANGER=1.5s, etc.)
     // so the policy is immediately usable. The user can tune via recompile
     // or future runtime config.
 
-    audio::AudioSystem audio(tts_cfg, alert_thresh);
-    audio.start();
+    audio::AudioSystem audio(tts_cfg, haptics_cfg, alert_thresh);
+    if (!audio.start()) {
+        std::cerr << "FATAL: Failed to start audio system";
+        const std::string err = audio.haptics().error_message();
+        if (!err.empty()) {
+            std::cerr << ": " << err;
+        }
+        std::cerr << "\n";
+        return 1;
+    }
 
     // Startup chime — lets the user know the glasses are active.
     audio.speak("Smart glasses active. Scanning for obstacles.",
@@ -627,6 +714,12 @@ int main(int argc, char* argv[])
 
     std::cout << "  ✓ TTS engine running (espeak-ng, "
               << cfg.tts_speed_wpm << " wpm)\n";
+    if (cfg.haptic_pin >= 0) {
+        std::cout << "  ✓ Haptics    : GPIO" << cfg.haptic_pin
+                  << " caution pulses only\n";
+    } else {
+        std::cout << "  ✓ Haptics    : disabled\n";
+    }
 
     // ══════════════════════════════════════════════════════════════════════════
     // 5. AGENT — OpenAI GPT-4o integration

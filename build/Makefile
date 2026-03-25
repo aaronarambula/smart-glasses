@@ -265,6 +265,19 @@ smart_glasses/fast:
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/smart_glasses.dir/build.make app/CMakeFiles/smart_glasses.dir/build
 .PHONY : smart_glasses/fast
 
+#=============================================================================
+# Target rules for targets named train_object_cnn
+
+# Build rule for target.
+train_object_cnn: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 train_object_cnn
+.PHONY : train_object_cnn
+
+# fast build rule for target.
+train_object_cnn/fast:
+	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/build
+.PHONY : train_object_cnn/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -285,6 +298,7 @@ help:
 	@echo "... sensors_lib"
 	@echo "... sim_lib"
 	@echo "... smart_glasses"
+	@echo "... train_object_cnn"
 .PHONY : help
 
 

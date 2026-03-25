@@ -175,6 +175,20 @@ smart_glasses/fast:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/smart_glasses.dir/build.make app/CMakeFiles/smart_glasses.dir/build
 .PHONY : smart_glasses/fast
 
+# Convenience name for target.
+app/CMakeFiles/train_object_cnn.dir/rule:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 app/CMakeFiles/train_object_cnn.dir/rule
+.PHONY : app/CMakeFiles/train_object_cnn.dir/rule
+
+# Convenience name for target.
+train_object_cnn: app/CMakeFiles/train_object_cnn.dir/rule
+.PHONY : train_object_cnn
+
+# fast build rule for target.
+train_object_cnn/fast:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/build
+.PHONY : train_object_cnn/fast
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -199,6 +213,30 @@ main.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/smart_glasses.dir/build.make app/CMakeFiles/smart_glasses.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+train_object_cnn.o: train_object_cnn.cpp.o
+.PHONY : train_object_cnn.o
+
+# target to build an object file
+train_object_cnn.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/train_object_cnn.cpp.o
+.PHONY : train_object_cnn.cpp.o
+
+train_object_cnn.i: train_object_cnn.cpp.i
+.PHONY : train_object_cnn.i
+
+# target to preprocess a source file
+train_object_cnn.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/train_object_cnn.cpp.i
+.PHONY : train_object_cnn.cpp.i
+
+train_object_cnn.s: train_object_cnn.cpp.s
+.PHONY : train_object_cnn.s
+
+# target to generate assembly for a file
+train_object_cnn.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/train_object_cnn.cpp.s
+.PHONY : train_object_cnn.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -212,9 +250,13 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... smart_glasses"
+	@echo "... train_object_cnn"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... train_object_cnn.o"
+	@echo "... train_object_cnn.i"
+	@echo "... train_object_cnn.s"
 .PHONY : help
 
 

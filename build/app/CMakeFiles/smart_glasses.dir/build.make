@@ -104,6 +104,7 @@ app/smart_glasses: autograd/libautograd_lib.a
 app/smart_glasses: sim/libsim_lib.a
 app/smart_glasses: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libcurl.tbd
 app/smart_glasses: sensors/libsensors_lib.a
+app/smart_glasses: autograd/libautograd_lib.a
 app/smart_glasses: app/CMakeFiles/smart_glasses.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable smart_glasses"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/app && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/smart_glasses.dir/link.txt --verbose=$(VERBOSE)

@@ -216,8 +216,8 @@ CURL_LIBRARY_RELEASE:FILEPATH=/Applications/Xcode.app/Contents/Developer/Platfor
 //Path to a program.
 ESPEAK_NG_EXECUTABLE:FILEPATH=ESPEAK_NG_EXECUTABLE-NOTFOUND
 
-//Build the standalone lidar_test executable for sensor debugging
-LIDAR_BUILD_STANDALONE:BOOL=OFF
+//The directory containing a CMake configuration file for OpenCV.
+OpenCV_DIR:PATH=OpenCV_DIR-NOTFOUND
 
 //Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=

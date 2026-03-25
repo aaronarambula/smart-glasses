@@ -199,6 +199,30 @@ src/alert_policy.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/src/alert_policy.cpp.s
 .PHONY : src/alert_policy.cpp.s
 
+src/haptics_engine.o: src/haptics_engine.cpp.o
+.PHONY : src/haptics_engine.o
+
+# target to build an object file
+src/haptics_engine.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/src/haptics_engine.cpp.o
+.PHONY : src/haptics_engine.cpp.o
+
+src/haptics_engine.i: src/haptics_engine.cpp.i
+.PHONY : src/haptics_engine.i
+
+# target to preprocess a source file
+src/haptics_engine.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/src/haptics_engine.cpp.i
+.PHONY : src/haptics_engine.cpp.i
+
+src/haptics_engine.s: src/haptics_engine.cpp.s
+.PHONY : src/haptics_engine.s
+
+# target to generate assembly for a file
+src/haptics_engine.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/src/haptics_engine.cpp.s
+.PHONY : src/haptics_engine.cpp.s
+
 src/tts_engine.o: src/tts_engine.cpp.o
 .PHONY : src/tts_engine.o
 
@@ -239,6 +263,9 @@ help:
 	@echo "... src/alert_policy.o"
 	@echo "... src/alert_policy.i"
 	@echo "... src/alert_policy.s"
+	@echo "... src/haptics_engine.o"
+	@echo "... src/haptics_engine.i"
+	@echo "... src/haptics_engine.s"
 	@echo "... src/tts_engine.o"
 	@echo "... src/tts_engine.i"
 	@echo "... src/tts_engine.s"

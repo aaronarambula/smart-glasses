@@ -54,6 +54,7 @@
 /Users/aaronarambula/Documents/smart-glasses/build/sim/CMakeFiles/install/local.dir
 /Users/aaronarambula/Documents/smart-glasses/build/sim/CMakeFiles/install/strip.dir
 /Users/aaronarambula/Documents/smart-glasses/build/app/CMakeFiles/smart_glasses.dir
+/Users/aaronarambula/Documents/smart-glasses/build/app/CMakeFiles/train_object_cnn.dir
 /Users/aaronarambula/Documents/smart-glasses/build/app/CMakeFiles/edit_cache.dir
 /Users/aaronarambula/Documents/smart-glasses/build/app/CMakeFiles/rebuild_cache.dir
 /Users/aaronarambula/Documents/smart-glasses/build/app/CMakeFiles/list_install_components.dir

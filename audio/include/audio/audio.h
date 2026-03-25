@@ -47,6 +47,7 @@
 //   tts.stop();
 
 #include "tts_engine.h"
+#include "haptics_engine.h"
 #include "alert_policy.h"
 
 namespace audio {
@@ -74,9 +75,11 @@ public:
     // ── Construction ──────────────────────────────────────────────────────────
 
     explicit AudioSystem(TtsConfig       tts_config  = TtsConfig{},
+                         HapticsConfig   haptics_config = HapticsConfig{},
                          AlertThresholds thresholds  = AlertThresholds{})
         : tts_(std::move(tts_config))
-        , policy_(tts_, std::move(thresholds))
+        , haptics_(std::move(haptics_config))
+        , policy_(tts_, haptics_, std::move(thresholds))
     {}
 
     // Non-copyable, non-movable (owns TtsEngine with a live thread).
@@ -93,13 +96,15 @@ public:
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     // Starts the TTS worker thread. Must be called before process().
-    void start() {
+    bool start() {
         tts_.start();
+        return haptics_.start();
     }
 
     // Stops the TTS worker thread. Blocks until the thread exits.
     void stop() {
         tts_.stop();
+        haptics_.stop();
     }
 
     // ── Main pipeline interface ───────────────────────────────────────────────
@@ -152,6 +157,8 @@ public:
 
     TtsEngine&            tts()            { return tts_;    }
     const TtsEngine&      tts()    const   { return tts_;    }
+    HapticsEngine&        haptics()        { return haptics_; }
+    const HapticsEngine&  haptics() const  { return haptics_; }
     AlertPolicy&          policy()         { return policy_; }
     const AlertPolicy&    policy() const   { return policy_; }
 
@@ -163,6 +170,7 @@ public:
 
 private:
     TtsEngine   tts_;
+    HapticsEngine haptics_;
     AlertPolicy policy_;
 };
 

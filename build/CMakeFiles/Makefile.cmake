@@ -82,4 +82,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "agent/CMakeFiles/agent_lib.dir/DependInfo.cmake"
   "sim/CMakeFiles/sim_lib.dir/DependInfo.cmake"
   "app/CMakeFiles/smart_glasses.dir/DependInfo.cmake"
+  "app/CMakeFiles/train_object_cnn.dir/DependInfo.cmake"
   )

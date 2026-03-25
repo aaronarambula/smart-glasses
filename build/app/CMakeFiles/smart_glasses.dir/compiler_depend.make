@@ -933,6 +933,8 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: /Users/aaronarambula/Documents/smar
   /Users/aaronarambula/Documents/smart-glasses/prediction/include/prediction/prediction.h \
   /Users/aaronarambula/Documents/smart-glasses/prediction/include/prediction/risk_predictor.h \
   /Users/aaronarambula/Documents/smart-glasses/prediction/include/prediction/ttc_engine.h \
+  /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/camera_classifier.h \
+  /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/camera_fallback.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ld06.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/lidar_base.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/rplidar_a1.h \
@@ -951,6 +953,8 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: /Users/aaronarambula/Documents/smar
 /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/sensors.h:
 
 /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/lidar_base.h:
+
+/Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/camera_fallback.h:
 
 /Users/aaronarambula/Documents/smart-glasses/prediction/include/prediction/ttc_engine.h:
 
@@ -1173,6 +1177,8 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: /Users/aaronarambula/Documents/smar
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/pthread/pthread_impl.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/pthread.h:
+
+/Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/camera_classifier.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/net/net_kev.h:
 

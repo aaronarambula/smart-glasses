@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/audio_lib.dir/src/alert_policy.cpp.o"
   "CMakeFiles/audio_lib.dir/src/alert_policy.cpp.o.d"
+  "CMakeFiles/audio_lib.dir/src/haptics_engine.cpp.o"
+  "CMakeFiles/audio_lib.dir/src/haptics_engine.cpp.o.d"
   "CMakeFiles/audio_lib.dir/src/tts_engine.cpp.o"
   "CMakeFiles/audio_lib.dir/src/tts_engine.cpp.o.d"
   "libaudio_lib.a"

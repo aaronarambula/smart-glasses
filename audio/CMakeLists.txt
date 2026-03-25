@@ -24,6 +24,7 @@ endif()
 
 add_library(audio_lib STATIC
     src/tts_engine.cpp
+    src/haptics_engine.cpp
     src/alert_policy.cpp
 )
 
@@ -72,6 +73,34 @@ target_link_libraries(audio_lib PUBLIC Threads::Threads)
 # Math library — std::ceil, std::round, std::floor, std::isfinite, etc.
 if(UNIX)
     target_link_libraries(audio_lib PUBLIC m)
+endif()
+
+if(UNIX AND NOT APPLE)
+    include(CheckSymbolExists)
+    find_path(GPIOD_INCLUDE_DIR gpiod.h)
+    find_library(GPIOD_LIBRARY gpiod)
+    if(GPIOD_INCLUDE_DIR AND GPIOD_LIBRARY)
+        set(CMAKE_REQUIRED_INCLUDES ${GPIOD_INCLUDE_DIR})
+        set(CMAKE_REQUIRED_LIBRARIES ${GPIOD_LIBRARY})
+        check_symbol_exists(gpiod_chip_request_lines "gpiod.h" HAVE_AUDIO_LIBGPIOD_V2_API)
+        check_symbol_exists(gpiod_chip_get_line "gpiod.h" HAVE_AUDIO_LIBGPIOD_V1_API)
+
+        if(HAVE_AUDIO_LIBGPIOD_V2_API OR HAVE_AUDIO_LIBGPIOD_V1_API)
+            target_include_directories(audio_lib PRIVATE ${GPIOD_INCLUDE_DIR})
+            target_link_libraries(audio_lib PRIVATE ${GPIOD_LIBRARY})
+            if(HAVE_AUDIO_LIBGPIOD_V2_API)
+                target_compile_definitions(audio_lib PRIVATE HAVE_LIBGPIOD_V2=1)
+                message(STATUS "audio: libgpiod v2 API found — haptics enabled")
+            else()
+                target_compile_definitions(audio_lib PRIVATE HAVE_LIBGPIOD_V1=1)
+                message(STATUS "audio: libgpiod v1 API found — haptics enabled")
+            endif()
+        else()
+            message(STATUS "audio: libgpiod found but usable GPIO symbols were not detected; haptics will be disabled")
+        endif()
+    else()
+        message(STATUS "audio: libgpiod not found — haptics will be disabled")
+    endif()
 endif()
 
 # ── espeak-ng runtime check (informational only) ──────────────────────────────

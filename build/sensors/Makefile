@@ -199,6 +199,54 @@ LiDAR.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.s
 .PHONY : LiDAR.cpp.s
 
+camera_classifier.o: camera_classifier.cpp.o
+.PHONY : camera_classifier.o
+
+# target to build an object file
+camera_classifier.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o
+.PHONY : camera_classifier.cpp.o
+
+camera_classifier.i: camera_classifier.cpp.i
+.PHONY : camera_classifier.i
+
+# target to preprocess a source file
+camera_classifier.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.i
+.PHONY : camera_classifier.cpp.i
+
+camera_classifier.s: camera_classifier.cpp.s
+.PHONY : camera_classifier.s
+
+# target to generate assembly for a file
+camera_classifier.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.s
+.PHONY : camera_classifier.cpp.s
+
+camera_fallback.o: camera_fallback.cpp.o
+.PHONY : camera_fallback.o
+
+# target to build an object file
+camera_fallback.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o
+.PHONY : camera_fallback.cpp.o
+
+camera_fallback.i: camera_fallback.cpp.i
+.PHONY : camera_fallback.i
+
+# target to preprocess a source file
+camera_fallback.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.i
+.PHONY : camera_fallback.cpp.i
+
+camera_fallback.s: camera_fallback.cpp.s
+.PHONY : camera_fallback.s
+
+# target to generate assembly for a file
+camera_fallback.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.s
+.PHONY : camera_fallback.cpp.s
+
 ld06.o: ld06.cpp.o
 .PHONY : ld06.o
 
@@ -287,6 +335,12 @@ help:
 	@echo "... LiDAR.o"
 	@echo "... LiDAR.i"
 	@echo "... LiDAR.s"
+	@echo "... camera_classifier.o"
+	@echo "... camera_classifier.i"
+	@echo "... camera_classifier.s"
+	@echo "... camera_fallback.o"
+	@echo "... camera_fallback.i"
+	@echo "... camera_fallback.s"
 	@echo "... ld06.o"
 	@echo "... ld06.i"
 	@echo "... ld06.s"

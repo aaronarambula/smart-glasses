@@ -835,13 +835,8 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/print \
   /Users/aaronarambula/Documents/smart-glasses/app/../sensors/include/sensors/ld06.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../sensors/include/sensors/ultrasonic_fallback.h \
-  /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/perception.h \
-  /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/occupancy_map.h \
-  /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/clusterer.h \
-  /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/tracker.h \
-  /Users/aaronarambula/Documents/smart-glasses/app/../prediction/include/prediction/prediction.h \
-  /Users/aaronarambula/Documents/smart-glasses/app/../prediction/include/prediction/ttc_engine.h \
-  /Users/aaronarambula/Documents/smart-glasses/app/../prediction/include/prediction/risk_predictor.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../sensors/include/sensors/camera_fallback.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../sensors/include/sensors/camera_classifier.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../autograd/include/autograd/autograd.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../autograd/include/autograd/no_grad.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../autograd/include/autograd/ops.h \
@@ -898,6 +893,13 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/uniform_random_bit_generator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/weibull_distribution.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../autograd/include/autograd/optimizer.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/perception.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/occupancy_map.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/clusterer.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../perception/include/perception/tracker.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../prediction/include/prediction/prediction.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../prediction/include/prediction/ttc_engine.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../prediction/include/prediction/risk_predictor.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/fstream \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/path.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/iomanip \
@@ -929,6 +931,7 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/atomic_unique_lock.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/intrusive_list_view.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_token.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../audio/include/audio/haptics_engine.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../audio/include/audio/alert_policy.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../agent/include/agent/agent.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../agent/include/agent/scene_builder.h \

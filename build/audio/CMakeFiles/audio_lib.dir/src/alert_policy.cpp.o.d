@@ -805,6 +805,7 @@ audio/CMakeFiles/audio_lib.dir/src/alert_policy.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/atomic_unique_lock.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/intrusive_list_view.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_token.h \
+  /Users/aaronarambula/Documents/smart-glasses/audio/include/audio/haptics_engine.h \
   /Users/aaronarambula/Documents/smart-glasses/audio/../prediction/include/prediction/prediction.h \
   /Users/aaronarambula/Documents/smart-glasses/audio/../prediction/include/prediction/ttc_engine.h \
   /Users/aaronarambula/Documents/smart-glasses/audio/../perception/include/perception/tracker.h \

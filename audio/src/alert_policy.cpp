@@ -14,8 +14,11 @@ namespace audio {
 
 // ─── Construction ─────────────────────────────────────────────────────────────
 
-AlertPolicy::AlertPolicy(TtsEngine& tts, AlertThresholds thresholds)
+AlertPolicy::AlertPolicy(TtsEngine& tts,
+                         HapticsEngine& haptics,
+                         AlertThresholds thresholds)
     : tts_(tts)
+    , haptics_(haptics)
     , thresholds_(std::move(thresholds))
 {
     // Initialise all last-alert timestamps to epoch so every level fires
@@ -377,7 +380,11 @@ void AlertPolicy::fire_alert(prediction::RiskLevel             level,
                               bool                              was_escalation,
                               bool                              was_ttc_override)
 {
-    tts_.speak(text, priority);
+    if (level == prediction::RiskLevel::CAUTION) {
+        haptics_.pulse_caution();
+    } else {
+        tts_.speak(text, priority);
+    }
 
     const auto now = std::chrono::steady_clock::now();
 
