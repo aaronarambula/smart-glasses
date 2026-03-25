@@ -19,6 +19,7 @@ namespace sensors {
 class UltrasonicFallback : public LidarBase {
 public:
     explicit UltrasonicFallback(std::string port_uri);
+    UltrasonicFallback(int trigger_pin, int echo_pin, float scan_hz, float mock_distance_mm);
     ~UltrasonicFallback() override;
 
     bool open() override;
@@ -38,6 +39,7 @@ public:
     int   echo_pin()    const { return echo_pin_; }
     float scan_hz()     const { return scan_hz_; }
     float mock_distance_mm() const { return mock_distance_mm_; }
+    void configure(int trigger_pin, int echo_pin, float scan_hz, float mock_distance_mm);
 
 private:
     bool parse_uri();
@@ -72,6 +74,7 @@ private:
     float max_distance_mm_  = 4000.0f;
     float mock_distance_mm_ = 0.0f;
     bool  mock_mode_        = false;
+    bool  configured_       = false;
 
     std::atomic<bool> open_{ false };
     std::atomic<bool> running_{ false };

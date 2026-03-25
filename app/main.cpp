@@ -79,6 +79,7 @@
 #include <sstream>
 #include <algorithm>
 #include <stdexcept>
+#include <memory>
 
 // ─── Global shutdown flag ─────────────────────────────────────────────────────
 
@@ -440,6 +441,13 @@ int main(int argc, char* argv[])
             lidar = sim::make_sim_lidar(cfg.port, sim_cfg);
         } else
 #endif
+        if (cfg.sensor_model == sensors::LidarModel::Ultrasonic) {
+            lidar = std::make_unique<sensors::UltrasonicFallback>(
+                cfg.ultra_trigger_pin,
+                cfg.ultra_echo_pin,
+                cfg.ultra_hz,
+                cfg.ultra_mock_mm);
+        } else
         {
             lidar = sensors::make_lidar(cfg.sensor_model, cfg.port);
         }

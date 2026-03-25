@@ -48,10 +48,34 @@ UltrasonicFallback::UltrasonicFallback(std::string port_uri)
     : LidarBase(std::move(port_uri))
 {}
 
+UltrasonicFallback::UltrasonicFallback(
+    int trigger_pin,
+    int echo_pin,
+    float scan_hz,
+    float mock_distance_mm)
+    : LidarBase("ultrasonic://configured")
+{
+    configure(trigger_pin, echo_pin, scan_hz, mock_distance_mm);
+}
+
 UltrasonicFallback::~UltrasonicFallback()
 {
     stop();
     close();
+}
+
+void UltrasonicFallback::configure(
+    int trigger_pin,
+    int echo_pin,
+    float scan_hz,
+    float mock_distance_mm)
+{
+    trigger_pin_ = trigger_pin;
+    echo_pin_ = echo_pin;
+    scan_hz_ = std::max(1.0f, scan_hz);
+    mock_distance_mm_ = std::max(0.0f, mock_distance_mm);
+    mock_mode_ = mock_distance_mm_ > 0.0f;
+    configured_ = true;
 }
 
 bool UltrasonicFallback::parse_uri()
@@ -108,6 +132,11 @@ bool UltrasonicFallback::parse_uri()
 bool UltrasonicFallback::open()
 {
     if (open_.load()) return true;
+
+    if (configured_) {
+        open_.store(true);
+        return true;
+    }
 
     // Mock mode is the primary demo/testing path. Recognize it directly before
     // any stricter URI parsing so it cannot fall through into GPIO setup.
