@@ -64,6 +64,7 @@
 #include <algorithm>
 #include <functional>
 #include <cstdint>
+#include <memory>
 
 namespace sim {
 

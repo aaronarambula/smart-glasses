@@ -13,6 +13,7 @@
 #include "sim/sim_world.h"
 
 #include <cmath>
+#include <memory>
 #include <stdexcept>
 
 namespace sim {
