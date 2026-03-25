@@ -134,6 +134,22 @@ bool UltrasonicFallback::open()
     if (open_.load()) return true;
 
     if (configured_) {
+#ifndef __linux__
+        if (!mock_mode_) {
+            set_error("UltrasonicFallback GPIO mode currently requires Linux; use --ultra-mock-mm for desktop testing");
+            return false;
+        }
+#else
+        if (!mock_mode_) {
+#if defined(HAVE_LIBGPIOD_V2) || defined(HAVE_LIBGPIOD_V1)
+            if (!open_gpiod()) return false;
+#else
+            if (!ensure_gpio_pin(trigger_pin_, "out", &trigger_exported_)) return false;
+            if (!ensure_gpio_pin(echo_pin_, "in", &echo_exported_)) return false;
+            if (!write_gpio_value(trigger_pin_, false)) return false;
+#endif
+        }
+#endif
         open_.store(true);
         return true;
     }
