@@ -430,6 +430,12 @@ bool AlertPolicy::process(const prediction::FullPrediction& pred)
 {
     const prediction::RiskLevel level = pred.risk_level();
 
+    // If risk de-escalated, stale queued hazard speech is now misleading.
+    // Clear any queued / in-flight utterances before evaluating the new state.
+    if (level < last_risk_level_) {
+        tts_.interrupt();
+    }
+
     // CLEAR → no alert, but update state so we track the transition.
     if (level == prediction::RiskLevel::CLEAR) {
         last_risk_level_ = level;
