@@ -87,7 +87,7 @@ CameraClassification CameraObjectClassifier::classify(const cv::Mat& bgr_or_gray
 
     autograd::NoGradGuard no_grad;
     auto x = preprocess(bgr_or_gray);
-    auto logits = model_.forward(x);
+    auto logits = const_cast<autograd::Sequential&>(model_).forward(x);
     auto probs = logits->softmax();
 
     size_t best_idx = 0;
