@@ -17,6 +17,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <iostream>
+#include <thread>
 
 // POSIX headers — Raspberry Pi / Linux only
 #include <unistd.h>
@@ -25,6 +26,11 @@
 #include <sys/wait.h>
 
 namespace audio {
+
+namespace {
+constexpr auto kMaxUtteranceDuration = std::chrono::seconds(8);
+constexpr auto kWaitPollInterval = std::chrono::milliseconds(20);
+}
 
 // ─── Construction ─────────────────────────────────────────────────────────────
 
@@ -288,7 +294,35 @@ void TtsEngine::speak_sync(const SpeechRequest& req)
 
     // Wait for the child to finish (or be killed by kill_current()).
     int status = 0;
-    ::waitpid(pid, &status, 0);
+    bool sent_term = false;
+    bool sent_kill = false;
+    const auto started_at = std::chrono::steady_clock::now();
+
+    while (true) {
+        const pid_t w = ::waitpid(pid, &status, WNOHANG);
+        if (w == pid) {
+            break;
+        }
+        if (w < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
+            break;
+        }
+
+        const auto elapsed = std::chrono::steady_clock::now() - started_at;
+        if (elapsed > kMaxUtteranceDuration) {
+            if (!sent_term) {
+                ::kill(pid, SIGTERM);
+                sent_term = true;
+            } else if (!sent_kill) {
+                ::kill(pid, SIGKILL);
+                sent_kill = true;
+            }
+        }
+
+        std::this_thread::sleep_for(kWaitPollInterval);
+    }
 
     {
         std::lock_guard<std::mutex> lk(mutex_);
@@ -310,10 +344,6 @@ void TtsEngine::kill_current()
 {
     if (current_pid_ > 0) {
         ::kill(current_pid_, SIGTERM);
-        // Reap the process in a non-blocking way to avoid zombies.
-        // The parent's waitpid() call in speak_sync() will handle the
-        // final wait — we just want the process to die promptly.
-        current_pid_ = -1;
     }
 }
 
