@@ -96,50 +96,63 @@ bool HapticsEngine::open_gpio()
     set_error("Haptics GPIO currently requires Linux/libgpiod");
     return false;
 #elif defined(HAVE_LIBGPIOD_V2)
-    chip_ = gpiod_chip_open_by_name("gpiochip0");
-    if (!chip_) {
-        set_error("Failed to open gpiochip0 for haptics");
-        return false;
-    }
+    static constexpr const char* kChipPaths[] = {
+        "/dev/gpiochip0", "/dev/gpiochip1", "/dev/gpiochip2",
+        "/dev/gpiochip3", "/dev/gpiochip4", "/dev/gpiochip5"
+    };
 
-    gpiod_line_settings* settings = gpiod_line_settings_new();
-    gpiod_line_config* line_cfg = gpiod_line_config_new();
-    gpiod_request_config* req_cfg = gpiod_request_config_new();
-    if (!settings || !line_cfg || !req_cfg) {
-        if (settings) gpiod_line_settings_free(settings);
-        if (line_cfg) gpiod_line_config_free(line_cfg);
-        if (req_cfg) gpiod_request_config_free(req_cfg);
-        set_error("Failed to allocate libgpiod v2 haptics objects");
-        close_gpio();
-        return false;
-    }
+    for (const char* chip_path : kChipPaths) {
+        gpiod_chip* chip = gpiod_chip_open(chip_path);
+        if (!chip) continue;
 
-    gpiod_line_settings_set_direction(settings, GPIOD_LINE_DIRECTION_OUTPUT);
-    const unsigned int offset =
-        static_cast<unsigned int>(config_.gpio_pin);
-    if (gpiod_line_config_add_line_settings(line_cfg, &offset, 1, settings) != 0) {
+        gpiod_line_settings* settings = gpiod_line_settings_new();
+        gpiod_line_config* line_cfg = gpiod_line_config_new();
+        gpiod_request_config* req_cfg = gpiod_request_config_new();
+        if (!settings || !line_cfg || !req_cfg) {
+            if (settings) gpiod_line_settings_free(settings);
+            if (line_cfg) gpiod_line_config_free(line_cfg);
+            if (req_cfg) gpiod_request_config_free(req_cfg);
+            gpiod_chip_close(chip);
+            continue;
+        }
+
+        gpiod_line_settings_set_direction(settings, GPIOD_LINE_DIRECTION_OUTPUT);
+        gpiod_line_settings_set_output_value(settings, GPIOD_LINE_VALUE_INACTIVE);
+
+        const unsigned int offset = static_cast<unsigned int>(config_.gpio_pin);
+        if (gpiod_line_config_add_line_settings(line_cfg, &offset, 1, settings) != 0) {
+            gpiod_line_settings_free(settings);
+            gpiod_line_config_free(line_cfg);
+            gpiod_request_config_free(req_cfg);
+            gpiod_chip_close(chip);
+            continue;
+        }
+
+        gpiod_request_config_set_consumer(req_cfg, "smart_glasses_haptics");
+        gpiod_line_request* req = gpiod_chip_request_lines(chip, req_cfg, line_cfg);
+
         gpiod_line_settings_free(settings);
         gpiod_line_config_free(line_cfg);
         gpiod_request_config_free(req_cfg);
-        set_error("Failed to configure haptics GPIO line");
-        close_gpio();
-        return false;
-    }
 
-    gpiod_request_config_set_consumer(req_cfg, "smart_glasses_haptics");
-    request_ = gpiod_chip_request_lines(chip_, req_cfg, line_cfg);
-    gpiod_line_settings_free(settings);
-    gpiod_line_config_free(line_cfg);
-    gpiod_request_config_free(req_cfg);
-    if (!request_) {
-        set_error("Failed to request haptics GPIO line");
-        close_gpio();
-        return false;
-    }
+        if (!req) {
+            gpiod_chip_close(chip);
+            continue;
+        }
 
-    if (!write_active(false)) {
-        close_gpio();
-        return false;
+        chip_ = chip;
+        request_ = req;
+        if (!write_active(false)) {
+            close_gpio();
+            return false;
+        }
+        available_.store(true);
+        if (config_.verbose) {
+            std::cout << "  ✓ Haptics   : GPIO" << config_.gpio_pin
+                      << " (" << (config_.active_low ? "active-low" : "active-high")
+                      << ")\n";
+        }
+        return true;
     }
 #elif defined(HAVE_LIBGPIOD_V1)
     chip_ = gpiod_chip_open_by_name("gpiochip0");
@@ -170,13 +183,8 @@ bool HapticsEngine::open_gpio()
     return false;
 #endif
 
-    available_.store(true);
-    if (config_.verbose) {
-        std::cout << "  ✓ Haptics   : GPIO" << config_.gpio_pin
-                  << " (" << (config_.active_low ? "active-low" : "active-high")
-                  << ")\n";
-    }
-    return true;
+    set_error("Failed to request haptics GPIO line");
+    return false;
 }
 
 void HapticsEngine::close_gpio()
