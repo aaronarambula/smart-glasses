@@ -34,6 +34,7 @@
 #include "rplidar_a1.h"
 #include "ld06.h"
 #include "ultrasonic_fallback.h"
+#include "camera_fallback.h"
 
 #include <memory>
 #include <string>
@@ -58,6 +59,7 @@ enum class LidarModel {
     RPLidarA1,  // Slamtec RPLIDAR A1M8 — USB-serial, 115200 baud
     LD06,       // LDROBOT LD06 / LD19 — UART, 230400 baud
     Ultrasonic, // HC-SR04-style forward fallback, exposed as a narrow cluster
+    Camera,     // OpenCV front camera fallback, exposed as a narrow cluster
     Sim,        // SimLidar — synthetic outdoor scenes, no hardware required
                 // port_path = "sim://sidewalk" | "sim://crossing" |
                 //             "sim://hallway"  | "sim://parking_lot" |
@@ -91,6 +93,9 @@ inline std::unique_ptr<LidarBase> make_lidar(LidarModel model,
         case LidarModel::Ultrasonic:
             return std::make_unique<UltrasonicFallback>(port_path);
 
+        case LidarModel::Camera:
+            return std::make_unique<CameraFallback>(port_path);
+
 #ifdef USE_SIM
         case LidarModel::Sim: {
             // sim_make_lidar_raw is declared in the GLOBAL namespace (extern "C"
@@ -122,6 +127,7 @@ inline std::string default_port(LidarModel model) {
         case LidarModel::RPLidarA1: return "/dev/ttyUSB0";
         case LidarModel::LD06:      return "/dev/ttyAMA0";
         case LidarModel::Ultrasonic:return "ultrasonic://23,24?hz=10";
+        case LidarModel::Camera:    return "camera://0?width=640&height=480&hz=10";
 #ifdef USE_SIM
         case LidarModel::Sim:       return "sim://sidewalk";
 #endif
@@ -138,6 +144,7 @@ inline std::string model_name(LidarModel model) {
         case LidarModel::RPLidarA1: return "RPLIDAR A1M8";
         case LidarModel::LD06:      return "LD06";
         case LidarModel::Ultrasonic:return "UltrasonicFallback";
+        case LidarModel::Camera:    return "CameraFallback";
 #ifdef USE_SIM
         case LidarModel::Sim:       return "SimLidar (synthetic)";
 #endif

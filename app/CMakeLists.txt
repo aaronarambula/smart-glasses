@@ -25,6 +25,10 @@ add_executable(smart_glasses
     main.cpp
 )
 
+add_executable(train_object_cnn
+    train_object_cnn.cpp
+)
+
 target_include_directories(smart_glasses
     PRIVATE
         # Each module's include directory — the libraries already expose these
@@ -38,7 +42,14 @@ target_include_directories(smart_glasses
         ${CMAKE_CURRENT_SOURCE_DIR}/../autograd/include
 )
 
+target_include_directories(train_object_cnn
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sensors/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../autograd/include
+)
+
 target_compile_features(smart_glasses PRIVATE cxx_std_17)
+target_compile_features(train_object_cnn PRIVATE cxx_std_17)
 
 # ── Link all libraries ────────────────────────────────────────────────────────
 # Link order matters on some linkers: list the most-dependent first.
@@ -54,6 +65,11 @@ if(TARGET agent_lib AND TARGET audio_lib AND TARGET prediction_lib AND
             audio_lib
             prediction_lib
             perception_lib
+            sensors_lib
+            autograd_lib
+    )
+    target_link_libraries(train_object_cnn
+        PRIVATE
             sensors_lib
             autograd_lib
     )
@@ -78,6 +94,11 @@ else()
             audio_lib
             prediction_lib
             perception_lib
+            sensors_lib
+            autograd_lib
+    )
+    target_link_libraries(train_object_cnn
+        PRIVATE
             sensors_lib
             autograd_lib
     )
@@ -108,6 +129,7 @@ endif()
 # pthreads — required by TtsEngine, AgentLoop, sensor drivers.
 find_package(Threads REQUIRED)
 target_link_libraries(smart_glasses PRIVATE Threads::Threads)
+target_link_libraries(train_object_cnn PRIVATE Threads::Threads)
 
 # libcurl — required by OpenAIClient (pulled in via agent_lib PUBLIC link,
 # but listed explicitly here so the linker sees it in all configurations).
@@ -117,6 +139,7 @@ target_link_libraries(smart_glasses PRIVATE CURL::libcurl)
 # Math library — std::sqrt, std::exp, std::log, etc.
 if(UNIX)
     target_link_libraries(smart_glasses PRIVATE m)
+    target_link_libraries(train_object_cnn PRIVATE m)
 endif()
 
 # ── Release optimisations ─────────────────────────────────────────────────────
@@ -139,6 +162,9 @@ endif()
 # Installs the binary to /usr/local/bin when the user runs `make install`.
 # On the Pi: sudo make install → sudo smart_glasses
 install(TARGETS smart_glasses
+    RUNTIME DESTINATION bin
+)
+install(TARGETS train_object_cnn
     RUNTIME DESTINATION bin
 )
 

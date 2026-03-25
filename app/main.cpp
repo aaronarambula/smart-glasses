@@ -109,6 +109,15 @@ struct AppConfig {
     float               ultra_hz          = 10.0f;
     float               ultra_mock_mm     = 0.0f;    // 0 = real GPIO sensor
 
+    // Camera fallback
+    int                 camera_index              = 0;
+    int                 camera_width              = 640;
+    int                 camera_height             = 480;
+    float               camera_hz                 = 10.0f;
+    float               camera_hfov_deg           = 62.0f;
+    float               camera_focal_px           = 700.0f;
+    float               camera_obstacle_height_mm = 1700.0f;
+
     // Perception
     float eps_mm  = 150.0f;
     int   min_pts = 4;
@@ -121,6 +130,7 @@ struct AppConfig {
     int   tts_speed_wpm = 150;
     int   tts_pitch     = 55;
     bool  tts_verbose   = false;
+    std::string tts_alsa_device;
 
     // Alert thresholds
     float danger_mm  =  500.0f;
@@ -146,7 +156,7 @@ struct AppConfig {
         "Usage: " << prog << " [options]\n"
         "\n"
         "Sensor:\n"
-        "  --sensor ld06|rplidar|ultrasonic|sim sensor model (default: ld06)\n"
+        "  --sensor ld06|rplidar|ultrasonic|camera|sim sensor model (default: ld06)\n"
         "  --port   PATH             Serial device (default: /dev/ttyAMA0)\n"
         "                            (ignored when --sensor sim)\n"
         "\n"
@@ -164,6 +174,15 @@ struct AppConfig {
         "  --ultra-hz FLOAT          Poll rate Hz     (default: 10.0)\n"
         "  --ultra-mock-mm FLOAT     Desktop/mock fixed distance in mm\n"
         "\n"
+        "Camera fallback (only with --sensor camera):\n"
+        "  --camera-index INT        OpenCV camera index (default: 0)\n"
+        "  --camera-width INT        Capture width       (default: 640)\n"
+        "  --camera-height INT       Capture height      (default: 480)\n"
+        "  --camera-hz FLOAT         Capture rate Hz     (default: 10.0)\n"
+        "  --camera-hfov FLOAT       Camera HFOV deg     (default: 62.0)\n"
+        "  --camera-focal-px FLOAT   Focal length px     (default: 700)\n"
+        "  --camera-obstacle-mm FLOAT Assumed obstacle height mm (default: 1700)\n"
+        "\n"
         "Perception:\n"
         "  --eps-mm FLOAT            DBSCAN neighbourhood radius mm (default: 150)\n"
         "  --min-pts INT             DBSCAN minimum cluster size    (default: 4)\n"
@@ -178,6 +197,7 @@ struct AppConfig {
         "Audio:\n"
         "  --speed  INT              espeak-ng words/min (default: 150)\n"
         "  --pitch  INT              espeak-ng pitch 0-99 (default: 55)\n"
+        "  --tts-alsa-device DEV     Route TTS through ALSA device (e.g. plughw:1,0)\n"
         "\n"
         "Agent:\n"
         "  --no-agent                Disable GPT-4o agent (no API calls)\n"
@@ -229,6 +249,9 @@ static AppConfig parse_args(int argc, char* argv[])
             } else if (s == "ultrasonic" || s == "ultra" || s == "Ultrasonic") {
                 cfg.sensor_model = sensors::LidarModel::Ultrasonic;
                 cfg.port = sensors::default_port(cfg.sensor_model);
+            } else if (s == "camera" || s == "cam" || s == "Camera") {
+                cfg.sensor_model = sensors::LidarModel::Camera;
+                cfg.port = sensors::default_port(cfg.sensor_model);
             } else if (s == "sim" || s == "Sim" || s == "SIM") {
 #ifndef USE_SIM
                 std::cerr << "error: --sensor sim requires the sim_lib to be "
@@ -241,7 +264,7 @@ static AppConfig parse_args(int argc, char* argv[])
 #endif
             } else {
                 std::cerr << "error: unknown sensor '" << s
-                          << "' (use ld06, rplidar, ultrasonic, or sim)\n";
+                          << "' (use ld06, rplidar, ultrasonic, camera, or sim)\n";
                 std::exit(1);
             }
         }
@@ -257,6 +280,13 @@ static AppConfig parse_args(int argc, char* argv[])
         else if (arg == "--ultra-echo")   { cfg.ultra_echo_pin    = std::stoi(next("--ultra-echo")); }
         else if (arg == "--ultra-hz")     { cfg.ultra_hz          = std::stof(next("--ultra-hz")); }
         else if (arg == "--ultra-mock-mm"){ cfg.ultra_mock_mm     = std::stof(next("--ultra-mock-mm")); }
+        else if (arg == "--camera-index") { cfg.camera_index      = std::stoi(next("--camera-index")); }
+        else if (arg == "--camera-width") { cfg.camera_width      = std::stoi(next("--camera-width")); }
+        else if (arg == "--camera-height"){ cfg.camera_height     = std::stoi(next("--camera-height")); }
+        else if (arg == "--camera-hz")    { cfg.camera_hz         = std::stof(next("--camera-hz")); }
+        else if (arg == "--camera-hfov")  { cfg.camera_hfov_deg   = std::stof(next("--camera-hfov")); }
+        else if (arg == "--camera-focal-px") { cfg.camera_focal_px = std::stof(next("--camera-focal-px")); }
+        else if (arg == "--camera-obstacle-mm") { cfg.camera_obstacle_height_mm = std::stof(next("--camera-obstacle-mm")); }
         else if (arg == "--port")            { cfg.port              = next("--port");            }
         else if (arg == "--eps-mm")          { cfg.eps_mm            = std::stof(next("--eps-mm"));     }
         else if (arg == "--min-pts")         { cfg.min_pts           = std::stoi(next("--min-pts"));    }
@@ -267,6 +297,7 @@ static AppConfig parse_args(int argc, char* argv[])
         else if (arg == "--caution-mm")      { cfg.caution_mm        = std::stof(next("--caution-mm")); }
         else if (arg == "--speed")           { cfg.tts_speed_wpm     = std::stoi(next("--speed"));      }
         else if (arg == "--pitch")           { cfg.tts_pitch         = std::stoi(next("--pitch"));      }
+        else if (arg == "--tts-alsa-device") { cfg.tts_alsa_device   = next("--tts-alsa-device");      }
         else if (arg == "--no-agent")        { cfg.agent_enabled     = false;                           }
         else if (arg == "--agent-interval")  { cfg.agent_interval_s  = std::stof(next("--agent-interval")); }
         else if (arg == "--agent-verbose")   { cfg.agent_verbose     = true;                            }
@@ -350,7 +381,8 @@ struct PipelineStats {
 
 static void log_frame(const prediction::FullPrediction& pred,
                       const perception::PerceptionResult& perc,
-                      double pipeline_ms)
+                      double pipeline_ms,
+                      const std::string* extra = nullptr)
 {
     // One compact line per frame.
     // [frame 1042 | WARN | conf=0.87 | TTC=3.1s | 1.2m ahead | trk=3 | 4.2ms]
@@ -361,6 +393,9 @@ static void log_frame(const prediction::FullPrediction& pred,
     char buf[32];
     std::snprintf(buf, sizeof(buf), " | %.1fms\n", pipeline_ms);
     std::cout << buf << std::flush;
+    if (extra && !extra->empty()) {
+        std::cout << *extra << "\n" << std::flush;
+    }
 }
 
 // ─── main ────────────────────────────────────────────────────────────────────
@@ -412,6 +447,25 @@ int main(int argc, char* argv[])
             cfg.online_train = false;
         }
     }
+    if (cfg.sensor_model == sensors::LidarModel::Camera) {
+        std::ostringstream uri;
+        uri << "camera://" << cfg.camera_index
+            << "?width=" << cfg.camera_width
+            << "&height=" << cfg.camera_height
+            << "&hz=" << cfg.camera_hz
+            << "&hfov=" << cfg.camera_hfov_deg
+            << "&focal-px=" << cfg.camera_focal_px
+            << "&obstacle-height-mm=" << cfg.camera_obstacle_height_mm;
+        cfg.port = uri.str();
+
+        if (cfg.checkpoint == "aaronnet_risk.bin") {
+            cfg.checkpoint = "aaronnet_camera.bin";
+        }
+
+        if (cfg.online_train) {
+            cfg.online_train = false;
+        }
+    }
 
     std::cout << "Sensor      : " << sensors::model_name(cfg.sensor_model)
               << " on " << cfg.port << "\n";
@@ -428,6 +482,7 @@ int main(int argc, char* argv[])
 
     std::cout << "[1/6] Opening sensor...\n";
     std::unique_ptr<sensors::LidarBase> lidar;
+    sensors::CameraFallback* camera_sensor = nullptr;
     try {
 #ifdef USE_SIM
         if (cfg.sensor_model == sensors::LidarModel::Sim) {
@@ -447,6 +502,16 @@ int main(int argc, char* argv[])
                 cfg.ultra_echo_pin,
                 cfg.ultra_hz,
                 cfg.ultra_mock_mm);
+        } else if (cfg.sensor_model == sensors::LidarModel::Camera) {
+            lidar = std::make_unique<sensors::CameraFallback>(
+                cfg.camera_index,
+                cfg.camera_width,
+                cfg.camera_height,
+                cfg.camera_hz,
+                cfg.camera_hfov_deg,
+                cfg.camera_focal_px,
+                cfg.camera_obstacle_height_mm);
+            camera_sensor = dynamic_cast<sensors::CameraFallback*>(lidar.get());
         } else
         {
             lidar = sensors::make_lidar(cfg.sensor_model, cfg.port);
@@ -493,6 +558,14 @@ int main(int argc, char* argv[])
         }
         std::cout << "  ✓ Poll rate  : " << cfg.ultra_hz << " Hz\n";
         std::cout << "  ✓ Output     : narrow forward synthetic cluster\n";
+    }
+    if (cfg.sensor_model == sensors::LidarModel::Camera) {
+        std::cout << "  ✓ Camera idx : " << cfg.camera_index << "\n";
+        std::cout << "  ✓ Resolution : " << cfg.camera_width << "x" << cfg.camera_height << "\n";
+        std::cout << "  ✓ Poll rate  : " << cfg.camera_hz << " Hz\n";
+        std::cout << "  ✓ HFOV       : " << cfg.camera_hfov_deg << " deg\n";
+        std::cout << "  ✓ Focal len  : " << cfg.camera_focal_px << " px\n";
+        std::cout << "  ✓ Output     : contour-based forward synthetic cluster\n";
     }
 
     // ══════════════════════════════════════════════════════════════════════════
@@ -542,6 +615,7 @@ int main(int argc, char* argv[])
     tts_cfg.speed_wpm = cfg.tts_speed_wpm;
     tts_cfg.pitch     = cfg.tts_pitch;
     tts_cfg.verbose   = cfg.tts_verbose;
+    tts_cfg.alsa_device = cfg.tts_alsa_device;
 
     audio::AlertThresholds alert_thresh;
     // Cooldowns are intentionally left at their defaults (DANGER=1.5s, etc.)
@@ -557,6 +631,9 @@ int main(int argc, char* argv[])
 
     std::cout << "  ✓ TTS engine running (espeak-ng, "
               << cfg.tts_speed_wpm << " wpm)\n";
+    if (!cfg.tts_alsa_device.empty()) {
+        std::cout << "  ✓ ALSA device: " << cfg.tts_alsa_device << "\n";
+    }
 
     // ══════════════════════════════════════════════════════════════════════════
     // 5. AGENT — OpenAI GPT-4o integration
@@ -761,7 +838,18 @@ int main(int argc, char* argv[])
 
         // Verbose per-frame log.
         if (cfg.verbose) {
-            log_frame(full_pred, perc, pipeline_ms);
+            std::string extra;
+            if (camera_sensor) {
+                const auto cls = camera_sensor->last_classification();
+                if (cls.valid) {
+                    std::ostringstream ss;
+                    ss << "[vision] class=" << cls.label
+                       << " conf=" << std::fixed << std::setprecision(2)
+                       << cls.confidence;
+                    extra = ss.str();
+                }
+            }
+            log_frame(full_pred, perc, pipeline_ms, extra.empty() ? nullptr : &extra);
         }
 
         // Periodic stats printout.

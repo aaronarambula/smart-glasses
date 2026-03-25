@@ -30,6 +30,8 @@ add_library(sensors_lib STATIC
     rplidar_a1.cpp
     ld06.cpp
     ultrasonic_fallback.cpp
+    camera_fallback.cpp
+    camera_classifier.cpp
     LiDAR.cpp
 )
 
@@ -39,6 +41,10 @@ target_include_directories(sensors_lib
 )
 
 target_compile_features(sensors_lib PUBLIC cxx_std_17)
+
+if(TARGET autograd_lib)
+    target_link_libraries(sensors_lib PRIVATE autograd_lib)
+endif()
 
 # pthreads — LD06 and RPLidarA1 run background read threads
 find_package(Threads REQUIRED)
@@ -77,6 +83,17 @@ if(UNIX AND NOT APPLE)
     else()
         message(STATUS "sensors: libgpiod not found — ultrasonic fallback will use legacy sysfs GPIO if available")
     endif()
+endif()
+
+# Optional OpenCV for the camera fallback sensor.
+find_package(OpenCV QUIET COMPONENTS core imgproc videoio)
+if(OpenCV_FOUND)
+    target_include_directories(sensors_lib PRIVATE ${OpenCV_INCLUDE_DIRS})
+    target_link_libraries(sensors_lib PRIVATE ${OpenCV_LIBS})
+    target_compile_definitions(sensors_lib PRIVATE HAVE_OPENCV=1)
+    message(STATUS "sensors: OpenCV found — camera fallback sensor enabled")
+else()
+    message(STATUS "sensors: OpenCV not found — camera fallback will report a clear runtime error if selected")
 endif()
 
 # ── Default build type ────────────────────────────────────────────────────────
