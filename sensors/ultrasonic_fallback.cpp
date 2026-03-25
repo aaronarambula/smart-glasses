@@ -56,12 +56,13 @@ UltrasonicFallback::~UltrasonicFallback()
 
 bool UltrasonicFallback::parse_uri()
 {
-    if (port_.rfind("ultrasonic://", 0) != 0) {
+    static const std::string prefix = "ultrasonic://";
+    if (port_.compare(0, prefix.size(), prefix) != 0) {
         set_error("UltrasonicFallback expects port like ultrasonic://23,24?hz=10 or ultrasonic://mock?mm=1200");
         return false;
     }
 
-    std::string spec = port_.substr(std::string("ultrasonic://").size());
+    std::string spec = port_.substr(prefix.size());
     std::string params;
     const size_t qpos = spec.find('?');
     if (qpos != std::string::npos) {
@@ -69,7 +70,8 @@ bool UltrasonicFallback::parse_uri()
         spec = spec.substr(0, qpos);
     }
 
-    if (spec == "mock") {
+    mock_mode_ = (spec == "mock");
+    if (mock_mode_) {
         if (mock_distance_mm_ <= 0.0f) {
             mock_distance_mm_ = 1200.0f;
         }
@@ -106,6 +108,35 @@ bool UltrasonicFallback::parse_uri()
 bool UltrasonicFallback::open()
 {
     if (open_.load()) return true;
+
+    // Mock mode is the primary demo/testing path. Recognize it directly before
+    // any stricter URI parsing so it cannot fall through into GPIO setup.
+    if (port_.find("ultrasonic://mock") == 0) {
+        mock_mode_ = true;
+        scan_hz_ = 10.0f;
+        max_distance_mm_ = 4000.0f;
+        const size_t mm_pos = port_.find("mm=");
+        if (mm_pos != std::string::npos) {
+            try {
+                mock_distance_mm_ = std::max(0.0f, std::stof(port_.substr(mm_pos + 3)));
+            } catch (const std::exception&) {
+                mock_distance_mm_ = 1200.0f;
+            }
+        } else if (mock_distance_mm_ <= 0.0f) {
+            mock_distance_mm_ = 1200.0f;
+        }
+        const size_t hz_pos = port_.find("hz=");
+        if (hz_pos != std::string::npos) {
+            try {
+                scan_hz_ = std::max(1.0f, std::stof(port_.substr(hz_pos + 3)));
+            } catch (const std::exception&) {
+                scan_hz_ = 10.0f;
+            }
+        }
+        open_.store(true);
+        return true;
+    }
+
     if (!parse_uri()) return false;
 
 #ifndef __linux__
@@ -116,7 +147,7 @@ bool UltrasonicFallback::open()
     open_.store(true);
     return true;
 #else
-    if (mock_distance_mm_ > 0.0f) {
+    if (mock_mode_ || mock_distance_mm_ > 0.0f) {
         open_.store(true);
         return true;
     }
@@ -158,6 +189,10 @@ void UltrasonicFallback::close()
 {
     stop();
 #ifdef __linux__
+    if (mock_mode_) {
+        open_.store(false);
+        return;
+    }
 #if defined(HAVE_LIBGPIOD_V2)
     if (echo_request_) {
         gpiod_line_request_release(echo_request_);

@@ -71,6 +71,7 @@ private:
     float scan_hz_          = 10.0f;
     float max_distance_mm_  = 4000.0f;
     float mock_distance_mm_ = 0.0f;
+    bool  mock_mode_        = false;
 
     std::atomic<bool> open_{ false };
     std::atomic<bool> running_{ false };
