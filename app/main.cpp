@@ -761,17 +761,17 @@ int main(int argc, char* argv[])
     // 6. WARM-UP — wait for first valid scan frame
     // ══════════════════════════════════════════════════════════════════════════
 
-    std::cout << "[6/6] Waiting for first LiDAR scan frame...\n";
+    std::cout << "[6/6] Waiting for first sensor frame...\n";
     {
         int wait_ms = 0;
         while (!g_shutdown.load()) {
             auto frame = lidar->get_latest_frame();
-            if (!frame.empty()) break;
+            if (frame.timestamp != std::chrono::steady_clock::time_point{}) break;
             std::this_thread::sleep_for(std::chrono::milliseconds(50));
             wait_ms += 50;
             if (wait_ms > 5000) {
-                std::cerr << "FATAL: No scan frame received after 5 seconds.\n"
-                          << "  → Check LiDAR power and serial connection.\n"
+                std::cerr << "FATAL: No sensor frame received after 5 seconds.\n"
+                          << "  → Check sensor power and connection.\n"
                           << "  → Check sensor error: " << lidar->error_message() << "\n";
                 lidar->stop();
                 lidar->close();
@@ -812,6 +812,7 @@ int main(int argc, char* argv[])
     PipelineStats stats;
     uint64_t last_frame_id     = UINT64_MAX;
     auto     last_new_frame_at = std::chrono::steady_clock::now();
+    bool     warned_sensor_stall = false;
 
     // dt timing: measured wall-clock time between consecutive frames.
     auto last_frame_time = std::chrono::steady_clock::now();
@@ -822,20 +823,20 @@ int main(int argc, char* argv[])
         // ── Poll for a new frame ───────────────────────────────────────────────
         auto frame = lidar->get_latest_frame();
 
-        if (frame.empty() || frame.frame_id == last_frame_id) {
+        if (frame.frame_id == last_frame_id) {
             // No new frame yet — yield briefly then poll again.
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
             const auto stall_s = std::chrono::duration_cast<std::chrono::duration<double>>(
                 std::chrono::steady_clock::now() - last_new_frame_at).count();
-            if (stall_s > 2.0) {
-                std::cerr << "FATAL: Sensor stopped producing new frames for "
+            if (stall_s > 2.0 && !warned_sensor_stall) {
+                std::cerr << "WARN: Sensor has not produced a new frame for "
                           << std::fixed << std::setprecision(1)
                           << stall_s << " seconds.\n";
                 if (!lidar->error_message().empty()) {
                     std::cerr << "  → Sensor error: " << lidar->error_message() << "\n";
                 }
-                break;
+                warned_sensor_stall = true;
             }
 
             // Surface sensor errors (non-fatal — driver keeps retrying).
@@ -847,6 +848,7 @@ int main(int argc, char* argv[])
 
         last_frame_id = frame.frame_id;
         last_new_frame_at = std::chrono::steady_clock::now();
+        warned_sensor_stall = false;
 
         // ── Measure dt ────────────────────────────────────────────────────────
         const auto frame_start_time = std::chrono::steady_clock::now();
