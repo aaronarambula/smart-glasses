@@ -41,38 +41,34 @@ struct CameraFallback::Impl {
 };
 
 #ifdef HAVE_OPENCV
-static bool open_capture_device(CameraFallback::Impl& impl,
-                                int camera_index,
-                                int frame_width,
-                                int frame_height,
-                                float scan_hz)
+bool CameraFallback::open_capture_device()
 {
-    impl.cap.release();
+    impl_->cap.release();
 
     const int backends[] = { cv::CAP_V4L2, cv::CAP_ANY };
     for (const int backend : backends) {
         bool opened = false;
         if (backend == cv::CAP_ANY) {
-            opened = impl.cap.open(camera_index);
+            opened = impl_->cap.open(camera_index_);
         } else {
-            opened = impl.cap.open(camera_index, backend);
+            opened = impl_->cap.open(camera_index_, backend);
         }
         if (!opened) continue;
 
-        if (frame_width > 0)  impl.cap.set(cv::CAP_PROP_FRAME_WIDTH, frame_width);
-        if (frame_height > 0) impl.cap.set(cv::CAP_PROP_FRAME_HEIGHT, frame_height);
-        if (scan_hz > 0.0f)   impl.cap.set(cv::CAP_PROP_FPS, scan_hz);
+        if (frame_width_ > 0)  impl_->cap.set(cv::CAP_PROP_FRAME_WIDTH, frame_width_);
+        if (frame_height_ > 0) impl_->cap.set(cv::CAP_PROP_FRAME_HEIGHT, frame_height_);
+        if (scan_hz_ > 0.0f)   impl_->cap.set(cv::CAP_PROP_FPS, scan_hz_);
 
         cv::Mat probe;
         for (int i = 0; i < kCameraWarmupReads; ++i) {
-            if (impl.cap.read(probe) && !probe.empty()) {
-                impl.frame = probe;
+            if (impl_->cap.read(probe) && !probe.empty()) {
+                impl_->frame = probe;
                 return true;
             }
             std::this_thread::sleep_for(kCameraWarmupDelay);
         }
 
-        impl.cap.release();
+        impl_->cap.release();
     }
 
     return false;
@@ -178,7 +174,7 @@ bool CameraFallback::open()
 #else
     if (!configured_ && !parse_uri()) return false;
 
-    if (!open_capture_device(*impl_, camera_index_, frame_width_, frame_height_, scan_hz_)) {
+    if (!open_capture_device()) {
         set_error("Cannot read frames from camera index " + std::to_string(camera_index_));
         return false;
     }
@@ -415,7 +411,7 @@ void CameraFallback::read_loop()
             if (consecutive_failures >= kMaxConsecutiveReadFailures) {
 #ifdef HAVE_OPENCV
                 if (open_.load()) {
-                    open_capture_device(*impl_, camera_index_, frame_width_, frame_height_, scan_hz_);
+                    open_capture_device();
                 }
 #endif
                 consecutive_failures = 0;

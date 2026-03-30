@@ -57,6 +57,7 @@ private:
     struct Impl;
 
     bool parse_uri();
+    bool open_capture_device();
     void read_loop();
     void publish_frame(ScanFrame frame);
     void set_error(const std::string& msg);
