@@ -813,6 +813,7 @@ int main(int argc, char* argv[])
     uint64_t last_frame_id     = UINT64_MAX;
     auto     last_new_frame_at = std::chrono::steady_clock::now();
     bool     warned_sensor_stall = false;
+    std::string last_sensor_error;
 
     // dt timing: measured wall-clock time between consecutive frames.
     auto last_frame_time = std::chrono::steady_clock::now();
@@ -840,8 +841,12 @@ int main(int argc, char* argv[])
             }
 
             // Surface sensor errors (non-fatal — driver keeps retrying).
-            if (!lidar->error_message().empty() && cfg.verbose) {
-                std::cerr << "[sensor] " << lidar->error_message() << "\n";
+            if (cfg.verbose) {
+                const std::string sensor_error = lidar->error_message();
+                if (!sensor_error.empty() && sensor_error != last_sensor_error) {
+                    std::cerr << "[sensor] " << sensor_error << "\n";
+                    last_sensor_error = sensor_error;
+                }
             }
             continue;
         }
@@ -849,6 +854,7 @@ int main(int argc, char* argv[])
         last_frame_id = frame.frame_id;
         last_new_frame_at = std::chrono::steady_clock::now();
         warned_sensor_stall = false;
+        last_sensor_error.clear();
 
         // ── Measure dt ────────────────────────────────────────────────────────
         const auto frame_start_time = std::chrono::steady_clock::now();

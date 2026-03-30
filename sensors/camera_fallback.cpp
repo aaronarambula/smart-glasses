@@ -23,6 +23,10 @@ constexpr int kMinBBoxHeightPx = 28;
 constexpr float kMinDistanceMm = 250.0f;
 constexpr float kMaxDistanceMm = 6000.0f;
 constexpr float kMaxAngularWidthDeg = 18.0f;
+constexpr int kCameraWarmupReads = 10;
+constexpr int kMaxConsecutiveReadFailures = 5;
+constexpr auto kCameraWarmupDelay = std::chrono::milliseconds(40);
+constexpr auto kCameraRetryDelay = std::chrono::milliseconds(150);
 } // namespace
 
 struct CameraFallback::Impl {
@@ -35,6 +39,45 @@ struct CameraFallback::Impl {
     cv::Mat morph;
 #endif
 };
+
+#ifdef HAVE_OPENCV
+static bool open_capture_device(CameraFallback::Impl& impl,
+                                int camera_index,
+                                int frame_width,
+                                int frame_height,
+                                float scan_hz)
+{
+    impl.cap.release();
+
+    const int backends[] = { cv::CAP_V4L2, cv::CAP_ANY };
+    for (const int backend : backends) {
+        bool opened = false;
+        if (backend == cv::CAP_ANY) {
+            opened = impl.cap.open(camera_index);
+        } else {
+            opened = impl.cap.open(camera_index, backend);
+        }
+        if (!opened) continue;
+
+        if (frame_width > 0)  impl.cap.set(cv::CAP_PROP_FRAME_WIDTH, frame_width);
+        if (frame_height > 0) impl.cap.set(cv::CAP_PROP_FRAME_HEIGHT, frame_height);
+        if (scan_hz > 0.0f)   impl.cap.set(cv::CAP_PROP_FPS, scan_hz);
+
+        cv::Mat probe;
+        for (int i = 0; i < kCameraWarmupReads; ++i) {
+            if (impl.cap.read(probe) && !probe.empty()) {
+                impl.frame = probe;
+                return true;
+            }
+            std::this_thread::sleep_for(kCameraWarmupDelay);
+        }
+
+        impl.cap.release();
+    }
+
+    return false;
+}
+#endif
 
 CameraFallback::CameraFallback(std::string port_uri)
     : LidarBase(std::move(port_uri))
@@ -135,14 +178,10 @@ bool CameraFallback::open()
 #else
     if (!configured_ && !parse_uri()) return false;
 
-    if (!impl_->cap.open(camera_index_)) {
-        set_error("Cannot open camera index " + std::to_string(camera_index_));
+    if (!open_capture_device(*impl_, camera_index_, frame_width_, frame_height_, scan_hz_)) {
+        set_error("Cannot read frames from camera index " + std::to_string(camera_index_));
         return false;
     }
-
-    impl_->cap.set(cv::CAP_PROP_FRAME_WIDTH, frame_width_);
-    impl_->cap.set(cv::CAP_PROP_FRAME_HEIGHT, frame_height_);
-    impl_->cap.set(cv::CAP_PROP_FPS, scan_hz_);
 
     classifier_ = std::make_unique<CameraObjectClassifier>();
     try {
@@ -367,11 +406,24 @@ bool CameraFallback::detect_obstacle(ScanFrame& frame_out)
 void CameraFallback::read_loop()
 {
     const auto sleep_for = std::chrono::duration<float>(1.0f / std::max(1.0f, scan_hz_));
+    int consecutive_failures = 0;
 
     while (running_.load()) {
         ScanFrame frame;
         if (!detect_obstacle(frame)) {
+            ++consecutive_failures;
+            if (consecutive_failures >= kMaxConsecutiveReadFailures) {
+#ifdef HAVE_OPENCV
+                if (open_.load()) {
+                    open_capture_device(*impl_, camera_index_, frame_width_, frame_height_, scan_hz_);
+                }
+#endif
+                consecutive_failures = 0;
+                std::this_thread::sleep_for(kCameraRetryDelay);
+            }
             frame = make_empty_frame();
+        } else {
+            consecutive_failures = 0;
         }
 
         frame.frame_id = frame_counter_++;
