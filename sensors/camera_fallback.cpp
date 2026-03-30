@@ -18,11 +18,11 @@ namespace sensors {
 
 namespace {
 constexpr std::array<float, 5> kClusterOffsetsDeg{ -2.0f, -1.0f, 0.0f, 1.0f, 2.0f };
-constexpr float kMinContourAreaPx = 1800.0f;
-constexpr int kMinBBoxHeightPx = 28;
+constexpr float kMinContourAreaPx = 600.0f;
+constexpr int kMinBBoxHeightPx = 18;
 constexpr float kMinDistanceMm = 250.0f;
 constexpr float kMaxDistanceMm = 6000.0f;
-constexpr float kMaxAngularWidthDeg = 18.0f;
+constexpr float kMaxAngularWidthDeg = 28.0f;
 constexpr int kCameraWarmupReads = 10;
 constexpr int kMaxConsecutiveReadFailures = 5;
 constexpr auto kCameraWarmupDelay = std::chrono::milliseconds(40);
@@ -322,20 +322,22 @@ bool CameraFallback::detect_obstacle(ScanFrame& frame_out)
     }
 
     cv::cvtColor(impl_->frame, impl_->gray, cv::COLOR_BGR2GRAY);
-    cv::GaussianBlur(impl_->gray, impl_->blurred, cv::Size(7, 7), 0.0);
-    cv::Canny(impl_->blurred, impl_->edges, 40.0, 120.0);
+    cv::GaussianBlur(impl_->gray, impl_->blurred, cv::Size(5, 5), 0.0);
+    cv::Canny(impl_->blurred, impl_->edges, 20.0, 80.0);
 
     const cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
     cv::dilate(impl_->edges, impl_->morph, kernel, cv::Point(-1, -1), 2);
+    cv::morphologyEx(impl_->morph, impl_->morph, cv::MORPH_CLOSE, kernel,
+                     cv::Point(-1, -1), 1);
 
     std::vector<std::vector<cv::Point>> contours;
     cv::findContours(impl_->morph, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
     const int width = impl_->frame.cols;
     const int height = impl_->frame.rows;
-    const int center_left = width / 5;
+    const int center_left = width / 8;
     const int center_right = width - center_left;
-    const int horizon_cut = height / 5;
+    const int horizon_cut = height / 10;
 
     double best_score = 0.0;
     cv::Rect best_box;
@@ -354,7 +356,10 @@ bool CameraFallback::detect_obstacle(ScanFrame& frame_out)
         const double solidity_score = area / static_cast<double>(std::max(1, box.area()));
         const double center_bias =
             1.0 - (std::abs(box_center_x - width / 2) / static_cast<double>(width / 2));
-        const double score = area * (0.5 + solidity_score) * (0.5 + center_bias);
+        const double height_bias =
+            std::min(2.0, static_cast<double>(box.height) / static_cast<double>(kMinBBoxHeightPx));
+        const double score =
+            area * (0.35 + solidity_score) * (0.35 + center_bias) * height_bias;
 
         if (score > best_score) {
             best_score = score;
