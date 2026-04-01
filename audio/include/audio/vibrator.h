@@ -19,6 +19,7 @@
 #include "sensors/gpio.h"
 #include "prediction/prediction.h"
 
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <thread>
