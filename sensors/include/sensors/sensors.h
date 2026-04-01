@@ -34,6 +34,7 @@
 #include "rplidar_a1.h"
 #include "ld06.h"
 #include "ultrasonic_fallback.h"
+#include "ultrasonic_hc_sr04.h"
 #include "camera_fallback.h"
 
 #include <memory>

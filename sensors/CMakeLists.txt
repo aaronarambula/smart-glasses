@@ -30,9 +30,11 @@ add_library(sensors_lib STATIC
     rplidar_a1.cpp
     ld06.cpp
     ultrasonic_fallback.cpp
+    ultrasonic_hc_sr04.cpp
     camera_fallback.cpp
     camera_classifier.cpp
     LiDAR.cpp
+    gpio.cpp
 )
 
 target_include_directories(sensors_lib

@@ -34,6 +34,7 @@ add_library(agent_lib STATIC
     src/openai_client.cpp
     src/agent_loop.cpp
     button_agent.cpp
+    voice_agent.cpp
 )
 
 target_include_directories(agent_lib

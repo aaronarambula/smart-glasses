@@ -937,18 +937,22 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: /Users/aaronarambula/Documents/smar
   /Users/aaronarambula/Documents/smart-glasses/prediction/include/prediction/ttc_engine.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/camera_classifier.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/camera_fallback.h \
+  /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/gpio.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ld06.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/lidar_base.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/rplidar_a1.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/sensors.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/serial_port.h \
   /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ultrasonic_fallback.h \
+  /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ultrasonic_hc_sr04.h \
   /Users/aaronarambula/Documents/smart-glasses/sim/include/sim/sim.h \
   /Users/aaronarambula/Documents/smart-glasses/sim/include/sim/sim_lidar.h \
   /Users/aaronarambula/Documents/smart-glasses/sim/include/sim/sim_world.h
 
 
 /Users/aaronarambula/Documents/smart-glasses/sim/include/sim/sim.h:
+
+/Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/ultrasonic_hc_sr04.h:
 
 /Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/serial_port.h:
 
@@ -1489,6 +1493,8 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: /Users/aaronarambula/Documents/smar
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_polymorphic.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_pointer.h:
+
+/Users/aaronarambula/Documents/smart-glasses/sensors/include/sensors/gpio.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_nothrow_destructible.h:
 

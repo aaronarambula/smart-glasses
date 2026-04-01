@@ -26,6 +26,9 @@ add_library(audio_lib STATIC
     src/tts_engine.cpp
     src/haptics_engine.cpp
     src/alert_policy.cpp
+    vibrator.cpp
+    button_handler.cpp
+    audio_capture.cpp
 )
 
 target_include_directories(audio_lib

@@ -1,10 +1,16 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/audio_lib.dir/audio_capture.cpp.o"
+  "CMakeFiles/audio_lib.dir/audio_capture.cpp.o.d"
+  "CMakeFiles/audio_lib.dir/button_handler.cpp.o"
+  "CMakeFiles/audio_lib.dir/button_handler.cpp.o.d"
   "CMakeFiles/audio_lib.dir/src/alert_policy.cpp.o"
   "CMakeFiles/audio_lib.dir/src/alert_policy.cpp.o.d"
   "CMakeFiles/audio_lib.dir/src/haptics_engine.cpp.o"
   "CMakeFiles/audio_lib.dir/src/haptics_engine.cpp.o.d"
   "CMakeFiles/audio_lib.dir/src/tts_engine.cpp.o"
   "CMakeFiles/audio_lib.dir/src/tts_engine.cpp.o.d"
+  "CMakeFiles/audio_lib.dir/vibrator.cpp.o"
+  "CMakeFiles/audio_lib.dir/vibrator.cpp.o.d"
   "libaudio_lib.a"
   "libaudio_lib.pdb"
 )

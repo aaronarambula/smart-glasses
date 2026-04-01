@@ -137,6 +137,10 @@ struct AppConfig {
     int   haptic_pulse_on_ms = 180;
     int   haptic_pulse_off_ms = 120;
 
+    // Button and voice input
+    int   button_pin    = -1;   // BCM numbering; -1 disables button handler
+    bool  voice_input_enabled = false;  // Enable voice queries via button hold
+
     // Alert thresholds
     float danger_mm  =  500.0f;
     float warning_mm = 1000.0f;
@@ -243,6 +247,11 @@ static int board_pin_to_bcm(int board_pin)
         "  --haptic-pulses INT       Pulses per CAUTION alert (default: 2)\n"
         "  --haptic-on-ms INT        Motor-on milliseconds per pulse (default: 180)\n"
         "  --haptic-off-ms INT       Gap milliseconds between pulses (default: 120)\n"
+        "\n"
+        "Button and voice input:\n"
+        "  --button-pin INT          BCM GPIO pin for physical button\n"
+        "  --button-board-pin INT    Physical BOARD pin for button\n"
+        "  --enable-voice-input      Enable voice queries via button hold (requires Whisper API key)\n"
         "\n"
         "Agent:\n"
         "  --no-agent                Disable GPT-4o agent (no API calls)\n"
@@ -356,6 +365,17 @@ static AppConfig parse_args(int argc, char* argv[])
         else if (arg == "--haptic-pulses")      { cfg.haptic_pulse_count = std::max(1, std::stoi(next("--haptic-pulses"))); }
         else if (arg == "--haptic-on-ms")       { cfg.haptic_pulse_on_ms = std::max(1, std::stoi(next("--haptic-on-ms"))); }
         else if (arg == "--haptic-off-ms")      { cfg.haptic_pulse_off_ms = std::max(1, std::stoi(next("--haptic-off-ms"))); }
+        else if (arg == "--button-pin")         { cfg.button_pin        = std::stoi(next("--button-pin")); }
+        else if (arg == "--button-board-pin")   {
+            const int board_pin = std::stoi(next("--button-board-pin"));
+            cfg.button_pin = board_pin_to_bcm(board_pin);
+            if (cfg.button_pin < 0) {
+                std::cerr << "error: unsupported Raspberry Pi BOARD pin '"
+                          << board_pin << "' for --button-board-pin\n";
+                std::exit(1);
+            }
+        }
+        else if (arg == "--enable-voice-input") { cfg.voice_input_enabled = true; }
         else if (arg == "--no-agent")        { cfg.agent_enabled     = false;                           }
         else if (arg == "--agent-interval")  { cfg.agent_interval_s  = std::stof(next("--agent-interval")); }
         else if (arg == "--agent-verbose")   { cfg.agent_verbose     = true;                            }

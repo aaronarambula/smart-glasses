@@ -271,6 +271,30 @@ src/scene_builder.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f agent/CMakeFiles/agent_lib.dir/build.make agent/CMakeFiles/agent_lib.dir/src/scene_builder.cpp.s
 .PHONY : src/scene_builder.cpp.s
 
+voice_agent.o: voice_agent.cpp.o
+.PHONY : voice_agent.o
+
+# target to build an object file
+voice_agent.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f agent/CMakeFiles/agent_lib.dir/build.make agent/CMakeFiles/agent_lib.dir/voice_agent.cpp.o
+.PHONY : voice_agent.cpp.o
+
+voice_agent.i: voice_agent.cpp.i
+.PHONY : voice_agent.i
+
+# target to preprocess a source file
+voice_agent.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f agent/CMakeFiles/agent_lib.dir/build.make agent/CMakeFiles/agent_lib.dir/voice_agent.cpp.i
+.PHONY : voice_agent.cpp.i
+
+voice_agent.s: voice_agent.cpp.s
+.PHONY : voice_agent.s
+
+# target to generate assembly for a file
+voice_agent.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f agent/CMakeFiles/agent_lib.dir/build.make agent/CMakeFiles/agent_lib.dir/voice_agent.cpp.s
+.PHONY : voice_agent.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -296,6 +320,9 @@ help:
 	@echo "... src/scene_builder.o"
 	@echo "... src/scene_builder.i"
 	@echo "... src/scene_builder.s"
+	@echo "... voice_agent.o"
+	@echo "... voice_agent.i"
+	@echo "... voice_agent.s"
 .PHONY : help
 
 

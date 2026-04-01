@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/agent_lib.dir/src/openai_client.cpp.o.d"
   "CMakeFiles/agent_lib.dir/src/scene_builder.cpp.o"
   "CMakeFiles/agent_lib.dir/src/scene_builder.cpp.o.d"
+  "CMakeFiles/agent_lib.dir/voice_agent.cpp.o"
+  "CMakeFiles/agent_lib.dir/voice_agent.cpp.o.d"
   "libagent_lib.a"
   "libagent_lib.pdb"
 )

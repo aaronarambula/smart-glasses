@@ -1,2 +1,2 @@
-/usr/bin/ar qc libagent_lib.a CMakeFiles/agent_lib.dir/src/scene_builder.cpp.o CMakeFiles/agent_lib.dir/src/openai_client.cpp.o CMakeFiles/agent_lib.dir/src/agent_loop.cpp.o CMakeFiles/agent_lib.dir/button_agent.cpp.o
+/usr/bin/ar qc libagent_lib.a CMakeFiles/agent_lib.dir/src/scene_builder.cpp.o CMakeFiles/agent_lib.dir/src/openai_client.cpp.o CMakeFiles/agent_lib.dir/src/agent_loop.cpp.o CMakeFiles/agent_lib.dir/button_agent.cpp.o CMakeFiles/agent_lib.dir/voice_agent.cpp.o
 /usr/bin/ranlib libagent_lib.a

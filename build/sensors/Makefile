@@ -247,6 +247,30 @@ camera_fallback.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.s
 .PHONY : camera_fallback.cpp.s
 
+gpio.o: gpio.cpp.o
+.PHONY : gpio.o
+
+# target to build an object file
+gpio.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.o
+.PHONY : gpio.cpp.o
+
+gpio.i: gpio.cpp.i
+.PHONY : gpio.i
+
+# target to preprocess a source file
+gpio.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.i
+.PHONY : gpio.cpp.i
+
+gpio.s: gpio.cpp.s
+.PHONY : gpio.s
+
+# target to generate assembly for a file
+gpio.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.s
+.PHONY : gpio.cpp.s
+
 ld06.o: ld06.cpp.o
 .PHONY : ld06.o
 
@@ -319,6 +343,30 @@ ultrasonic_fallback.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.s
 .PHONY : ultrasonic_fallback.cpp.s
 
+ultrasonic_hc_sr04.o: ultrasonic_hc_sr04.cpp.o
+.PHONY : ultrasonic_hc_sr04.o
+
+# target to build an object file
+ultrasonic_hc_sr04.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o
+.PHONY : ultrasonic_hc_sr04.cpp.o
+
+ultrasonic_hc_sr04.i: ultrasonic_hc_sr04.cpp.i
+.PHONY : ultrasonic_hc_sr04.i
+
+# target to preprocess a source file
+ultrasonic_hc_sr04.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.i
+.PHONY : ultrasonic_hc_sr04.cpp.i
+
+ultrasonic_hc_sr04.s: ultrasonic_hc_sr04.cpp.s
+.PHONY : ultrasonic_hc_sr04.s
+
+# target to generate assembly for a file
+ultrasonic_hc_sr04.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.s
+.PHONY : ultrasonic_hc_sr04.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -341,6 +389,9 @@ help:
 	@echo "... camera_fallback.o"
 	@echo "... camera_fallback.i"
 	@echo "... camera_fallback.s"
+	@echo "... gpio.o"
+	@echo "... gpio.i"
+	@echo "... gpio.s"
 	@echo "... ld06.o"
 	@echo "... ld06.i"
 	@echo "... ld06.s"
@@ -350,6 +401,9 @@ help:
 	@echo "... ultrasonic_fallback.o"
 	@echo "... ultrasonic_fallback.i"
 	@echo "... ultrasonic_fallback.s"
+	@echo "... ultrasonic_hc_sr04.o"
+	@echo "... ultrasonic_hc_sr04.i"
+	@echo "... ultrasonic_hc_sr04.s"
 .PHONY : help
 
 

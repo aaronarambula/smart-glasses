@@ -114,11 +114,56 @@ audio/CMakeFiles/audio_lib.dir/src/alert_policy.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/audio_lib.dir/src/alert_policy.cpp.s"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/audio/src/alert_policy.cpp -o CMakeFiles/audio_lib.dir/src/alert_policy.cpp.s
 
+audio/CMakeFiles/audio_lib.dir/vibrator.cpp.o: audio/CMakeFiles/audio_lib.dir/flags.make
+audio/CMakeFiles/audio_lib.dir/vibrator.cpp.o: /Users/aaronarambula/Documents/smart-glasses/audio/vibrator.cpp
+audio/CMakeFiles/audio_lib.dir/vibrator.cpp.o: audio/CMakeFiles/audio_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object audio/CMakeFiles/audio_lib.dir/vibrator.cpp.o"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT audio/CMakeFiles/audio_lib.dir/vibrator.cpp.o -MF CMakeFiles/audio_lib.dir/vibrator.cpp.o.d -o CMakeFiles/audio_lib.dir/vibrator.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/audio/vibrator.cpp
+
+audio/CMakeFiles/audio_lib.dir/vibrator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/audio_lib.dir/vibrator.cpp.i"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/aaronarambula/Documents/smart-glasses/audio/vibrator.cpp > CMakeFiles/audio_lib.dir/vibrator.cpp.i
+
+audio/CMakeFiles/audio_lib.dir/vibrator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/audio_lib.dir/vibrator.cpp.s"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/audio/vibrator.cpp -o CMakeFiles/audio_lib.dir/vibrator.cpp.s
+
+audio/CMakeFiles/audio_lib.dir/button_handler.cpp.o: audio/CMakeFiles/audio_lib.dir/flags.make
+audio/CMakeFiles/audio_lib.dir/button_handler.cpp.o: /Users/aaronarambula/Documents/smart-glasses/audio/button_handler.cpp
+audio/CMakeFiles/audio_lib.dir/button_handler.cpp.o: audio/CMakeFiles/audio_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object audio/CMakeFiles/audio_lib.dir/button_handler.cpp.o"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT audio/CMakeFiles/audio_lib.dir/button_handler.cpp.o -MF CMakeFiles/audio_lib.dir/button_handler.cpp.o.d -o CMakeFiles/audio_lib.dir/button_handler.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/audio/button_handler.cpp
+
+audio/CMakeFiles/audio_lib.dir/button_handler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/audio_lib.dir/button_handler.cpp.i"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/aaronarambula/Documents/smart-glasses/audio/button_handler.cpp > CMakeFiles/audio_lib.dir/button_handler.cpp.i
+
+audio/CMakeFiles/audio_lib.dir/button_handler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/audio_lib.dir/button_handler.cpp.s"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/audio/button_handler.cpp -o CMakeFiles/audio_lib.dir/button_handler.cpp.s
+
+audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.o: audio/CMakeFiles/audio_lib.dir/flags.make
+audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.o: /Users/aaronarambula/Documents/smart-glasses/audio/audio_capture.cpp
+audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.o: audio/CMakeFiles/audio_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.o"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.o -MF CMakeFiles/audio_lib.dir/audio_capture.cpp.o.d -o CMakeFiles/audio_lib.dir/audio_capture.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/audio/audio_capture.cpp
+
+audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/audio_lib.dir/audio_capture.cpp.i"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/aaronarambula/Documents/smart-glasses/audio/audio_capture.cpp > CMakeFiles/audio_lib.dir/audio_capture.cpp.i
+
+audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/audio_lib.dir/audio_capture.cpp.s"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/audio/audio_capture.cpp -o CMakeFiles/audio_lib.dir/audio_capture.cpp.s
+
 # Object files for target audio_lib
 audio_lib_OBJECTS = \
 "CMakeFiles/audio_lib.dir/src/tts_engine.cpp.o" \
 "CMakeFiles/audio_lib.dir/src/haptics_engine.cpp.o" \
-"CMakeFiles/audio_lib.dir/src/alert_policy.cpp.o"
+"CMakeFiles/audio_lib.dir/src/alert_policy.cpp.o" \
+"CMakeFiles/audio_lib.dir/vibrator.cpp.o" \
+"CMakeFiles/audio_lib.dir/button_handler.cpp.o" \
+"CMakeFiles/audio_lib.dir/audio_capture.cpp.o"
 
 # External object files for target audio_lib
 audio_lib_EXTERNAL_OBJECTS =
@@ -126,9 +171,12 @@ audio_lib_EXTERNAL_OBJECTS =
 audio/libaudio_lib.a: audio/CMakeFiles/audio_lib.dir/src/tts_engine.cpp.o
 audio/libaudio_lib.a: audio/CMakeFiles/audio_lib.dir/src/haptics_engine.cpp.o
 audio/libaudio_lib.a: audio/CMakeFiles/audio_lib.dir/src/alert_policy.cpp.o
+audio/libaudio_lib.a: audio/CMakeFiles/audio_lib.dir/vibrator.cpp.o
+audio/libaudio_lib.a: audio/CMakeFiles/audio_lib.dir/button_handler.cpp.o
+audio/libaudio_lib.a: audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.o
 audio/libaudio_lib.a: audio/CMakeFiles/audio_lib.dir/build.make
 audio/libaudio_lib.a: audio/CMakeFiles/audio_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX static library libaudio_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libaudio_lib.a"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && $(CMAKE_COMMAND) -P CMakeFiles/audio_lib.dir/cmake_clean_target.cmake
 	cd /Users/aaronarambula/Documents/smart-glasses/build/audio && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/audio_lib.dir/link.txt --verbose=$(VERBOSE)
 

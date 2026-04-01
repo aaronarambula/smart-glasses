@@ -175,6 +175,54 @@ audio_lib/fast:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/build
 .PHONY : audio_lib/fast
 
+audio_capture.o: audio_capture.cpp.o
+.PHONY : audio_capture.o
+
+# target to build an object file
+audio_capture.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.o
+.PHONY : audio_capture.cpp.o
+
+audio_capture.i: audio_capture.cpp.i
+.PHONY : audio_capture.i
+
+# target to preprocess a source file
+audio_capture.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.i
+.PHONY : audio_capture.cpp.i
+
+audio_capture.s: audio_capture.cpp.s
+.PHONY : audio_capture.s
+
+# target to generate assembly for a file
+audio_capture.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/audio_capture.cpp.s
+.PHONY : audio_capture.cpp.s
+
+button_handler.o: button_handler.cpp.o
+.PHONY : button_handler.o
+
+# target to build an object file
+button_handler.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/button_handler.cpp.o
+.PHONY : button_handler.cpp.o
+
+button_handler.i: button_handler.cpp.i
+.PHONY : button_handler.i
+
+# target to preprocess a source file
+button_handler.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/button_handler.cpp.i
+.PHONY : button_handler.cpp.i
+
+button_handler.s: button_handler.cpp.s
+.PHONY : button_handler.s
+
+# target to generate assembly for a file
+button_handler.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/button_handler.cpp.s
+.PHONY : button_handler.cpp.s
+
 src/alert_policy.o: src/alert_policy.cpp.o
 .PHONY : src/alert_policy.o
 
@@ -247,6 +295,30 @@ src/tts_engine.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/src/tts_engine.cpp.s
 .PHONY : src/tts_engine.cpp.s
 
+vibrator.o: vibrator.cpp.o
+.PHONY : vibrator.o
+
+# target to build an object file
+vibrator.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/vibrator.cpp.o
+.PHONY : vibrator.cpp.o
+
+vibrator.i: vibrator.cpp.i
+.PHONY : vibrator.i
+
+# target to preprocess a source file
+vibrator.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/vibrator.cpp.i
+.PHONY : vibrator.cpp.i
+
+vibrator.s: vibrator.cpp.s
+.PHONY : vibrator.s
+
+# target to generate assembly for a file
+vibrator.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f audio/CMakeFiles/audio_lib.dir/build.make audio/CMakeFiles/audio_lib.dir/vibrator.cpp.s
+.PHONY : vibrator.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -260,6 +332,12 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... audio_lib"
+	@echo "... audio_capture.o"
+	@echo "... audio_capture.i"
+	@echo "... audio_capture.s"
+	@echo "... button_handler.o"
+	@echo "... button_handler.i"
+	@echo "... button_handler.s"
 	@echo "... src/alert_policy.o"
 	@echo "... src/alert_policy.i"
 	@echo "... src/alert_policy.s"
@@ -269,6 +347,9 @@ help:
 	@echo "... src/tts_engine.o"
 	@echo "... src/tts_engine.i"
 	@echo "... src/tts_engine.s"
+	@echo "... vibrator.o"
+	@echo "... vibrator.i"
+	@echo "... vibrator.s"
 .PHONY : help
 
 
