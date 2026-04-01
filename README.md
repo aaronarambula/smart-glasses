@@ -1,24 +1,61 @@
-# Smart Glasses — AI Obstacle Detection System
+# Smart Glasses — AI Obstacle Detection & Voice Navigation System
 
-> **FSE 100 Class Project** — Smart assistive glasses with real-time LiDAR obstacle detection, a custom C++ autograd engine (*aaronnet*), Kalman tracking, time-to-collision prediction, spoken alerts via espeak-ng, and a GPT-4o navigation agent.
+> Production-ready assistive glasses with real-time LiDAR obstacle detection, neural network risk prediction, spoken alerts, and hands-free GPT-4o voice queries. Built in C++17 with a custom autograd engine.
+
+**Status:** ✅ Complete and tested for hardware integration
 
 ---
 
-## Table of Contents
+## Quick Start
 
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Module Breakdown](#module-breakdown)
-- [Hardware](#hardware)
-- [Software Dependencies](#software-dependencies)
-- [Building](#building)
-- [Running](#running)
-- [Project Structure](#project-structure)
-- [How The AI Works](#how-the-ai-works)
-- [The aaronnet Engine](#the-aaronnet-engine)
-- [Configuration Reference](#configuration-reference)
-- [Raspberry Pi Setup](#raspberry-pi-setup)
-- [Team](#team)
+### On Raspberry Pi (Hardware)
+```bash
+# 1. Build
+mkdir -p build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . --parallel
+
+# 2. Run
+export OPENAI_API_KEY="sk-..."
+./app/smart_glasses --sensor ld06 --port /dev/ttyAMA0
+
+# 3. Press GPIO button (pin 17) for voice queries
+```
+
+### Without Hardware (Simulator)
+```bash
+cd build
+./app/smart_glasses --sensor sim
+```
+
+---
+
+## Documentation
+
+| Document | Purpose |
+|----------|---------|
+| **[STRUCTURE.md](STRUCTURE.md)** | Repository organization & file guide |
+| **[docs/QUICKSTART.md](docs/QUICKSTART.md)** | Build & run instructions |
+| **[docs/README_BUTTON.md](docs/README_BUTTON.md)** | GPIO button feature guide |
+| **[docs/BUTTON_SETUP.md](docs/BUTTON_SETUP.md)** | Hardware wiring details |
+| **[docs/GPIO_AUDIT.md](docs/GPIO_AUDIT.md)** | GPIO connector usage |
+| **[docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)** | Feature checklist & status |
+| **[.github/copilot-instructions.md](.github/copilot-instructions.md)** | Developer guide for future sessions |
+
+---
+
+## Key Features
+
+- ✅ Real-time 360° LiDAR obstacle detection (10 Hz)
+- ✅ Neural network risk classification (MLP: 24→64→32→4)
+- ✅ Kalman tracking with persistent object IDs
+- ✅ Time-to-collision prediction
+- ✅ Spoken alerts via TTS (espeak-ng)
+- ✅ GPT-4o navigation agent (contextual advice)
+- ✅ **Hands-free voice queries via GPIO button**
+- ✅ Online training with pseudo-labels
+- ✅ Runs on Raspberry Pi Zero 2W
+- ✅ Zero external ML dependencies (custom autograd engine)
 
 ---
 

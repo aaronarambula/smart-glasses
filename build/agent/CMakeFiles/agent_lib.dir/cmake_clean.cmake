@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/agent_lib.dir/button_agent.cpp.o"
+  "CMakeFiles/agent_lib.dir/button_agent.cpp.o.d"
   "CMakeFiles/agent_lib.dir/src/agent_loop.cpp.o"
   "CMakeFiles/agent_lib.dir/src/agent_loop.cpp.o.d"
   "CMakeFiles/agent_lib.dir/src/openai_client.cpp.o"

@@ -465,4 +465,50 @@ std::string OpenAIClient::json_escape(const std::string& s)
     return out;
 }
 
+// ─── query_direct ───────────────────────────────────────────────────────────
+// 
+// Synchronous direct query to GPT-4o. Blocks until response arrives or timeout.
+// Useful for button-activated interactive mode.
+
+std::string OpenAIClient::query_direct(const std::string& user_question)
+{
+    if (!has_api_key_) {
+        throw std::runtime_error("OpenAI API key not set");
+    }
+
+    std::string response;
+    bool completed = false;
+    std::mutex response_mu;
+    std::condition_variable response_cv;
+
+    // Use the async request API with a callback that signals completion
+    auto callback = [&](bool success, const std::string& text) {
+        {
+            std::lock_guard<std::mutex> lock(response_mu);
+            completed = true;
+            response = text;
+            if (!success) {
+                response = "Error: " + text;
+            }
+        }
+        response_cv.notify_all();
+    };
+
+    // Dispatch the request
+    if (!request(user_question, callback)) {
+        throw std::runtime_error("Failed to dispatch request (API key missing?)");
+    }
+
+    // Wait for completion (with timeout)
+    {
+        std::unique_lock<std::mutex> lock(response_mu);
+        if (!response_cv.wait_for(lock, std::chrono::seconds(config_.request_timeout_s + 5),
+                                  [&] { return completed; })) {
+            throw std::runtime_error("Query timeout");
+        }
+    }
+
+    return response;
+}
+
 } // namespace agent

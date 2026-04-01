@@ -189,6 +189,82 @@ train_object_cnn/fast:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/build
 .PHONY : train_object_cnn/fast
 
+# Convenience name for target.
+app/CMakeFiles/export_risk_model.dir/rule:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 app/CMakeFiles/export_risk_model.dir/rule
+.PHONY : app/CMakeFiles/export_risk_model.dir/rule
+
+# Convenience name for target.
+export_risk_model: app/CMakeFiles/export_risk_model.dir/rule
+.PHONY : export_risk_model
+
+# fast build rule for target.
+export_risk_model/fast:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/export_risk_model.dir/build.make app/CMakeFiles/export_risk_model.dir/build
+.PHONY : export_risk_model/fast
+
+# Convenience name for target.
+app/CMakeFiles/extract_features.dir/rule:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 app/CMakeFiles/extract_features.dir/rule
+.PHONY : app/CMakeFiles/extract_features.dir/rule
+
+# Convenience name for target.
+extract_features: app/CMakeFiles/extract_features.dir/rule
+.PHONY : extract_features
+
+# fast build rule for target.
+extract_features/fast:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/extract_features.dir/build.make app/CMakeFiles/extract_features.dir/build
+.PHONY : extract_features/fast
+
+export_risk_model.o: export_risk_model.cpp.o
+.PHONY : export_risk_model.o
+
+# target to build an object file
+export_risk_model.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/export_risk_model.dir/build.make app/CMakeFiles/export_risk_model.dir/export_risk_model.cpp.o
+.PHONY : export_risk_model.cpp.o
+
+export_risk_model.i: export_risk_model.cpp.i
+.PHONY : export_risk_model.i
+
+# target to preprocess a source file
+export_risk_model.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/export_risk_model.dir/build.make app/CMakeFiles/export_risk_model.dir/export_risk_model.cpp.i
+.PHONY : export_risk_model.cpp.i
+
+export_risk_model.s: export_risk_model.cpp.s
+.PHONY : export_risk_model.s
+
+# target to generate assembly for a file
+export_risk_model.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/export_risk_model.dir/build.make app/CMakeFiles/export_risk_model.dir/export_risk_model.cpp.s
+.PHONY : export_risk_model.cpp.s
+
+extract_features.o: extract_features.cpp.o
+.PHONY : extract_features.o
+
+# target to build an object file
+extract_features.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/extract_features.dir/build.make app/CMakeFiles/extract_features.dir/extract_features.cpp.o
+.PHONY : extract_features.cpp.o
+
+extract_features.i: extract_features.cpp.i
+.PHONY : extract_features.i
+
+# target to preprocess a source file
+extract_features.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/extract_features.dir/build.make app/CMakeFiles/extract_features.dir/extract_features.cpp.i
+.PHONY : extract_features.cpp.i
+
+extract_features.s: extract_features.cpp.s
+.PHONY : extract_features.s
+
+# target to generate assembly for a file
+extract_features.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/extract_features.dir/build.make app/CMakeFiles/extract_features.dir/extract_features.cpp.s
+.PHONY : extract_features.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -249,8 +325,16 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... export_risk_model"
+	@echo "... extract_features"
 	@echo "... smart_glasses"
 	@echo "... train_object_cnn"
+	@echo "... export_risk_model.o"
+	@echo "... export_risk_model.i"
+	@echo "... export_risk_model.s"
+	@echo "... extract_features.o"
+	@echo "... extract_features.i"
+	@echo "... extract_features.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

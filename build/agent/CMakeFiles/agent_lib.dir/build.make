@@ -114,11 +114,26 @@ agent/CMakeFiles/agent_lib.dir/src/agent_loop.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/agent_lib.dir/src/agent_loop.cpp.s"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/agent && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/agent/src/agent_loop.cpp -o CMakeFiles/agent_lib.dir/src/agent_loop.cpp.s
 
+agent/CMakeFiles/agent_lib.dir/button_agent.cpp.o: agent/CMakeFiles/agent_lib.dir/flags.make
+agent/CMakeFiles/agent_lib.dir/button_agent.cpp.o: /Users/aaronarambula/Documents/smart-glasses/agent/button_agent.cpp
+agent/CMakeFiles/agent_lib.dir/button_agent.cpp.o: agent/CMakeFiles/agent_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object agent/CMakeFiles/agent_lib.dir/button_agent.cpp.o"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/agent && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT agent/CMakeFiles/agent_lib.dir/button_agent.cpp.o -MF CMakeFiles/agent_lib.dir/button_agent.cpp.o.d -o CMakeFiles/agent_lib.dir/button_agent.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/agent/button_agent.cpp
+
+agent/CMakeFiles/agent_lib.dir/button_agent.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/agent_lib.dir/button_agent.cpp.i"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/agent && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/aaronarambula/Documents/smart-glasses/agent/button_agent.cpp > CMakeFiles/agent_lib.dir/button_agent.cpp.i
+
+agent/CMakeFiles/agent_lib.dir/button_agent.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/agent_lib.dir/button_agent.cpp.s"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/agent && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/agent/button_agent.cpp -o CMakeFiles/agent_lib.dir/button_agent.cpp.s
+
 # Object files for target agent_lib
 agent_lib_OBJECTS = \
 "CMakeFiles/agent_lib.dir/src/scene_builder.cpp.o" \
 "CMakeFiles/agent_lib.dir/src/openai_client.cpp.o" \
-"CMakeFiles/agent_lib.dir/src/agent_loop.cpp.o"
+"CMakeFiles/agent_lib.dir/src/agent_loop.cpp.o" \
+"CMakeFiles/agent_lib.dir/button_agent.cpp.o"
 
 # External object files for target agent_lib
 agent_lib_EXTERNAL_OBJECTS =
@@ -126,9 +141,10 @@ agent_lib_EXTERNAL_OBJECTS =
 agent/libagent_lib.a: agent/CMakeFiles/agent_lib.dir/src/scene_builder.cpp.o
 agent/libagent_lib.a: agent/CMakeFiles/agent_lib.dir/src/openai_client.cpp.o
 agent/libagent_lib.a: agent/CMakeFiles/agent_lib.dir/src/agent_loop.cpp.o
+agent/libagent_lib.a: agent/CMakeFiles/agent_lib.dir/button_agent.cpp.o
 agent/libagent_lib.a: agent/CMakeFiles/agent_lib.dir/build.make
 agent/libagent_lib.a: agent/CMakeFiles/agent_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX static library libagent_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library libagent_lib.a"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/agent && $(CMAKE_COMMAND) -P CMakeFiles/agent_lib.dir/cmake_clean_target.cmake
 	cd /Users/aaronarambula/Documents/smart-glasses/build/agent && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/agent_lib.dir/link.txt --verbose=$(VERBOSE)
 

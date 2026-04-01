@@ -83,4 +83,6 @@ set(CMAKE_DEPEND_INFO_FILES
   "sim/CMakeFiles/sim_lib.dir/DependInfo.cmake"
   "app/CMakeFiles/smart_glasses.dir/DependInfo.cmake"
   "app/CMakeFiles/train_object_cnn.dir/DependInfo.cmake"
+  "app/CMakeFiles/export_risk_model.dir/DependInfo.cmake"
+  "app/CMakeFiles/extract_features.dir/DependInfo.cmake"
   )

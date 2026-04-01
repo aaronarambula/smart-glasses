@@ -278,6 +278,32 @@ train_object_cnn/fast:
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/build
 .PHONY : train_object_cnn/fast
 
+#=============================================================================
+# Target rules for targets named export_risk_model
+
+# Build rule for target.
+export_risk_model: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 export_risk_model
+.PHONY : export_risk_model
+
+# fast build rule for target.
+export_risk_model/fast:
+	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/export_risk_model.dir/build.make app/CMakeFiles/export_risk_model.dir/build
+.PHONY : export_risk_model/fast
+
+#=============================================================================
+# Target rules for targets named extract_features
+
+# Build rule for target.
+extract_features: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 extract_features
+.PHONY : extract_features
+
+# fast build rule for target.
+extract_features/fast:
+	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/extract_features.dir/build.make app/CMakeFiles/extract_features.dir/build
+.PHONY : extract_features/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -293,6 +319,8 @@ help:
 	@echo "... agent_lib"
 	@echo "... audio_lib"
 	@echo "... autograd_lib"
+	@echo "... export_risk_model"
+	@echo "... extract_features"
 	@echo "... perception_lib"
 	@echo "... prediction_lib"
 	@echo "... sensors_lib"

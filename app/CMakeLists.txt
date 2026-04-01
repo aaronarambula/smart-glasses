@@ -29,6 +29,14 @@ add_executable(train_object_cnn
     train_object_cnn.cpp
 )
 
+add_executable(export_risk_model
+    export_risk_model.cpp
+)
+
+add_executable(extract_features
+    extract_features.cpp
+)
+
 target_include_directories(smart_glasses
     PRIVATE
         # Each module's include directory — the libraries already expose these
@@ -45,6 +53,24 @@ target_include_directories(smart_glasses
 target_include_directories(train_object_cnn
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/../sensors/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../autograd/include
+)
+
+target_include_directories(export_risk_model
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sensors/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../perception/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../prediction/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../audio/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../autograd/include
+)
+
+target_include_directories(extract_features
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sensors/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../perception/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../prediction/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../audio/include
         ${CMAKE_CURRENT_SOURCE_DIR}/../autograd/include
 )
 
@@ -70,6 +96,15 @@ if(TARGET agent_lib AND TARGET audio_lib AND TARGET prediction_lib AND
     )
     target_link_libraries(train_object_cnn
         PRIVATE
+            sensors_lib
+            autograd_lib
+    )
+    target_link_libraries(export_risk_model
+        PRIVATE
+            agent_lib
+            audio_lib
+            prediction_lib
+            perception_lib
             sensors_lib
             autograd_lib
     )
@@ -102,6 +137,24 @@ else()
             sensors_lib
             autograd_lib
     )
+    target_link_libraries(export_risk_model
+        PRIVATE
+            agent_lib
+            audio_lib
+            prediction_lib
+            perception_lib
+            sensors_lib
+            autograd_lib
+    )
+    target_link_libraries(extract_features
+        PRIVATE
+            agent_lib
+            audio_lib
+            prediction_lib
+            perception_lib
+            sensors_lib
+            autograd_lib
+    )
 endif()
 
 # ── Optional sim_lib ──────────────────────────────────────────────────────────
@@ -130,6 +183,8 @@ endif()
 find_package(Threads REQUIRED)
 target_link_libraries(smart_glasses PRIVATE Threads::Threads)
 target_link_libraries(train_object_cnn PRIVATE Threads::Threads)
+target_link_libraries(export_risk_model PRIVATE Threads::Threads)
+target_link_libraries(extract_features PRIVATE Threads::Threads)
 
 # libcurl — required by OpenAIClient (pulled in via agent_lib PUBLIC link,
 # but listed explicitly here so the linker sees it in all configurations).
@@ -165,6 +220,12 @@ install(TARGETS smart_glasses
     RUNTIME DESTINATION bin
 )
 install(TARGETS train_object_cnn
+    RUNTIME DESTINATION bin
+)
+install(TARGETS export_risk_model
+    RUNTIME DESTINATION bin
+)
+install(TARGETS extract_features
     RUNTIME DESTINATION bin
 )
 

@@ -175,6 +175,30 @@ agent_lib/fast:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f agent/CMakeFiles/agent_lib.dir/build.make agent/CMakeFiles/agent_lib.dir/build
 .PHONY : agent_lib/fast
 
+button_agent.o: button_agent.cpp.o
+.PHONY : button_agent.o
+
+# target to build an object file
+button_agent.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f agent/CMakeFiles/agent_lib.dir/build.make agent/CMakeFiles/agent_lib.dir/button_agent.cpp.o
+.PHONY : button_agent.cpp.o
+
+button_agent.i: button_agent.cpp.i
+.PHONY : button_agent.i
+
+# target to preprocess a source file
+button_agent.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f agent/CMakeFiles/agent_lib.dir/build.make agent/CMakeFiles/agent_lib.dir/button_agent.cpp.i
+.PHONY : button_agent.cpp.i
+
+button_agent.s: button_agent.cpp.s
+.PHONY : button_agent.s
+
+# target to generate assembly for a file
+button_agent.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f agent/CMakeFiles/agent_lib.dir/build.make agent/CMakeFiles/agent_lib.dir/button_agent.cpp.s
+.PHONY : button_agent.cpp.s
+
 src/agent_loop.o: src/agent_loop.cpp.o
 .PHONY : src/agent_loop.o
 
@@ -260,6 +284,9 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... agent_lib"
+	@echo "... button_agent.o"
+	@echo "... button_agent.i"
+	@echo "... button_agent.s"
 	@echo "... src/agent_loop.o"
 	@echo "... src/agent_loop.i"
 	@echo "... src/agent_loop.s"

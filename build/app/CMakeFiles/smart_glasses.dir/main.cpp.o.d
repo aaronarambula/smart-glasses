@@ -937,6 +937,7 @@ app/CMakeFiles/smart_glasses.dir/main.cpp.o: \
   /Users/aaronarambula/Documents/smart-glasses/app/../agent/include/agent/scene_builder.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../agent/include/agent/openai_client.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../agent/include/agent/agent_loop.h \
+  /Users/aaronarambula/Documents/smart-glasses/app/../agent/include/agent/button_agent.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../sim/include/sim/sim.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../sim/include/sim/sim_world.h \
   /Users/aaronarambula/Documents/smart-glasses/app/../sim/include/sim/sim_lidar.h \

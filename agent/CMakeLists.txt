@@ -33,6 +33,7 @@ add_library(agent_lib STATIC
     src/scene_builder.cpp
     src/openai_client.cpp
     src/agent_loop.cpp
+    button_agent.cpp
 )
 
 target_include_directories(agent_lib

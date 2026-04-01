@@ -171,6 +171,11 @@ public:
     bool request(const std::string& user_content,
                  ResponseCallback   callback);
 
+    // Send a direct query and wait for response (blocking).
+    // Useful for button-activated interactive queries.
+    // Throws std::runtime_error on failure.
+    std::string query_direct(const std::string& user_question);
+
     // ── Status ────────────────────────────────────────────────────────────────
 
     // Returns true if the API key was found in the environment.

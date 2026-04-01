@@ -56,6 +56,7 @@
 #include "prediction/prediction.h"
 #include "audio/audio.h"
 #include "agent/agent.h"
+#include "agent/button_agent.h"
 
 // sim/ is an optional module — only included when USE_SIM is defined at
 // compile time (i.e. when sim_lib is linked). Real hardware builds are
@@ -757,6 +758,11 @@ int main(int argc, char* argv[])
         std::cout << "  ✓ Agent disabled by --no-agent flag\n";
     }
 
+    // Start button agent for voice-activated queries (GPIO pin 17 by default)
+    agent::ButtonAgent button_agent(17, &agent_sys, &audio);
+    button_agent.start();
+    std::cout << "  ✓ Button agent running (GPIO pin 17, 2-second hold)\n";
+
     // ══════════════════════════════════════════════════════════════════════════
     // 6. WARM-UP — wait for first valid scan frame
     // ══════════════════════════════════════════════════════════════════════════
@@ -970,7 +976,10 @@ int main(int argc, char* argv[])
     // (perception and prediction are stack-allocated — no explicit stop needed)
     // ══════════════════════════════════════════════════════════════════════════
 
-    std::cout << "\n[shutdown] Stopping agent...\n";
+    std::cout << "\n[shutdown] Stopping button agent...\n";
+    button_agent.stop();
+
+    std::cout << "[shutdown] Stopping agent...\n";
     agent_sys.stop();
 
     std::cout << "[shutdown] Stopping audio...\n";
