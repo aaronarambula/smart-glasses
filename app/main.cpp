@@ -778,10 +778,15 @@ int main(int argc, char* argv[])
         std::cout << "  ✓ Agent disabled by --no-agent flag\n";
     }
 
-    // Start button agent for voice-activated queries (GPIO pin 17 by default)
-    agent::ButtonAgent button_agent(17, &agent_sys, &audio);
-    button_agent.start();
-    std::cout << "  ✓ Button agent running (GPIO pin 17, 2-second hold)\n";
+    // Start button agent for voice-activated queries (configured GPIO pin)
+    std::unique_ptr<agent::ButtonAgent> button_agent;
+    if (cfg.button_pin >= 0) {
+        button_agent = std::make_unique<agent::ButtonAgent>(cfg.button_pin, &agent_sys, &audio);
+        button_agent->start();
+        std::cout << "  ✓ Button agent running (GPIO pin " << cfg.button_pin << ", 2-second hold)\n";
+    } else {
+        std::cout << "  ⚠ Button disabled (no GPIO pin configured with --button-pin)\n";
+    }
 
     // ══════════════════════════════════════════════════════════════════════════
     // 6. WARM-UP — wait for first valid scan frame
@@ -997,7 +1002,9 @@ int main(int argc, char* argv[])
     // ══════════════════════════════════════════════════════════════════════════
 
     std::cout << "\n[shutdown] Stopping button agent...\n";
-    button_agent.stop();
+    if (button_agent) {
+        button_agent->stop();
+    }
 
     std::cout << "[shutdown] Stopping agent...\n";
     agent_sys.stop();
