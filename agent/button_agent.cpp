@@ -5,14 +5,11 @@
 #include "agent/agent.h"
 #include "audio/audio.h"
 #include "agent/openai_client.h"
+#include "sensors/gpio.h"
 
 #include <iostream>
 #include <chrono>
-#include <fstream>
-#include <cstring>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
+#include <memory>
 
 namespace agent {
 
@@ -35,8 +32,13 @@ void ButtonAgent::start()
 {
     if (running_.load()) return;
 
-    if (!gpio_exists()) {
-        std::cerr << "⚠ GPIO pin " << gpio_pin_ << " not available (button mode disabled)\n";
+    // Initialize GPIO input using the proper abstraction (pull-up mode: LOW = pressed)
+    button_input_ = std::make_unique<sensors::DigitalInput>(gpio_pin_, true);
+    
+    if (!button_input_->open()) {
+        std::cerr << "⚠ Failed to open GPIO pin " << gpio_pin_ << ": "
+                  << button_input_->error_message() << "\n";
+        button_input_.reset();
         return;
     }
 
@@ -55,61 +57,41 @@ void ButtonAgent::stop()
         monitor_thread_->join();
     }
 
-    if (sysfs_fd_ >= 0) {
-        close(sysfs_fd_);
-        sysfs_fd_ = -1;
+    if (button_input_) {
+        button_input_->close();
+        button_input_.reset();
     }
-}
-
-bool ButtonAgent::gpio_exists()
-{
-    // Check GPIO pin is in valid range
-    if (gpio_pin_ < 0 || gpio_pin_ > 31) {
-        return false;
-    }
-    // On Raspberry Pi, we'll assume GPIO is available
-    // In production, could check /sys/class/gpio or /dev/gpiochip0
-    return true;
-}
-
-int ButtonAgent::read_gpio_value()
-{
-    // Try sysfs: /sys/class/gpio/gpio{N}/value
-    std::string value_path = "/sys/class/gpio/gpio" + std::to_string(gpio_pin_) + "/value";
-    std::ifstream value_file(value_path);
-    if (value_file.is_open()) {
-        int val = 0;
-        value_file >> val;
-        return val;
-    }
-
-    // Fallback: return "not pressed" (for testing without actual GPIO)
-    return 1;  // HIGH = not pressed (pull-up mode)
 }
 
 void ButtonAgent::monitor_button()
 {
     std::cout << "[ButtonAgent] Monitor thread started (GPIO " << gpio_pin_ << ")\n";
 
+    if (!button_input_) {
+        std::cerr << "[ButtonAgent] Button input not initialized\n";
+        return;
+    }
+
     const int PRESS_THRESHOLD_MS = 2000;  // 2 seconds
     const int DEBOUNCE_MS = 50;           // 50 ms debounce
     const int POLL_INTERVAL_MS = 100;     // Check GPIO every 100 ms when unpressed
 
     while (running_.load()) {
-        int current = read_gpio_value();
+        // DigitalInput::read() returns true if the pin reads HIGH
+        // In pull-up mode: LOW (pressed) returns false, HIGH (not pressed) returns true
+        bool is_pressed = !button_input_->read();
 
-        // In pull-up mode: 0 = pressed, 1 = not pressed
-        if (current == 0) {
+        if (is_pressed) {
             // Button pressed — measure hold duration
             auto press_start = std::chrono::steady_clock::now();
             bool long_press_announced = false;
 
             while (running_.load()) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(DEBOUNCE_MS));
-                current = read_gpio_value();
+                is_pressed = !button_input_->read();
 
                 // Button released?
-                if (current != 0) break;
+                if (!is_pressed) break;
 
                 // Check hold duration
                 auto now = std::chrono::steady_clock::now();

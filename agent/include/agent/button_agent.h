@@ -17,6 +17,10 @@
 #include <memory>
 #include <string>
 
+namespace sensors {
+    class DigitalInput;
+}
+
 namespace audio {
     class AudioSystem;
 }
@@ -52,18 +56,7 @@ private:
     std::atomic<bool> running_{false};
     std::atomic<bool> query_mode_{false};
     std::unique_ptr<std::thread> monitor_thread_;
-
-    // GPIO access helpers
-    int read_gpio_value();
-    bool gpio_exists();
-    bool try_open_libgpiod();
-    bool try_open_sysfs();
-
-    // GPIO handles (platform-dependent)
-    void* gpio_chip_ = nullptr;  // gpiod_chip* (libgpiod)
-    void* gpio_line_ = nullptr;  // gpiod_line* (libgpiod)
-    int sysfs_fd_ = -1;          // sysfs file descriptor
-    bool use_libgpiod_ = false;
+    std::unique_ptr<sensors::DigitalInput> button_input_;
 };
 
 } // namespace agent
