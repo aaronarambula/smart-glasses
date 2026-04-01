@@ -20,6 +20,8 @@
 #include <stdexcept>
 #include <sstream>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 #include <chrono>
 #include <iostream>
 #include <algorithm>
