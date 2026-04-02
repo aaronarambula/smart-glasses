@@ -53,8 +53,11 @@ void ButtonAgent::stop()
     if (!running_.load()) return;
 
     running_.store(false);
-    if (monitor_thread_ && monitor_thread_->joinable()) {
-        monitor_thread_->join();
+    if (monitor_thread_) {
+        if (monitor_thread_->joinable()) {
+            monitor_thread_->join();
+        }
+        monitor_thread_.reset();
     }
 
     if (button_input_) {
