@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/sensors_lib.dir/ld06.cpp.o.d"
   "CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o"
   "CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o.d"
+  "CMakeFiles/sensors_lib.dir/tfluna.cpp.o"
+  "CMakeFiles/sensors_lib.dir/tfluna.cpp.o.d"
   "CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o"
   "CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o.d"
   "CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o"

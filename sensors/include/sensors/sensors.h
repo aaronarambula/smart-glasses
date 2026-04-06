@@ -33,6 +33,7 @@
 #include "lidar_base.h"
 #include "rplidar_a1.h"
 #include "ld06.h"
+#include "tfluna.h"
 #include "ultrasonic_fallback.h"
 #include "ultrasonic_hc_sr04.h"
 #include "camera_fallback.h"
@@ -59,6 +60,7 @@ namespace sensors {
 enum class LidarModel {
     RPLidarA1,  // Slamtec RPLIDAR A1M8 — USB-serial, 115200 baud
     LD06,       // LDROBOT LD06 / LD19 — UART, 230400 baud
+    TFLuna,     // Benewake TF-Luna V1.3 — single-point ToF, UART, 115200 baud
     Ultrasonic, // HC-SR04-style forward fallback, exposed as a narrow cluster
     Camera,     // OpenCV front camera fallback, exposed as a narrow cluster
     Sim,        // SimLidar — synthetic outdoor scenes, no hardware required
@@ -90,6 +92,9 @@ inline std::unique_ptr<LidarBase> make_lidar(LidarModel model,
 
         case LidarModel::LD06:
             return std::make_unique<LD06>(port_path);
+
+        case LidarModel::TFLuna:
+            return std::make_unique<sensors::TFLuna>(port_path);
 
         case LidarModel::Ultrasonic:
             return std::make_unique<UltrasonicFallback>(port_path);
@@ -127,6 +132,7 @@ inline std::string default_port(LidarModel model) {
     switch (model) {
         case LidarModel::RPLidarA1: return "/dev/ttyUSB0";
         case LidarModel::LD06:      return "/dev/ttyAMA0";
+        case LidarModel::TFLuna:    return "/dev/ttyAMA0";
         case LidarModel::Ultrasonic:return "ultrasonic://23,24?hz=10";
         case LidarModel::Camera:    return "camera://0?width=640&height=480&hz=10";
 #ifdef USE_SIM
@@ -144,6 +150,7 @@ inline std::string model_name(LidarModel model) {
     switch (model) {
         case LidarModel::RPLidarA1: return "RPLIDAR A1M8";
         case LidarModel::LD06:      return "LD06";
+        case LidarModel::TFLuna:    return "TF-Luna";
         case LidarModel::Ultrasonic:return "UltrasonicFallback";
         case LidarModel::Camera:    return "CameraFallback";
 #ifdef USE_SIM

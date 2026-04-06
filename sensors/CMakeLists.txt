@@ -29,6 +29,7 @@ endif()
 add_library(sensors_lib STATIC
     rplidar_a1.cpp
     ld06.cpp
+    tfluna.cpp
     ultrasonic_fallback.cpp
     ultrasonic_hc_sr04.cpp
     camera_fallback.cpp

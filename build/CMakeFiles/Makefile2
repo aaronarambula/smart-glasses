@@ -309,12 +309,12 @@ autograd/CMakeFiles/autograd_lib.dir/clean:
 sensors/CMakeFiles/sensors_lib.dir/all: autograd/CMakeFiles/autograd_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=32,33,34,35,36,37,38,39,40 "Built target sensors_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=32,33,34,35,36,37,38,39,40,41 "Built target sensors_lib"
 .PHONY : sensors/CMakeFiles/sensors_lib.dir/all
 
 # Build rule for subdir invocation for target.
 sensors/CMakeFiles/sensors_lib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 14
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 15
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sensors/CMakeFiles/sensors_lib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 0
 .PHONY : sensors/CMakeFiles/sensors_lib.dir/rule
@@ -326,7 +326,7 @@ sensors_lib: sensors/CMakeFiles/sensors_lib.dir/rule
 # codegen rule for target.
 sensors/CMakeFiles/sensors_lib.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=32,33,34,35,36,37,38,39,40 "Finished codegen for target sensors_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=32,33,34,35,36,37,38,39,40,41 "Finished codegen for target sensors_lib"
 .PHONY : sensors/CMakeFiles/sensors_lib.dir/codegen
 
 # clean rule for target.
@@ -347,7 +347,7 @@ sensors/CMakeFiles/lidar_test.dir/all: sensors/CMakeFiles/sensors_lib.dir/all
 
 # Build rule for subdir invocation for target.
 sensors/CMakeFiles/lidar_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 16
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sensors/CMakeFiles/lidar_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 0
 .PHONY : sensors/CMakeFiles/lidar_test.dir/rule
@@ -509,12 +509,12 @@ sim/CMakeFiles/sim_lib.dir/all: autograd/CMakeFiles/autograd_lib.dir/all
 sim/CMakeFiles/sim_lib.dir/all: sensors/CMakeFiles/sensors_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f sim/CMakeFiles/sim_lib.dir/build.make sim/CMakeFiles/sim_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f sim/CMakeFiles/sim_lib.dir/build.make sim/CMakeFiles/sim_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=41,42,43 "Built target sim_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=42,43,44 "Built target sim_lib"
 .PHONY : sim/CMakeFiles/sim_lib.dir/all
 
 # Build rule for subdir invocation for target.
 sim/CMakeFiles/sim_lib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 17
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 18
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sim/CMakeFiles/sim_lib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 0
 .PHONY : sim/CMakeFiles/sim_lib.dir/rule
@@ -526,7 +526,7 @@ sim_lib: sim/CMakeFiles/sim_lib.dir/rule
 # codegen rule for target.
 sim/CMakeFiles/sim_lib.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f sim/CMakeFiles/sim_lib.dir/build.make sim/CMakeFiles/sim_lib.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=41,42,43 "Finished codegen for target sim_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=42,43,44 "Finished codegen for target sim_lib"
 .PHONY : sim/CMakeFiles/sim_lib.dir/codegen
 
 # clean rule for target.
@@ -547,12 +547,12 @@ app/CMakeFiles/smart_glasses.dir/all: agent/CMakeFiles/agent_lib.dir/all
 app/CMakeFiles/smart_glasses.dir/all: sim/CMakeFiles/sim_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/smart_glasses.dir/build.make app/CMakeFiles/smart_glasses.dir/depend
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/smart_glasses.dir/build.make app/CMakeFiles/smart_glasses.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=44,45 "Built target smart_glasses"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=45,46 "Built target smart_glasses"
 .PHONY : app/CMakeFiles/smart_glasses.dir/all
 
 # Build rule for subdir invocation for target.
 app/CMakeFiles/smart_glasses.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 39
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 40
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 app/CMakeFiles/smart_glasses.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 0
 .PHONY : app/CMakeFiles/smart_glasses.dir/rule
@@ -564,7 +564,7 @@ smart_glasses: app/CMakeFiles/smart_glasses.dir/rule
 # codegen rule for target.
 app/CMakeFiles/smart_glasses.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/smart_glasses.dir/build.make app/CMakeFiles/smart_glasses.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=44,45 "Finished codegen for target smart_glasses"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=45,46 "Finished codegen for target smart_glasses"
 .PHONY : app/CMakeFiles/smart_glasses.dir/codegen
 
 # clean rule for target.
@@ -580,12 +580,12 @@ app/CMakeFiles/train_object_cnn.dir/all: autograd/CMakeFiles/autograd_lib.dir/al
 app/CMakeFiles/train_object_cnn.dir/all: sensors/CMakeFiles/sensors_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/depend
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=46,47 "Built target train_object_cnn"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=47,48 "Built target train_object_cnn"
 .PHONY : app/CMakeFiles/train_object_cnn.dir/all
 
 # Build rule for subdir invocation for target.
 app/CMakeFiles/train_object_cnn.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 16
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 app/CMakeFiles/train_object_cnn.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 0
 .PHONY : app/CMakeFiles/train_object_cnn.dir/rule
@@ -597,7 +597,7 @@ train_object_cnn: app/CMakeFiles/train_object_cnn.dir/rule
 # codegen rule for target.
 app/CMakeFiles/train_object_cnn.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/train_object_cnn.dir/build.make app/CMakeFiles/train_object_cnn.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=46,47 "Finished codegen for target train_object_cnn"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=47,48 "Finished codegen for target train_object_cnn"
 .PHONY : app/CMakeFiles/train_object_cnn.dir/codegen
 
 # clean rule for target.
@@ -622,7 +622,7 @@ app/CMakeFiles/export_risk_model.dir/all: agent/CMakeFiles/agent_lib.dir/all
 
 # Build rule for subdir invocation for target.
 app/CMakeFiles/export_risk_model.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 36
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 37
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 app/CMakeFiles/export_risk_model.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles 0
 .PHONY : app/CMakeFiles/export_risk_model.dir/rule

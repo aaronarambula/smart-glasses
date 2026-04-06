@@ -100,10 +100,24 @@ sensors/CMakeFiles/sensors_lib.dir/ld06.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sensors_lib.dir/ld06.cpp.s"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/sensors/ld06.cpp -o CMakeFiles/sensors_lib.dir/ld06.cpp.s
 
+sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.o: sensors/CMakeFiles/sensors_lib.dir/flags.make
+sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/tfluna.cpp
+sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.o: sensors/CMakeFiles/sensors_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.o"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.o -MF CMakeFiles/sensors_lib.dir/tfluna.cpp.o.d -o CMakeFiles/sensors_lib.dir/tfluna.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/tfluna.cpp
+
+sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sensors_lib.dir/tfluna.cpp.i"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/aaronarambula/Documents/smart-glasses/sensors/tfluna.cpp > CMakeFiles/sensors_lib.dir/tfluna.cpp.i
+
+sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sensors_lib.dir/tfluna.cpp.s"
+	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/sensors/tfluna.cpp -o CMakeFiles/sensors_lib.dir/tfluna.cpp.s
+
 sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o: sensors/CMakeFiles/sensors_lib.dir/flags.make
 sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/ultrasonic_fallback.cpp
 sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o: sensors/CMakeFiles/sensors_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o -MF CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o.d -o CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/ultrasonic_fallback.cpp
 
 sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.i: cmake_force
@@ -117,7 +131,7 @@ sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.s: cmake_force
 sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o: sensors/CMakeFiles/sensors_lib.dir/flags.make
 sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/ultrasonic_hc_sr04.cpp
 sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o: sensors/CMakeFiles/sensors_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o -MF CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o.d -o CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/ultrasonic_hc_sr04.cpp
 
 sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.i: cmake_force
@@ -131,7 +145,7 @@ sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.s: cmake_force
 sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o: sensors/CMakeFiles/sensors_lib.dir/flags.make
 sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/camera_fallback.cpp
 sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o: sensors/CMakeFiles/sensors_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o -MF CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o.d -o CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/camera_fallback.cpp
 
 sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.i: cmake_force
@@ -145,7 +159,7 @@ sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.s: cmake_force
 sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o: sensors/CMakeFiles/sensors_lib.dir/flags.make
 sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/camera_classifier.cpp
 sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o: sensors/CMakeFiles/sensors_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o -MF CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o.d -o CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/camera_classifier.cpp
 
 sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.i: cmake_force
@@ -159,7 +173,7 @@ sensors/CMakeFiles/sensors_lib.dir/camera_classifier.cpp.s: cmake_force
 sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o: sensors/CMakeFiles/sensors_lib.dir/flags.make
 sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/LiDAR.cpp
 sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o: sensors/CMakeFiles/sensors_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o -MF CMakeFiles/sensors_lib.dir/LiDAR.cpp.o.d -o CMakeFiles/sensors_lib.dir/LiDAR.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/LiDAR.cpp
 
 sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.i: cmake_force
@@ -173,7 +187,7 @@ sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.s: cmake_force
 sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.o: sensors/CMakeFiles/sensors_lib.dir/flags.make
 sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/gpio.cpp
 sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.o: sensors/CMakeFiles/sensors_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.o"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.o -MF CMakeFiles/sensors_lib.dir/gpio.cpp.o.d -o CMakeFiles/sensors_lib.dir/gpio.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/gpio.cpp
 
 sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.i: cmake_force
@@ -188,6 +202,7 @@ sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.s: cmake_force
 sensors_lib_OBJECTS = \
 "CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o" \
 "CMakeFiles/sensors_lib.dir/ld06.cpp.o" \
+"CMakeFiles/sensors_lib.dir/tfluna.cpp.o" \
 "CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o" \
 "CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o" \
 "CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o" \
@@ -200,6 +215,7 @@ sensors_lib_EXTERNAL_OBJECTS =
 
 sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o
 sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/ld06.cpp.o
+sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.o
 sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o
 sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o
 sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o
@@ -208,7 +224,7 @@ sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/LiDAR.cpp.o
 sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/gpio.cpp.o
 sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/build.make
 sensors/libsensors_lib.a: sensors/CMakeFiles/sensors_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX static library libsensors_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/aaronarambula/Documents/smart-glasses/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX static library libsensors_lib.a"
 	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && $(CMAKE_COMMAND) -P CMakeFiles/sensors_lib.dir/cmake_clean_target.cmake
 	cd /Users/aaronarambula/Documents/smart-glasses/build/sensors && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/sensors_lib.dir/link.txt --verbose=$(VERBOSE)
 

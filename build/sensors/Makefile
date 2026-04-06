@@ -357,6 +357,30 @@ rplidar_a1.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.s
 .PHONY : rplidar_a1.cpp.s
 
+tfluna.o: tfluna.cpp.o
+.PHONY : tfluna.o
+
+# target to build an object file
+tfluna.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.o
+.PHONY : tfluna.cpp.o
+
+tfluna.i: tfluna.cpp.i
+.PHONY : tfluna.i
+
+# target to preprocess a source file
+tfluna.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.i
+.PHONY : tfluna.cpp.i
+
+tfluna.s: tfluna.cpp.s
+.PHONY : tfluna.s
+
+# target to generate assembly for a file
+tfluna.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/tfluna.cpp.s
+.PHONY : tfluna.cpp.s
+
 ultrasonic_fallback.o: ultrasonic_fallback.cpp.o
 .PHONY : ultrasonic_fallback.o
 
@@ -440,6 +464,9 @@ help:
 	@echo "... rplidar_a1.o"
 	@echo "... rplidar_a1.i"
 	@echo "... rplidar_a1.s"
+	@echo "... tfluna.o"
+	@echo "... tfluna.i"
+	@echo "... tfluna.s"
 	@echo "... ultrasonic_fallback.o"
 	@echo "... ultrasonic_fallback.i"
 	@echo "... ultrasonic_fallback.s"

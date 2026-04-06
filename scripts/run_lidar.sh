@@ -5,18 +5,19 @@
 # Usage:
 #   bash scripts/run_lidar.sh [port] [model]
 #
-#   port   – serial device  (default: /dev/ttyUSB0)
-#   model  – rplidar | ld06 (default: rplidar)
+#   port   – serial device              (default: /dev/ttyAMA0)
+#   model  – rplidar | ld06 | tfluna   (default: tfluna)
 #
 # Examples:
 #   bash scripts/run_lidar.sh
+#   bash scripts/run_lidar.sh /dev/ttyAMA0 tfluna
 #   bash scripts/run_lidar.sh /dev/ttyUSB0 rplidar
 #   bash scripts/run_lidar.sh /dev/ttyAMA0 ld06
 
 set -e
 
-PORT="${1:-/dev/ttyUSB0}"
-MODEL="${2:-rplidar}"
+PORT="${1:-/dev/ttyAMA0}"
+MODEL="${2:-tfluna}"
 
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BUILD_DIR="$REPO_DIR/build"

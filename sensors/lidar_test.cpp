@@ -42,9 +42,12 @@ int main(int argc, char* argv[])
             model = sensors::LidarModel::LD06;
         } else if (arg == "rplidar") {
             model = sensors::LidarModel::RPLidarA1;
+        } else if (arg == "tfluna") {
+            model = sensors::LidarModel::TFLuna;
         } else {
-            std::fprintf(stderr, "Unknown model '%s'. Use 'rplidar' or 'ld06'.\n",
-                         argv[2]);
+            std::fprintf(stderr,
+                "Unknown model '%s'. Use 'rplidar', 'ld06', or 'tfluna'.\n",
+                argv[2]);
             return 1;
         }
     }
