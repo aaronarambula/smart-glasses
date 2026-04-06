@@ -98,6 +98,18 @@ else()
     message(STATUS "sensors: OpenCV not found — camera fallback will report a clear runtime error if selected")
 endif()
 
+# ── lidar_test executable ─────────────────────────────────────────────────────
+# Standalone test: streams frames and prints per-frame stats.
+# Build:  cmake --build sensors/build --target lidar_test
+# Run:    ./sensors/build/lidar_test [port] [model]
+
+add_executable(lidar_test lidar_test.cpp)
+target_link_libraries(lidar_test PRIVATE sensors_lib)
+if(TARGET autograd_lib)
+    target_include_directories(lidar_test PRIVATE
+        $<TARGET_PROPERTY:autograd_lib,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
+
 # ── Default build type ────────────────────────────────────────────────────────
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message(STATUS "sensors: defaulting build type to Release")

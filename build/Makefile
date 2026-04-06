@@ -188,6 +188,19 @@ sensors_lib/fast:
 .PHONY : sensors_lib/fast
 
 #=============================================================================
+# Target rules for targets named lidar_test
+
+# Build rule for target.
+lidar_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lidar_test
+.PHONY : lidar_test
+
+# fast build rule for target.
+lidar_test/fast:
+	$(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/lidar_test.dir/build.make sensors/CMakeFiles/lidar_test.dir/build
+.PHONY : lidar_test/fast
+
+#=============================================================================
 # Target rules for targets named perception_lib
 
 # Build rule for target.
@@ -321,6 +334,7 @@ help:
 	@echo "... autograd_lib"
 	@echo "... export_risk_model"
 	@echo "... extract_features"
+	@echo "... lidar_test"
 	@echo "... perception_lib"
 	@echo "... prediction_lib"
 	@echo "... sensors_lib"

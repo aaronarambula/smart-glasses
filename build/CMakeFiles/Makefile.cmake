@@ -76,6 +76,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "autograd/CMakeFiles/autograd_lib.dir/DependInfo.cmake"
   "sensors/CMakeFiles/sensors_lib.dir/DependInfo.cmake"
+  "sensors/CMakeFiles/lidar_test.dir/DependInfo.cmake"
   "perception/CMakeFiles/perception_lib.dir/DependInfo.cmake"
   "prediction/CMakeFiles/prediction_lib.dir/DependInfo.cmake"
   "audio/CMakeFiles/audio_lib.dir/DependInfo.cmake"

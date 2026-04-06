@@ -148,7 +148,6 @@ LiDAR.o: LiDAR.cpp.o
 # target to build an object file
 LiDAR.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/LiDAR.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/LiDAR.cpp.o
 .PHONY : LiDAR.cpp.o
 
 LiDAR.i: LiDAR.cpp.i
@@ -157,7 +156,6 @@ LiDAR.i: LiDAR.cpp.i
 # target to preprocess a source file
 LiDAR.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/LiDAR.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/LiDAR.cpp.i
 .PHONY : LiDAR.cpp.i
 
 LiDAR.s: LiDAR.cpp.s
@@ -166,8 +164,79 @@ LiDAR.s: LiDAR.cpp.s
 # target to generate assembly for a file
 LiDAR.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/LiDAR.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/LiDAR.cpp.s
 .PHONY : LiDAR.cpp.s
+
+camera_classifier.o: camera_classifier.cpp.o
+.PHONY : camera_classifier.o
+
+# target to build an object file
+camera_classifier.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/camera_classifier.cpp.o
+.PHONY : camera_classifier.cpp.o
+
+camera_classifier.i: camera_classifier.cpp.i
+.PHONY : camera_classifier.i
+
+# target to preprocess a source file
+camera_classifier.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/camera_classifier.cpp.i
+.PHONY : camera_classifier.cpp.i
+
+camera_classifier.s: camera_classifier.cpp.s
+.PHONY : camera_classifier.s
+
+# target to generate assembly for a file
+camera_classifier.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/camera_classifier.cpp.s
+.PHONY : camera_classifier.cpp.s
+
+camera_fallback.o: camera_fallback.cpp.o
+.PHONY : camera_fallback.o
+
+# target to build an object file
+camera_fallback.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/camera_fallback.cpp.o
+.PHONY : camera_fallback.cpp.o
+
+camera_fallback.i: camera_fallback.cpp.i
+.PHONY : camera_fallback.i
+
+# target to preprocess a source file
+camera_fallback.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/camera_fallback.cpp.i
+.PHONY : camera_fallback.cpp.i
+
+camera_fallback.s: camera_fallback.cpp.s
+.PHONY : camera_fallback.s
+
+# target to generate assembly for a file
+camera_fallback.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/camera_fallback.cpp.s
+.PHONY : camera_fallback.cpp.s
+
+gpio.o: gpio.cpp.o
+.PHONY : gpio.o
+
+# target to build an object file
+gpio.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/gpio.cpp.o
+.PHONY : gpio.cpp.o
+
+gpio.i: gpio.cpp.i
+.PHONY : gpio.i
+
+# target to preprocess a source file
+gpio.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/gpio.cpp.i
+.PHONY : gpio.cpp.i
+
+gpio.s: gpio.cpp.s
+.PHONY : gpio.s
+
+# target to generate assembly for a file
+gpio.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/gpio.cpp.s
+.PHONY : gpio.cpp.s
 
 ld06.o: ld06.cpp.o
 .PHONY : ld06.o
@@ -175,7 +244,6 @@ ld06.o: ld06.cpp.o
 # target to build an object file
 ld06.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/ld06.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/ld06.cpp.o
 .PHONY : ld06.cpp.o
 
 ld06.i: ld06.cpp.i
@@ -184,7 +252,6 @@ ld06.i: ld06.cpp.i
 # target to preprocess a source file
 ld06.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/ld06.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/ld06.cpp.i
 .PHONY : ld06.cpp.i
 
 ld06.s: ld06.cpp.s
@@ -193,8 +260,31 @@ ld06.s: ld06.cpp.s
 # target to generate assembly for a file
 ld06.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/ld06.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/ld06.cpp.s
 .PHONY : ld06.cpp.s
+
+lidar_test.o: lidar_test.cpp.o
+.PHONY : lidar_test.o
+
+# target to build an object file
+lidar_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/lidar_test.cpp.o
+.PHONY : lidar_test.cpp.o
+
+lidar_test.i: lidar_test.cpp.i
+.PHONY : lidar_test.i
+
+# target to preprocess a source file
+lidar_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/lidar_test.cpp.i
+.PHONY : lidar_test.cpp.i
+
+lidar_test.s: lidar_test.cpp.s
+.PHONY : lidar_test.s
+
+# target to generate assembly for a file
+lidar_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/lidar_test.cpp.s
+.PHONY : lidar_test.cpp.s
 
 rplidar_a1.o: rplidar_a1.cpp.o
 .PHONY : rplidar_a1.o
@@ -202,7 +292,6 @@ rplidar_a1.o: rplidar_a1.cpp.o
 # target to build an object file
 rplidar_a1.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o
 .PHONY : rplidar_a1.cpp.o
 
 rplidar_a1.i: rplidar_a1.cpp.i
@@ -211,7 +300,6 @@ rplidar_a1.i: rplidar_a1.cpp.i
 # target to preprocess a source file
 rplidar_a1.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/rplidar_a1.cpp.i
 .PHONY : rplidar_a1.cpp.i
 
 rplidar_a1.s: rplidar_a1.cpp.s
@@ -220,8 +308,55 @@ rplidar_a1.s: rplidar_a1.cpp.s
 # target to generate assembly for a file
 rplidar_a1.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/rplidar_a1.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lidar_test.dir/build.make CMakeFiles/lidar_test.dir/rplidar_a1.cpp.s
 .PHONY : rplidar_a1.cpp.s
+
+ultrasonic_fallback.o: ultrasonic_fallback.cpp.o
+.PHONY : ultrasonic_fallback.o
+
+# target to build an object file
+ultrasonic_fallback.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.o
+.PHONY : ultrasonic_fallback.cpp.o
+
+ultrasonic_fallback.i: ultrasonic_fallback.cpp.i
+.PHONY : ultrasonic_fallback.i
+
+# target to preprocess a source file
+ultrasonic_fallback.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.i
+.PHONY : ultrasonic_fallback.cpp.i
+
+ultrasonic_fallback.s: ultrasonic_fallback.cpp.s
+.PHONY : ultrasonic_fallback.s
+
+# target to generate assembly for a file
+ultrasonic_fallback.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/ultrasonic_fallback.cpp.s
+.PHONY : ultrasonic_fallback.cpp.s
+
+ultrasonic_hc_sr04.o: ultrasonic_hc_sr04.cpp.o
+.PHONY : ultrasonic_hc_sr04.o
+
+# target to build an object file
+ultrasonic_hc_sr04.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.o
+.PHONY : ultrasonic_hc_sr04.cpp.o
+
+ultrasonic_hc_sr04.i: ultrasonic_hc_sr04.cpp.i
+.PHONY : ultrasonic_hc_sr04.i
+
+# target to preprocess a source file
+ultrasonic_hc_sr04.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.i
+.PHONY : ultrasonic_hc_sr04.cpp.i
+
+ultrasonic_hc_sr04.s: ultrasonic_hc_sr04.cpp.s
+.PHONY : ultrasonic_hc_sr04.s
+
+# target to generate assembly for a file
+ultrasonic_hc_sr04.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sensors_lib.dir/build.make CMakeFiles/sensors_lib.dir/ultrasonic_hc_sr04.cpp.s
+.PHONY : ultrasonic_hc_sr04.cpp.s
 
 # Help Target
 help:
@@ -236,12 +371,30 @@ help:
 	@echo "... LiDAR.o"
 	@echo "... LiDAR.i"
 	@echo "... LiDAR.s"
+	@echo "... camera_classifier.o"
+	@echo "... camera_classifier.i"
+	@echo "... camera_classifier.s"
+	@echo "... camera_fallback.o"
+	@echo "... camera_fallback.i"
+	@echo "... camera_fallback.s"
+	@echo "... gpio.o"
+	@echo "... gpio.i"
+	@echo "... gpio.s"
 	@echo "... ld06.o"
 	@echo "... ld06.i"
 	@echo "... ld06.s"
+	@echo "... lidar_test.o"
+	@echo "... lidar_test.i"
+	@echo "... lidar_test.s"
 	@echo "... rplidar_a1.o"
 	@echo "... rplidar_a1.i"
 	@echo "... rplidar_a1.s"
+	@echo "... ultrasonic_fallback.o"
+	@echo "... ultrasonic_fallback.i"
+	@echo "... ultrasonic_fallback.s"
+	@echo "... ultrasonic_hc_sr04.o"
+	@echo "... ultrasonic_hc_sr04.i"
+	@echo "... ultrasonic_hc_sr04.s"
 .PHONY : help
 
 

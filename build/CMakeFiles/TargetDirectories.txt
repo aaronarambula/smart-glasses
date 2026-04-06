@@ -12,6 +12,7 @@
 /Users/aaronarambula/Documents/smart-glasses/build/autograd/CMakeFiles/install/local.dir
 /Users/aaronarambula/Documents/smart-glasses/build/autograd/CMakeFiles/install/strip.dir
 /Users/aaronarambula/Documents/smart-glasses/build/sensors/CMakeFiles/sensors_lib.dir
+/Users/aaronarambula/Documents/smart-glasses/build/sensors/CMakeFiles/lidar_test.dir
 /Users/aaronarambula/Documents/smart-glasses/build/sensors/CMakeFiles/edit_cache.dir
 /Users/aaronarambula/Documents/smart-glasses/build/sensors/CMakeFiles/rebuild_cache.dir
 /Users/aaronarambula/Documents/smart-glasses/build/sensors/CMakeFiles/list_install_components.dir

@@ -175,6 +175,20 @@ sensors_lib/fast:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/build
 .PHONY : sensors_lib/fast
 
+# Convenience name for target.
+sensors/CMakeFiles/lidar_test.dir/rule:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sensors/CMakeFiles/lidar_test.dir/rule
+.PHONY : sensors/CMakeFiles/lidar_test.dir/rule
+
+# Convenience name for target.
+lidar_test: sensors/CMakeFiles/lidar_test.dir/rule
+.PHONY : lidar_test
+
+# fast build rule for target.
+lidar_test/fast:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/lidar_test.dir/build.make sensors/CMakeFiles/lidar_test.dir/build
+.PHONY : lidar_test/fast
+
 LiDAR.o: LiDAR.cpp.o
 .PHONY : LiDAR.o
 
@@ -295,6 +309,30 @@ ld06.cpp.s:
 	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/sensors_lib.dir/build.make sensors/CMakeFiles/sensors_lib.dir/ld06.cpp.s
 .PHONY : ld06.cpp.s
 
+lidar_test.o: lidar_test.cpp.o
+.PHONY : lidar_test.o
+
+# target to build an object file
+lidar_test.cpp.o:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/lidar_test.dir/build.make sensors/CMakeFiles/lidar_test.dir/lidar_test.cpp.o
+.PHONY : lidar_test.cpp.o
+
+lidar_test.i: lidar_test.cpp.i
+.PHONY : lidar_test.i
+
+# target to preprocess a source file
+lidar_test.cpp.i:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/lidar_test.dir/build.make sensors/CMakeFiles/lidar_test.dir/lidar_test.cpp.i
+.PHONY : lidar_test.cpp.i
+
+lidar_test.s: lidar_test.cpp.s
+.PHONY : lidar_test.s
+
+# target to generate assembly for a file
+lidar_test.cpp.s:
+	cd /Users/aaronarambula/Documents/smart-glasses/build && $(MAKE) $(MAKESILENT) -f sensors/CMakeFiles/lidar_test.dir/build.make sensors/CMakeFiles/lidar_test.dir/lidar_test.cpp.s
+.PHONY : lidar_test.cpp.s
+
 rplidar_a1.o: rplidar_a1.cpp.o
 .PHONY : rplidar_a1.o
 
@@ -379,6 +417,7 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... lidar_test"
 	@echo "... sensors_lib"
 	@echo "... LiDAR.o"
 	@echo "... LiDAR.i"
@@ -395,6 +434,9 @@ help:
 	@echo "... ld06.o"
 	@echo "... ld06.i"
 	@echo "... ld06.s"
+	@echo "... lidar_test.o"
+	@echo "... lidar_test.i"
+	@echo "... lidar_test.s"
 	@echo "... rplidar_a1.o"
 	@echo "... rplidar_a1.i"
 	@echo "... rplidar_a1.s"

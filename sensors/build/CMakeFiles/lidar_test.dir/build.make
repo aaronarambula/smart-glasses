@@ -72,63 +72,32 @@ include CMakeFiles/lidar_test.dir/flags.make
 CMakeFiles/lidar_test.dir/codegen:
 .PHONY : CMakeFiles/lidar_test.dir/codegen
 
-CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o: CMakeFiles/lidar_test.dir/flags.make
-CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/rplidar_a1.cpp
-CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o: CMakeFiles/lidar_test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o -MF CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o.d -o CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/rplidar_a1.cpp
+CMakeFiles/lidar_test.dir/lidar_test.cpp.o: CMakeFiles/lidar_test.dir/flags.make
+CMakeFiles/lidar_test.dir/lidar_test.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/lidar_test.cpp
+CMakeFiles/lidar_test.dir/lidar_test.cpp.o: CMakeFiles/lidar_test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/lidar_test.dir/lidar_test.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lidar_test.dir/lidar_test.cpp.o -MF CMakeFiles/lidar_test.dir/lidar_test.cpp.o.d -o CMakeFiles/lidar_test.dir/lidar_test.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/lidar_test.cpp
 
-CMakeFiles/lidar_test.dir/rplidar_a1.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/lidar_test.dir/rplidar_a1.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/aaronarambula/Documents/smart-glasses/sensors/rplidar_a1.cpp > CMakeFiles/lidar_test.dir/rplidar_a1.cpp.i
+CMakeFiles/lidar_test.dir/lidar_test.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/lidar_test.dir/lidar_test.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/aaronarambula/Documents/smart-glasses/sensors/lidar_test.cpp > CMakeFiles/lidar_test.dir/lidar_test.cpp.i
 
-CMakeFiles/lidar_test.dir/rplidar_a1.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/lidar_test.dir/rplidar_a1.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/sensors/rplidar_a1.cpp -o CMakeFiles/lidar_test.dir/rplidar_a1.cpp.s
-
-CMakeFiles/lidar_test.dir/ld06.cpp.o: CMakeFiles/lidar_test.dir/flags.make
-CMakeFiles/lidar_test.dir/ld06.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/ld06.cpp
-CMakeFiles/lidar_test.dir/ld06.cpp.o: CMakeFiles/lidar_test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/lidar_test.dir/ld06.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lidar_test.dir/ld06.cpp.o -MF CMakeFiles/lidar_test.dir/ld06.cpp.o.d -o CMakeFiles/lidar_test.dir/ld06.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/ld06.cpp
-
-CMakeFiles/lidar_test.dir/ld06.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/lidar_test.dir/ld06.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/aaronarambula/Documents/smart-glasses/sensors/ld06.cpp > CMakeFiles/lidar_test.dir/ld06.cpp.i
-
-CMakeFiles/lidar_test.dir/ld06.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/lidar_test.dir/ld06.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/sensors/ld06.cpp -o CMakeFiles/lidar_test.dir/ld06.cpp.s
-
-CMakeFiles/lidar_test.dir/LiDAR.cpp.o: CMakeFiles/lidar_test.dir/flags.make
-CMakeFiles/lidar_test.dir/LiDAR.cpp.o: /Users/aaronarambula/Documents/smart-glasses/sensors/LiDAR.cpp
-CMakeFiles/lidar_test.dir/LiDAR.cpp.o: CMakeFiles/lidar_test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/lidar_test.dir/LiDAR.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lidar_test.dir/LiDAR.cpp.o -MF CMakeFiles/lidar_test.dir/LiDAR.cpp.o.d -o CMakeFiles/lidar_test.dir/LiDAR.cpp.o -c /Users/aaronarambula/Documents/smart-glasses/sensors/LiDAR.cpp
-
-CMakeFiles/lidar_test.dir/LiDAR.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/lidar_test.dir/LiDAR.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/aaronarambula/Documents/smart-glasses/sensors/LiDAR.cpp > CMakeFiles/lidar_test.dir/LiDAR.cpp.i
-
-CMakeFiles/lidar_test.dir/LiDAR.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/lidar_test.dir/LiDAR.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/sensors/LiDAR.cpp -o CMakeFiles/lidar_test.dir/LiDAR.cpp.s
+CMakeFiles/lidar_test.dir/lidar_test.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/lidar_test.dir/lidar_test.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/aaronarambula/Documents/smart-glasses/sensors/lidar_test.cpp -o CMakeFiles/lidar_test.dir/lidar_test.cpp.s
 
 # Object files for target lidar_test
 lidar_test_OBJECTS = \
-"CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o" \
-"CMakeFiles/lidar_test.dir/ld06.cpp.o" \
-"CMakeFiles/lidar_test.dir/LiDAR.cpp.o"
+"CMakeFiles/lidar_test.dir/lidar_test.cpp.o"
 
 # External object files for target lidar_test
 lidar_test_EXTERNAL_OBJECTS =
 
-lidar_test: CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o
-lidar_test: CMakeFiles/lidar_test.dir/ld06.cpp.o
-lidar_test: CMakeFiles/lidar_test.dir/LiDAR.cpp.o
+lidar_test: CMakeFiles/lidar_test.dir/lidar_test.cpp.o
 lidar_test: CMakeFiles/lidar_test.dir/build.make
+lidar_test: libsensors_lib.a
 lidar_test: CMakeFiles/lidar_test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable lidar_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/aaronarambula/Documents/smart-glasses/sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable lidar_test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/lidar_test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

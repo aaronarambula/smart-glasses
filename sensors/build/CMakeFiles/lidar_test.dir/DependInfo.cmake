@@ -8,9 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/aaronarambula/Documents/smart-glasses/sensors/LiDAR.cpp" "CMakeFiles/lidar_test.dir/LiDAR.cpp.o" "gcc" "CMakeFiles/lidar_test.dir/LiDAR.cpp.o.d"
-  "/Users/aaronarambula/Documents/smart-glasses/sensors/ld06.cpp" "CMakeFiles/lidar_test.dir/ld06.cpp.o" "gcc" "CMakeFiles/lidar_test.dir/ld06.cpp.o.d"
-  "/Users/aaronarambula/Documents/smart-glasses/sensors/rplidar_a1.cpp" "CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o" "gcc" "CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o.d"
+  "/Users/aaronarambula/Documents/smart-glasses/sensors/lidar_test.cpp" "CMakeFiles/lidar_test.dir/lidar_test.cpp.o" "gcc" "CMakeFiles/lidar_test.dir/lidar_test.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

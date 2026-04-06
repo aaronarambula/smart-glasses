@@ -1,1 +1,1 @@
-/usr/bin/c++ -O3 -DNDEBUG -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/lidar_test.dir/rplidar_a1.cpp.o CMakeFiles/lidar_test.dir/ld06.cpp.o CMakeFiles/lidar_test.dir/LiDAR.cpp.o -o lidar_test  -lm
+/usr/bin/c++ -O3 -DNDEBUG -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/lidar_test.dir/lidar_test.cpp.o -o lidar_test  libsensors_lib.a -lm
