@@ -904,52 +904,94 @@ int main(int argc, char* argv[])
         last_frame_time = frame_start_time;
 
         // ─────────────────────────────────────────────────────────────────────
-        // STEP 1 — PERCEPTION
-        // OccupancyMap update + DBSCAN clustering + Kalman tracking
+        // STEPS 1–4 — sensor-specific data path
         // ─────────────────────────────────────────────────────────────────────
-        perception::PerceptionResult perc = perception.process(frame, dt_s);
 
-        // Local occupancy density: fraction of 8×8 cell neighbourhood
-        // around the origin that is occupied. Passed to the MLP as feature[23].
-        const float local_density =
-            perception.map().local_density(/*radius_mm=*/1500.0f);
+        perception::PerceptionResult perc;        // default-initialised; populated below
+        prediction::FullPrediction   full_pred;
 
-        // ─────────────────────────────────────────────────────────────────────
-        // STEP 2 — PREDICTION
-        // TTC (quadratic solver + CPA) + aaronnet MLP inference + training
-        // ─────────────────────────────────────────────────────────────────────
-        auto pred_out = pred_pipeline.process(perc, local_density);
+        // ── TF-Luna fast path ─────────────────────────────────────────────────
+        // TF-Luna is a single-point rangefinder: one distance at 0°, no sweep.
+        // DBSCAN requires minPts ≥ 2 to form a cluster, so the single forward
+        // point is rejected as noise; the Kalman tracker never instantiates a
+        // tracked object; the MLP evaluates zero objects and reports CLEAR.
+        // We bypass the entire perception/TTC/MLP stack and synthesise a
+        // TTCResult directly from the raw distance, then feed it into
+        // PseudoLabeller for threshold-based risk bucketing.  The audio, agent,
+        // telemetry, and stats paths are identical to the normal path.
+        if (cfg.sensor_model == sensors::LidarModel::TFLuna) {
+            float dist_mm = 0.0f;
+            for (const auto& pt : frame.points) {
+                if (pt.is_valid()) { dist_mm = pt.distance_mm; break; }
+            }
 
-        // Assemble into FullPrediction for downstream consumers.
-        prediction::FullPrediction full_pred;
-        full_pred.ttc        = std::move(pred_out.ttc);
-        full_pred.prediction = std::move(pred_out.prediction);
+            full_pred.ttc.frame_id        = frame.frame_id;
+            full_pred.ttc.dt_s            = dt_s;
+            full_pred.prediction.frame_id = frame.frame_id;
 
-        // Update stats with MLP training diagnostics.
-        const auto& rp            = pred_pipeline.risk_predictor();
-        stats.training_steps      = static_cast<uint64_t>(rp.training_steps());
-        stats.last_loss           = rp.last_loss();
-        stats.smoothed_loss       = rp.smoothed_loss();
+            if (dist_mm > 0.0f) {
+                prediction::TTCResult synthetic;
+                synthetic.object_id         = 1;
+                synthetic.sector            = 0;    // forward (0°)
+                synthetic.bearing_deg       = 0.0f;
+                synthetic.distance_mm       = dist_mm;
+                synthetic.cpa.distance_mm   = dist_mm;
+                synthetic.cpa.time_s        = std::numeric_limits<float>::infinity();
+                synthetic.ttc_s             = std::numeric_limits<float>::infinity();
+                synthetic.velocity_reliable = false;
+                synthetic.size_label        = "point";
 
-        // ─────────────────────────────────────────────────────────────────────
-        // STEP 3 — AUDIO
-        // Rate-limited alert policy → TTS priority queue → espeak-ng
-        // ─────────────────────────────────────────────────────────────────────
-        audio.process(full_pred);
+                prediction::PseudoLabeller labeller;
+                labeller.danger_dist_mm  = cfg.danger_mm;
+                labeller.warning_dist_mm = cfg.warning_mm;
+                labeller.caution_dist_mm = cfg.caution_mm;
+                const prediction::RiskLevel risk = labeller.label_result(synthetic);
 
-        // ─────────────────────────────────────────────────────────────────────
-        // STEP 4 — AGENT
-        // Atomic snapshot push → GPT query fires on agent thread when gated
-        // ─────────────────────────────────────────────────────────────────────
-        if (cfg.agent_enabled && agent_sys.is_running()) {
-            agent_sys.push_prediction(full_pred, &perc);
+                full_pred.ttc.sectors[0].sector          = 0;
+                full_pred.ttc.sectors[0].occupied        = true;
+                full_pred.ttc.sectors[0].min_distance_mm = dist_mm;
+                full_pred.ttc.sectors[0].min_ttc_s =
+                    std::numeric_limits<float>::infinity();
+                full_pred.ttc.results.push_back(std::move(synthetic));
 
-            // Forward MLP training diagnostics into the scene JSON so GPT
-            // can acknowledge the model's learning state.
-            if (full_pred.prediction.trained_this_frame) {
-                agent_sys.set_training_info(
-                    rp.training_steps(),
-                    rp.last_loss());
+                full_pred.prediction.risk_level   = risk;
+                full_pred.prediction.pseudo_label = risk;
+                full_pred.prediction.probabilities.fill(0.0f);
+                full_pred.prediction.probabilities[static_cast<int>(risk)] = 1.0f;
+            }
+            // dist_mm == 0 → no valid reading → CLEAR (default-initialised above)
+
+            audio.process(full_pred);
+            if (cfg.agent_enabled && agent_sys.is_running()) {
+                agent_sys.push_prediction(full_pred, &perc);
+            }
+
+        } else {
+            // ── Normal scanning-LiDAR path (LD06 / RPLidar / sim / etc.) ──────
+            perc = perception.process(frame, dt_s);
+
+            // Local occupancy density: fraction of 8×8 cell neighbourhood
+            // around the origin that is occupied. Passed to MLP as feature[23].
+            const float local_density =
+                perception.map().local_density(/*radius_mm=*/1500.0f);
+
+            auto pred_out = pred_pipeline.process(perc, local_density);
+            full_pred.ttc        = std::move(pred_out.ttc);
+            full_pred.prediction = std::move(pred_out.prediction);
+
+            const auto& rp       = pred_pipeline.risk_predictor();
+            stats.training_steps = static_cast<uint64_t>(rp.training_steps());
+            stats.last_loss      = rp.last_loss();
+            stats.smoothed_loss  = rp.smoothed_loss();
+
+            audio.process(full_pred);
+            if (cfg.agent_enabled && agent_sys.is_running()) {
+                agent_sys.push_prediction(full_pred, &perc);
+                if (full_pred.prediction.trained_this_frame) {
+                    agent_sys.set_training_info(
+                        rp.training_steps(),
+                        rp.last_loss());
+                }
             }
         }
 
@@ -1013,6 +1055,8 @@ int main(int argc, char* argv[])
     agent_sys.stop();
 
     std::cout << "[shutdown] Stopping audio...\n";
+    // TODO: shutdown segfault — likely destructor order issue in agent or a
+    // static global; investigate if it reproduces reliably after the demo.
     audio.stop();
 
     std::cout << "[shutdown] Stopping sensor...\n";

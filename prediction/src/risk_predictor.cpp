@@ -720,17 +720,8 @@ bool RiskPredictor::load_weights(const std::string& path)
         0.999f,
         1e-8f
     );
-    // Restore the timestep so bias-correction stays correct.
-    // We do this by advancing the internal step counter.
-    for (int s = 0; s < training_steps_; ++s) {
-        // We can't directly set t_ in Adam (it's private), so we advance
-        // it via a no-op step with zero-grad parameters.
-        // Instead, we simply re-set it via set_lr which doesn't touch t_,
-        // and accept that bias correction resets to step 1 after a reload.
-        // This is a minor inaccuracy that self-corrects after ~10 steps.
-        (void)s;
-        break;
-    }
+    // Adam moment buffers are zeroed on reload (not persisted).
+    // Bias correction resets to step 1 and self-corrects after ~10 steps.
 
     return true;
 }

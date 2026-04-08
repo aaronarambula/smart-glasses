@@ -145,10 +145,7 @@ AudioBuffer AudioCapture::read_audio_linux() {
         return buffer;
     }
 
-    // Skip WAV header (44 bytes standard).
-    file.seekg(44, std::ios::beg);
-
-    // Read raw PCM data.
+    // Read raw PCM data (skip 44-byte WAV header).
     file.seekg(0, std::ios::end);
     std::streamsize file_size = file.tellg();
     file.seekg(44, std::ios::beg);  // Back to after header

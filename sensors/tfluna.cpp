@@ -175,7 +175,8 @@ bool TFLuna::parse_frame(const uint8_t* raw,
 
     const uint16_t raw_temp = static_cast<uint16_t>(raw[6])
                             | (static_cast<uint16_t>(raw[7]) << 8);
-    temp_c = static_cast<float>(raw_temp) / 100.0f;
+    // Benewake datasheet V1.3: temperature = raw / 8.0 - 256.0 (°C)
+    temp_c = static_cast<float>(raw_temp) / 8.0f - 256.0f;
 
     return true;
 }
