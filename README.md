@@ -15,11 +15,8 @@ mkdir -p build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . --parallel
 
-# 2. Run (LD06 — 360° sweep)
+# 2. Run
 export OPENAI_API_KEY="sk-..."
-./app/smart_glasses --sensor ld06 --port /dev/ttyAMA0
-
-# Or with TF-Luna (single-point ToF, forward-facing)
 ./app/smart_glasses --sensor tfluna --port /dev/ttyAMA0
 
 # 3. Press GPIO button (pin 17) for voice queries
@@ -347,7 +344,7 @@ export OPENAI_API_KEY="sk-..."
 
 ```
 Sensor:
-  --sensor ld06|rplidar|tfluna  LiDAR model       (default: ld06)
+  --sensor ld06|rplidar|tfluna  LiDAR model       (default: tfluna)
   --port   PATH             Serial device          (default: /dev/ttyAMA0)
 
 Perception:
