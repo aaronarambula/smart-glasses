@@ -1,6 +1,6 @@
 # Smart Glasses — AI Obstacle Detection & Voice Navigation System
 
-> Production-ready assistive glasses with real-time LiDAR obstacle detection, neural network risk prediction, spoken alerts, and hands-free GPT-4o voice queries. Built in C++17 with a custom autograd engine.
+> Production-ready assistive glasses with real-time LiDAR obstacle detection, neural network risk prediction, spoken alerts, and hands-free GPT-4o voice queries. Built in C++17 with a custom autograd engine. Supports LD06 (360° sweep), RPLidar A1, and TF-Luna (single-point ToF).
 
 **Status:** ✅ Complete and tested for hardware integration
 
@@ -15,9 +15,12 @@ mkdir -p build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . --parallel
 
-# 2. Run
+# 2. Run (LD06 — 360° sweep)
 export OPENAI_API_KEY="sk-..."
 ./app/smart_glasses --sensor ld06 --port /dev/ttyAMA0
+
+# Or with TF-Luna (single-point ToF, forward-facing)
+./app/smart_glasses --sensor tfluna --port /dev/ttyAMA0
 
 # 3. Press GPIO button (pin 17) for voice queries
 ```
@@ -46,7 +49,7 @@ cd build
 
 ## Key Features
 
-- ✅ Real-time 360° LiDAR obstacle detection (10 Hz)
+- ✅ Real-time LiDAR obstacle detection (10 Hz) — 360° sweep or single-point ToF
 - ✅ Neural network risk classification (MLP: 24→64→32→4)
 - ✅ Kalman tracking with persistent object IDs
 - ✅ Time-to-collision prediction
@@ -65,7 +68,7 @@ This project turns a Raspberry Pi and a cheap LiDAR sensor into smart assistive 
 
 The system processes a full 360° LiDAR scan every 100 ms and runs it through a complete AI pipeline:
 
-1. **Sensor** — LD06 or RPLidar A1 streams raw distance measurements over UART
+1. **Sensor** — LD06, RPLidar A1, or TF-Luna streams raw distance measurements over UART
 2. **Perception** — points are clustered into objects and tracked across frames with a Kalman filter, giving each obstacle a persistent identity and a velocity estimate
 3. **Prediction** — time-to-collision is computed geometrically for every tracked object; a custom MLP neural network (*aaronnet*) classifies the overall scene into CLEAR / CAUTION / WARNING / DANGER
 4. **Audio** — a priority-queue TTS engine speaks natural-language alerts ("obstacle one point two metres ahead — collision in two seconds") via espeak-ng
@@ -78,7 +81,7 @@ Everything is written in C++17 with no heavy frameworks. The neural network engi
 ## Architecture
 
 ```
-LD06 / RPLidar A1  (/dev/ttyAMA0 or /dev/ttyUSB0)
+LD06 / RPLidar A1 / TF-Luna  (/dev/ttyAMA0 or /dev/ttyUSB0)
          │
          │  ScanFrame — 460 points, 360°, ~10 Hz
          ▼
@@ -159,10 +162,11 @@ POSIX serial port drivers for two sensors, with a common abstract interface.
 | `LidarBase` | Abstract interface: `open / start / stop / close / get_latest_frame` |
 | `LD06` | LDROBOT LD06/LD19. UART 230400 baud. Continuous 47-byte packets. CRC-8/MAXIM validated. No commands needed. |
 | `RPLidarA1` | Slamtec A1M8. USB-serial 115200 baud. Request/response protocol. SCAN command, 5-byte measurement nodes. |
+| `TFLuna` | Benewake TF-Luna V1.3. UART 115200 baud. 9-byte frames at 100 Hz. Single forward-facing point at 0°. Range: 20 cm – 800 cm. Checksum validated. Signal strength quality gate (amp < 100 → rejected). |
 | `SerialPort` | POSIX `termios` RAII wrapper. `select()`-based reads. All standard baud rates. |
-| `ScanFrame` | One complete 360° sweep: `vector<ScanPoint>`, timestamp, frame ID, RPM |
+| `ScanFrame` | One scan frame: `vector<ScanPoint>`, timestamp, frame ID, RPM. For TF-Luna, contains one point at angle 0°. |
 
-Both drivers run their read loop on a background thread. The main thread calls `get_latest_frame()` once per pipeline tick.
+All drivers run their read loop on a background thread. The main thread calls `get_latest_frame()` once per pipeline tick.
 
 ---
 
@@ -248,8 +252,9 @@ Budget at 10 Hz: 100 ms. Utilisation: ~5%.
 | Component | Model | Cost | Notes |
 |-----------|-------|------|-------|
 | Compute | Raspberry Pi Zero 2W or Pi 4 | $15–$45 | Pi Zero 2W is sufficient; Pi 4 recommended for development |
-| LiDAR | LDROBOT LD06 | ~$15–$30 | Preferred. UART, 230400 baud, no USB adapter needed |
-| LiDAR (alt) | Slamtec RPLidar A1M8 | ~$100 | Connects via USB-to-serial adapter |
+| LiDAR | LDROBOT LD06 | ~$15–$30 | 360° sweep. UART, 230400 baud, no USB adapter needed |
+| LiDAR (alt) | Benewake TF-Luna | ~$20–$30 | Single-point forward ToF. UART 115200 baud. 20 cm – 8 m range. Best for corridor/forward detection |
+| LiDAR (alt) | Slamtec RPLidar A1M8 | ~$100 | 360° sweep. Connects via USB-to-serial adapter |
 | Speaker | USB speaker or 3.5mm | $5–$15 | Any ALSA-compatible speaker |
 | Power | USB-C PD bank | $10–$20 | 5V/3A for Pi + sensor |
 | Glasses frame | DIY / 3D printed | — | Mount Pi + sensor to glasses |
@@ -321,6 +326,9 @@ target_compile_options(smart_glasses PRIVATE -O3 -march=native)
 # LD06 on GPIO UART (default)
 ./build/app/smart_glasses
 
+# TF-Luna on GPIO UART
+./build/app/smart_glasses --sensor tfluna --port /dev/ttyAMA0
+
 # RPLidar A1 on USB
 ./build/app/smart_glasses --sensor rplidar --port /dev/ttyUSB0
 
@@ -339,7 +347,7 @@ export OPENAI_API_KEY="sk-..."
 
 ```
 Sensor:
-  --sensor ld06|rplidar     LiDAR model           (default: ld06)
+  --sensor ld06|rplidar|tfluna  LiDAR model       (default: ld06)
   --port   PATH             Serial device          (default: /dev/ttyAMA0)
 
 Perception:
@@ -414,11 +422,13 @@ smart-glasses/
 │   ├── LiDAR.cpp                   ← Sensor-layer compilation unit
 │   ├── ld06.cpp                    ← LD06 driver implementation
 │   ├── rplidar_a1.cpp              ← RPLidar A1 driver implementation
+│   ├── tfluna.cpp                  ← TF-Luna driver implementation
 │   └── include/sensors/
 │       ├── sensors.h               ← Umbrella include + factory
 │       ├── lidar_base.h            ← ScanPoint, ScanFrame, LidarBase
 │       ├── ld06.h                  ← LD06 driver declaration
 │       ├── rplidar_a1.h            ← RPLidar A1 driver declaration
+│       ├── tfluna.h                ← TF-Luna driver declaration
 │       └── serial_port.h           ← POSIX serial port RAII wrapper
 │
 ├── perception/                     ── Scene understanding
@@ -627,6 +637,21 @@ sudo reboot
 ls -la /dev/ttyAMA0
 ```
 
+### Serial port for TF-Luna (GPIO UART)
+
+The TF-Luna uses the same GPIO UART as the LD06. Follow the same `raspi-config` steps above to enable the hardware UART and disable the serial console.
+
+```bash
+# TF-Luna connects to GPIO 14 (TX) / 15 (RX) — same pins as LD06
+# Baud rate is 115200 (handled automatically by the driver)
+ls -la /dev/ttyAMA0
+
+# Test with the lidar_test binary
+bash scripts/run_lidar.sh /dev/ttyAMA0 tfluna
+```
+
+> **Note:** The TF-Luna is a single-point ToF sensor — it measures one distance straight ahead, not a 360° sweep. Orient it in the direction of travel.
+
 ### Serial port for RPLidar A1 (USB)
 
 ```bash
@@ -685,7 +710,7 @@ Built as a class project demonstrating embedded AI, real-time signal processing,
 | Role | Contribution |
 |------|-------------|
 | aaronnet autograd engine | Custom C++ neural network framework (ported from Python) |
-| Sensor drivers | LD06 / RPLidar A1 serial protocol implementation |
+| Sensor drivers | LD06 / RPLidar A1 / TF-Luna serial protocol implementation |
 | Perception pipeline | Occupancy map, DBSCAN, Kalman tracker, Hungarian assignment |
 | Prediction pipeline | TTC engine, MLP risk predictor, pseudo-labelling |
 | Audio system | TTS engine, alert policy, natural language generation |
