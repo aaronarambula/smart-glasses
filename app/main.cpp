@@ -297,6 +297,9 @@ static AppConfig parse_args(int argc, char* argv[])
             if (s == "ld06" || s == "LD06") {
                 cfg.sensor_model = sensors::LidarModel::LD06;
                 if (cfg.port == "/dev/ttyAMA0") cfg.port = "/dev/ttyAMA0";
+            } else if (s == "tfluna" || s == "TFLuna" || s == "tf-luna") {
+                cfg.sensor_model = sensors::LidarModel::TFLuna;
+                cfg.port = sensors::default_port(cfg.sensor_model);
             } else if (s == "rplidar" || s == "RPLidar" || s == "a1") {
                 cfg.sensor_model = sensors::LidarModel::RPLidarA1;
                 if (cfg.port == "/dev/ttyAMA0") cfg.port = "/dev/ttyUSB0";
@@ -318,7 +321,7 @@ static AppConfig parse_args(int argc, char* argv[])
 #endif
             } else {
                 std::cerr << "error: unknown sensor '" << s
-                          << "' (use ld06, rplidar, ultrasonic, camera, or sim)\n";
+                          << "' (use tfluna, ld06, rplidar, ultrasonic, camera, or sim)\n";
                 std::exit(1);
             }
         }
