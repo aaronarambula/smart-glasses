@@ -8,24 +8,49 @@
 
 ## Quick Start
 
-### On Raspberry Pi (Hardware)
+### 1. Build (all platforms)
 ```bash
-# 1. Build
 mkdir -p build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . --parallel
-
-# 2. Run
-export OPENAI_API_KEY="sk-..."
-./app/smart_glasses --sensor tfluna --port /dev/ttyAMA0
-
-# 3. Press GPIO button (pin 17) for voice queries
 ```
 
-### Without Hardware (Simulator)
+### 2. Run — pick your sensor
+
+**TF-Luna** (single-point ToF, GPIO UART — recommended)
 ```bash
-cd build
-./app/smart_glasses --sensor sim
+./build/app/smart_glasses --sensor tfluna --port /dev/ttyAMA0
+```
+
+**LD06** (360° sweep, GPIO UART)
+```bash
+./build/app/smart_glasses --sensor ld06 --port /dev/ttyAMA0
+```
+
+**RPLidar A1** (360° sweep, USB)
+```bash
+./build/app/smart_glasses --sensor rplidar --port /dev/ttyUSB0
+```
+
+**Simulator** (no hardware needed)
+```bash
+./build/app/smart_glasses --sensor sim
+```
+
+### 3. Optional add-ons
+```bash
+# GPT-4o voice navigation
+export OPENAI_API_KEY="sk-..."
+
+# Haptic vibration motor on physical pin 11
+./build/app/smart_glasses --sensor tfluna --haptic-board-pin 11
+
+# GPIO button (physical pin 17) for voice queries
+./build/app/smart_glasses --sensor tfluna --button-board-pin 17
+
+# Everything on
+./build/app/smart_glasses --sensor tfluna --port /dev/ttyAMA0 \
+  --haptic-board-pin 11 --button-board-pin 17
 ```
 
 ---
