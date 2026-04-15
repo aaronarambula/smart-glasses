@@ -178,6 +178,13 @@ bool HapticsEngine::open_gpio()
         close_gpio();
         return false;
     }
+    available_.store(true);
+    if (config_.verbose) {
+        std::cout << "  ✓ Haptics   : GPIO" << config_.gpio_pin
+                  << " (" << (config_.active_low ? "active-low" : "active-high")
+                  << ")\n";
+    }
+    return true;
 #else
     set_error("Haptics GPIO requires libgpiod on this platform");
     return false;

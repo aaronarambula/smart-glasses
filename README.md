@@ -51,6 +51,7 @@ cd build
 - ✅ Kalman tracking with persistent object IDs
 - ✅ Time-to-collision prediction
 - ✅ Spoken alerts via TTS (espeak-ng)
+- ✅ **Haptic vibration feedback** — silent pulses on CAUTION, configurable intensity/count
 - ✅ GPT-4o navigation agent (contextual advice)
 - ✅ **Hands-free voice queries via GPIO button**
 - ✅ Online training with pseudo-labels
@@ -253,6 +254,7 @@ Budget at 10 Hz: 100 ms. Utilisation: ~5%.
 | LiDAR (alt) | Benewake TF-Luna | ~$20–$30 | Single-point forward ToF. UART 115200 baud. 20 cm – 8 m range. Best for corridor/forward detection |
 | LiDAR (alt) | Slamtec RPLidar A1M8 | ~$100 | 360° sweep. Connects via USB-to-serial adapter |
 | Speaker | USB speaker or 3.5mm | $5–$15 | Any ALSA-compatible speaker |
+| Vibration motor | Mini ERM or coin vibrator module | $2–$5 | Active-low module (LOW=on). Connect to any free GPIO pin — physical pin 11 (BCM 17) recommended |
 | Power | USB-C PD bank | $10–$20 | 5V/3A for Pi + sensor |
 | Glasses frame | DIY / 3D printed | — | Mount Pi + sensor to glasses |
 
@@ -269,6 +271,7 @@ Budget at 10 Hz: 100 ms. Utilisation: ~5%.
 | `cmake` ≥ 3.16 | Build system | `sudo apt install cmake` |
 | `g++` / `clang++` | C++17 compiler | `sudo apt install build-essential` |
 | `pthreads` | Threading | Included with libc |
+| `libgpiod-dev` | Haptic vibration motor GPIO control | `sudo apt install libgpiod-dev` |
 
 No other external libraries. The autograd engine, Kalman tracker, Hungarian algorithm, DBSCAN, serial port driver, and JSON parser are all written from scratch.
 
@@ -656,6 +659,33 @@ sudo usermod -aG dialout $USER
 # Plug in USB adapter — device appears as /dev/ttyUSB0
 ls -la /dev/ttyUSB0
 ```
+
+### Vibration motor (haptics)
+
+Connect an active-low vibration motor module to the Pi:
+
+```
+Motor module VCC  → Pin 2  (5V)
+Motor module GND  → Pin 6  (GND)
+Motor module IN   → Pin 11 (BCM GPIO 17)  ← signal: LOW = on, HIGH = off
+```
+
+Run with haptics enabled:
+
+```bash
+# Using physical BOARD pin number (matches wiring above)
+./build/app/smart_glasses --sensor tfluna --haptic-board-pin 11
+
+# Or using BCM GPIO number directly
+./build/app/smart_glasses --sensor tfluna --haptic-pin 17
+```
+
+The motor pulses twice on every CAUTION alert (silent feedback alongside speech). Tune with:
+- `--haptic-pulses N`   — number of pulses (default: 2)
+- `--haptic-on-ms MS`   — motor-on duration per pulse (default: 180 ms)
+- `--haptic-off-ms MS`  — gap between pulses (default: 120 ms)
+
+If your module is active-high (HIGH = on), add `--haptic-active-high`.
 
 ### Audio output
 

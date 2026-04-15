@@ -20,7 +20,8 @@ VibrationController::VibrationController(uint32_t gpio_pin, bool pwm_capable)
     if (pwm_capable_) {
         pwm_ = std::make_unique<sensors::PWMOutput>(gpio_pin, 1000, 255);
     } else {
-        relay_ = std::make_unique<sensors::DigitalOutput>(gpio_pin, false);
+        // Initial state HIGH = motor OFF (active-low: LOW drives motor ON, HIGH drives motor OFF)
+        relay_ = std::make_unique<sensors::DigitalOutput>(gpio_pin, true);
     }
 }
 
@@ -154,7 +155,7 @@ void VibrationController::stop_immediately() {
     if (pwm_) {
         pwm_->set_duty(0);
     } else if (relay_) {
-        relay_->write(false);
+        relay_->write(true);  // HIGH = motor OFF (active-low)
     }
 }
 
@@ -186,7 +187,7 @@ void VibrationController::apply_pattern(VibratorPattern pattern) {
             if (pwm_) {
                 pwm_->set_percentage(80);
             } else if (relay_) {
-                relay_->write(true);
+                relay_->write(false);  // LOW = motor ON (active-low)
             }
             break;
     }
@@ -198,12 +199,12 @@ void VibrationController::pulse(std::chrono::milliseconds duration_ms,
     if (pwm_) {
         pwm_->set_duty(intensity);
     } else if (relay_) {
-        relay_->write(true);
+        relay_->write(false);  // LOW = motor ON (active-low)
     }
 
     std::this_thread::sleep_for(duration_ms);
 
-    stop_immediately();
+    stop_immediately();  // HIGH = motor OFF
 }
 
 // ─── Worker Thread ───────────────────────────────────────────────────────────
