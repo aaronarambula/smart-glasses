@@ -8,49 +8,54 @@
 
 ## Quick Start
 
-### 1. Build (all platforms)
+### Hardware wiring
+
+| Component | Pi Pin | Notes |
+|-----------|--------|-------|
+| TF-Luna VCC | Pin 2 (5V) | |
+| TF-Luna GND | Pin 14 (GND) | |
+| TF-Luna TX → Pi RX | Pin 15 (GPIO 22)… | …actually uses `/dev/ttyAMA0` (pins 8/10) |
+| **Button VCC** | **Pin 1 (3.3V)** | |
+| **Button GND** | **Pin 39 (GND)** | |
+| **Button OUT** | **Pin 15 (BCM 22)** | |
+| **Vibrator GND** | **Pin 25 (GND)** | |
+| **Vibrator IN** | **Pin 13 (BCM 27)** | Active-low: LOW = on |
+
+### 1. Install dependencies
+```bash
+sudo apt update
+sudo apt install build-essential cmake libcurl4-openssl-dev espeak-ng libgpiod-dev
+```
+
+### 2. Build
 ```bash
 mkdir -p build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . --parallel
+cd ..
 ```
 
-### 2. Run — pick your sensor
-
-**TF-Luna** (single-point ToF, GPIO UART — recommended)
+### 3. Run
 ```bash
-./build/app/smart_glasses --sensor tfluna --port /dev/ttyAMA0
-```
-
-**LD06** (360° sweep, GPIO UART)
-```bash
-./build/app/smart_glasses --sensor ld06 --port /dev/ttyAMA0
-```
-
-**RPLidar A1** (360° sweep, USB)
-```bash
-./build/app/smart_glasses --sensor rplidar --port /dev/ttyUSB0
-```
-
-**Simulator** (no hardware needed)
-```bash
-./build/app/smart_glasses --sensor sim
-```
-
-### 3. Optional add-ons
-```bash
-# GPT-4o voice navigation
 export OPENAI_API_KEY="sk-..."
+./build/app/smart_glasses \
+  --sensor tfluna --port /dev/ttyAMA0 \
+  --haptic-board-pin 13 \
+  --button-board-pin 15
+```
 
-# Haptic vibration motor on physical pin 11
-./build/app/smart_glasses --sensor tfluna --haptic-board-pin 11
+> No API key? Drop the `export` line — GPT-4o agent is automatically disabled, everything else works.
 
-# GPIO button (physical pin 17) for voice queries
-./build/app/smart_glasses --sensor tfluna --button-board-pin 17
+**Other sensors (same wiring, swap the first two flags):**
+```bash
+# LD06  (360° sweep, same GPIO UART)
+./build/app/smart_glasses --sensor ld06  --port /dev/ttyAMA0 --haptic-board-pin 13 --button-board-pin 15
 
-# Everything on
-./build/app/smart_glasses --sensor tfluna --port /dev/ttyAMA0 \
-  --haptic-board-pin 11 --button-board-pin 17
+# RPLidar A1  (360° sweep, USB)
+./build/app/smart_glasses --sensor rplidar --port /dev/ttyUSB0 --haptic-board-pin 13 --button-board-pin 15
+
+# No hardware / simulator
+./build/app/smart_glasses --sensor sim
 ```
 
 ---
@@ -691,18 +696,14 @@ Connect an active-low vibration motor module to the Pi:
 
 ```
 Motor module VCC  → Pin 2  (5V)
-Motor module GND  → Pin 6  (GND)
-Motor module IN   → Pin 11 (BCM GPIO 17)  ← signal: LOW = on, HIGH = off
+Motor module GND  → Pin 25 (GND)
+Motor module IN   → Pin 13 (BCM GPIO 27)  ← signal: LOW = on, HIGH = off
 ```
 
 Run with haptics enabled:
 
 ```bash
-# Using physical BOARD pin number (matches wiring above)
-./build/app/smart_glasses --sensor tfluna --haptic-board-pin 11
-
-# Or using BCM GPIO number directly
-./build/app/smart_glasses --sensor tfluna --haptic-pin 17
+./build/app/smart_glasses --sensor tfluna --haptic-board-pin 13
 ```
 
 The motor pulses twice on every CAUTION alert (silent feedback alongside speech). Tune with:
